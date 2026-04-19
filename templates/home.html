@@ -25,5 +25,26 @@
         </tr>
         {% endfor %}
     </table>
+
+    <h1>Reviews</h1>
+    <table>
+        <tr>
+            <th>Rating</th>
+            <th>User</th>
+            <th>Movie</th>
+            <th>Review</th>
+            <th>Time</th>
+        </tr>
+
+        {% for review in reviews %}
+        <tr>
+            <td>{{ review[0] }}</td>
+            <td>{{ review[1] }}</td>
+            <td>{{ review[2] }}</td>
+            <td>{{ review[3] }}</td>
+            <td>{{ review[4] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 </body>
 </html>

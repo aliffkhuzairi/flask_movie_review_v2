@@ -20,9 +20,16 @@ def home():
                 order by rel_date desc;
                 """)
     movies = cur.fetchall()
+
+    cur.execute("""
+        select r.ratings. r.uid, m.title, r.review, r.rev_time
+        form reviews r
+        join movies m on r.mid = m.id
+    """)
+    reviews = cur.fetchall()
     cur.close()
     conn.close()
-    return render_template("home.html", movies=movies)
+    return render_template("home.html", movies=movies, reviews=reviews)
 
 if __name__ == '__main__':
     app.run(debug=True)
