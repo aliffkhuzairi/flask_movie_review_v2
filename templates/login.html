@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Title</title>
+</head>
+<body>
+    <h1>Movie Review Login</h1>
+
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
+
+    <form action="{{ url_for('auth') }}" method="POST">
+        <label>ID:</label>
+        <input type="text" name="user_id" required>
+        <br><br>
+
+        <label>Password:</label>
+        <input type="password" name="password" required>
+        <br><br>
+
+        <button type="submit" name="action" value="signin">Sign In</button>
+        <button type="submit" name="action" value="signup">Sign Up</button>
+    </form>
+</body>
+</html>
