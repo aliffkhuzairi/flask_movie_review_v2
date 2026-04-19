@@ -22,7 +22,7 @@ def home():
     movies = cur.fetchall()
 
     cur.execute("""
-        select r.ratings. r.uid, m.title, r.review, r.rev_time
+        select r.ratings, r.uid, m.title, r.review, r.rev_time
         from reviews r
         join movies m on r.mid = m.id
     """)
