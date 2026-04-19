@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 import psycopg2
 app = Flask(__name__)
 
@@ -12,17 +12,17 @@ def get_db_connection():
     )
 @app.route('/')
 def home():
-    return "Flask is working"
-
-@app.route("/test_db")
-def test_db():
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute("SELECT id, title, director, genre, rel_date FROM movies ORDER BY rel_date DESC;")
+    cur.execute("""
+                select id, title, director, genre, rel_date
+                from movies
+                order by rel_date desc;
+                """)
     movies = cur.fetchall()
     cur.close()
     conn.close()
-    return "<br>".join([f"{m[0]} | {m[1]} | {m[2]} | {m[3]} | {m[4]}" for m in movies])
+    return render_template("home.html", movies=movies)
 
 if __name__ == '__main__':
     app.run(debug=True)
