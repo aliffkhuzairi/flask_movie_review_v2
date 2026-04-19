@@ -23,7 +23,7 @@ def home():
 
     cur.execute("""
         select r.ratings. r.uid, m.title, r.review, r.rev_time
-        form reviews r
+        from reviews r
         join movies m on r.mid = m.id
     """)
     reviews = cur.fetchall()
