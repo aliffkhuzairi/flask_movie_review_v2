@@ -189,9 +189,23 @@ def movie_detail(movie_id):
 def user_detail(user_id):
     if 'user_id' not in session:
         return redirect(url_for('index'))
-
+    is_self = (user_id == session['user_id'])
     conn = get_db_connection()
     cur = conn.cursor()
+
+    relationship = None
+
+    if not is_self:
+        cur.execute("""
+            select tie
+            from ties
+            where id = %s and opid = %s;
+        """,(session['user_id'], user_id))
+
+        relation_row = cur.fetchone()
+
+        if  relation_row:
+            relationship =  relation_row[0]
 
     cur.execute("""
         select * from user_info where id = %s;
@@ -214,11 +228,100 @@ def user_detail(user_id):
 
     user_reviews = cur.fetchall()
 
-    is_self = (user_id == session['user_id'])
     cur.close()
     conn.close()
 
-    return render_template("user_info.html", user_info=user_info, user_review=user_reviews, user_id=session['user_id'], is_self=is_self)
+    return render_template("user_info.html", user_info=user_info, user_review=user_reviews, user_id=session['user_id'], is_self=is_self, relationship=relationship)
+
+@app.route('/follow/<target_user_id>', methods=['POST'])
+def follow_user(target_user_id):
+    if 'user_id' not in session:
+        return redirect(url_for('index'))
+
+    current_user_id = session['user_id']
+
+    if current_user_id == target_user_id:
+        return redirect(url_for('user_detail', user_id=target_user_id))
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    if target_user_id == "admin":
+        cur.close()
+        conn.close()
+        return redirect(url_for('user_detail', user_id=target_user_id))
+
+    cur.execute("""
+        delete from ties
+        where id = %s and opid = %s and tie = 'mute';
+    """, (current_user_id, target_user_id))
+
+    cur.execute("""
+        select 1 from ties
+        where id = %s and opid = %s and tie = 'follow'
+    """,(current_user_id, target_user_id))
+
+    existing_follow = cur.fetchone()
+
+    if not existing_follow:
+        cur.execute("""
+            insert into ties(id, opid, tie)
+            values(%s, %s, 'follow');
+        """, (current_user_id, target_user_id))
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect(url_for('user_detail', user_id=target_user_id))
+
+@app.route('/mute/<target_user_id>', methods=['POST'])
+def mute_user(target_user_id):
+    if 'user_id' not in session:
+        return redirect(url_for('index'))
+
+    current_user_id = session['user_id']
+
+    if current_user_id == target_user_id:
+        return redirect(url_for('user_detail', user_id=target_user_id))
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    if target_user_id == "admin":
+        cur.close()
+        conn.close()
+        return redirect(url_for('user_detail', user_id=target_user_id))
+
+    cur.execute("""
+                delete
+                from ties
+                where id = %s
+                  and opid = %s
+                  and tie = 'follow';
+                """, (current_user_id, target_user_id))
+
+    cur.execute("""
+                select 1
+                from ties
+                where id = %s
+                  and opid = %s
+                  and tie = 'mute'
+                """, (current_user_id, target_user_id))
+
+    existing_follow = cur.fetchone()
+
+    if not existing_follow:
+        cur.execute("""
+                    insert into ties(id, opid, tie)
+                    values (%s, %s, 'mute');
+                    """, (current_user_id, target_user_id))
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect(url_for('user_detail', user_id=target_user_id))
 
 if __name__ == '__main__':
     app.run(debug=True)

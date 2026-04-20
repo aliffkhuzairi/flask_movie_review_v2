@@ -29,7 +29,7 @@
             {% else %}
             <td>Private</td>
             {% endif %}
-            
+
             <td>{{ user_info[3] }}</td>
         </tr>
 
@@ -56,5 +56,19 @@
 
         {% endfor %}
     </table>
+
+    {% if not is_self %}
+    <p>Current relationship: {{ relationship if relationship else 'none' }}</p>
+
+    <form action="{{ url_for('follow_user', target_user_id=user_info[0]) }}" method="POST" style="display:inline;">
+        <button type="submit">Follow</button>
+    </form>
+
+    <form action="{{ url_for('mute_user', target_user_id=user_info[0]) }}" method="POST" style="display:inline;">
+        <button type="submit">Mute</button>
+    </form>
+{% endif %}
+
+
 </body>
 </html>
