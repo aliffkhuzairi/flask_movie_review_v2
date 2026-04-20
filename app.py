@@ -62,6 +62,7 @@ def auth():
         if user:
             session['user_id'] = user[0]
             session['role'] = user[1]
+            print(redirect(url_for('home')))
             return redirect(url_for('home'))
         else:
             return render_template('login.html', message="Invalid ID or password")
@@ -121,5 +122,13 @@ def home():
 def logout():
     session.clear()
     return redirect(url_for('index'))
+
+@app.route('/movie/<movie_id>')
+def movie_detail(movie_id):
+    if 'user_id' not in session:
+        return redirect(url_for('index'))
+
+    return f"Movie ID: {movie_id}"
+
 if __name__ == '__main__':
     app.run(debug=True)

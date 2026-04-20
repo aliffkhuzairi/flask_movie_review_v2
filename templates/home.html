@@ -22,10 +22,10 @@
 
         {% for movie in movies %}
         <tr>
-            <td>{{ movie[1] }}</td>
-            <td>{{ movie[2] }}</td>
-            <td>{{ movie[3] }}</td>
-            <td>{{ movie[4] }}</td>
+            <td><a href="{{ url_for('movie_detail', movie_id=movie[0]) }}">{{ movie[1] }}</a></td>
+            <td><a>{{ movie[2] }}</a></td>
+            <td><a>{{ movie[3] }}</a></td>
+            <td><a>{{ movie[4] }}</a></td>
 
         </tr>
         {% endfor %}
