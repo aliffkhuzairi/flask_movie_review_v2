@@ -123,13 +123,39 @@ def logout():
     session.clear()
     return redirect(url_for('index'))
 
-@app.route('/movie/movie_id=<movie_id>')
+@app.route('/movie/movie_id=<movie_id>', methods=['GET', 'POST'])
 def movie_detail(movie_id):
     if 'user_id' not in session:
         return redirect(url_for('index'))
 
     conn = get_db_connection()
     cur = conn.cursor()
+
+    if request.method == 'POST':
+        review = request.form.get('review', '').strip()
+        rating = request.form.get('rating', '').strip()
+
+        if review and rating:
+            cur.execute("""
+                select 1 from reviews where mid = %s and uid = %s;
+            """,(movie_id, session['user_id']))
+
+            existing_review = cur.fetchone()
+
+            if existing_review:
+                cur.execute("""
+                    update reviews
+                    set ratings = %s, review = %s, rev_time = now()
+                    where mid = %s and uid = %s;
+                """, (rating, review, movie_id, session['user_id']))
+
+            else:
+                cur.execute("""
+                    insert into reviews(mid, uid, ratings, review, rev_time)
+                    values(%s, %s, %s, %s, now());
+                """,(movie_id, session['user_id'], rating, review))
+
+            conn.commit()
 
     cur.execute("""
         select id, title, director, genre, rel_date
@@ -147,10 +173,17 @@ def movie_detail(movie_id):
     """, (movie_id,))
 
     reviews = cur.fetchall()
+
+    cur.execute("""
+        select round(avg(r.ratings), 2) from reviews r where r.mid = %s
+    """, (movie_id,))
+
+    avg_rating = cur.fetchone()[0]
+
     cur.close()
     conn.close()
 
-    return render_template("movie.html", movie=movie, reviews=reviews, user_id=session['user_id'])
+    return render_template("movie.html", movie=movie, reviews=reviews, avg_rating=avg_rating, user_id=session['user_id'])
 
 if __name__ == '__main__':
     app.run(debug=True)
