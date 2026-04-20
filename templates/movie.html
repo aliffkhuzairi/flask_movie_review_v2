@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie</title>
+</head>
+<body>
+    <p>Logged in as: {{ user_id }}</p>
+    <a href="{{ url_for('logout') }}">Logout</a>
+    <a href="{{ url_for('home') }}">Home</a>
+
+    <table border="1">
+        <tr>
+            <th>Title</th>
+            <th>Director</th>
+            <th>Genre</th>
+            <th>Release Date</th>
+        </tr>
+
+        <tr>
+            <td>{{ movie[1] }}</td>
+            <td>{{ movie[2] }}</td>
+            <td>{{ movie[3] }}</td>
+            <td>{{ movie[4] }}</td>
+        </tr>
+    </table>
+
+
+    <h2>Reviews</h2>
+    <table border="1">
+        <tr>
+            <th>User ID</th>
+            <th>Ratings</th>
+            <th>Review</th>
+            <th>Review Time</th>
+        </tr>
+
+        {% for review in reviews %}
+        <tr>
+            <td>{{ review[1] }}</td>
+            <td>{{ review[0] }}</td>
+            <td>{{ review[2] }}</td>
+            <td>{{ review[3] }}</td>
+        </tr>
+
+        {% endfor %}
+    </table>
+
+</body>
+</html>

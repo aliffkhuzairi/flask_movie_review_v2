@@ -123,12 +123,34 @@ def logout():
     session.clear()
     return redirect(url_for('index'))
 
-@app.route('/movie/<movie_id>')
+@app.route('/movie/movie_id=<movie_id>')
 def movie_detail(movie_id):
     if 'user_id' not in session:
         return redirect(url_for('index'))
 
-    return f"Movie ID: {movie_id}"
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        select id, title, director, genre, rel_date
+        from movies
+        where id = %s
+    """, (movie_id,))
+
+    movie = cur.fetchone()
+
+    cur.execute("""
+        select r.ratings, r.uid, r.review, r.rev_time
+        from reviews r 
+        where r.mid = %s
+        order by r.rev_time desc
+    """, (movie_id,))
+
+    reviews = cur.fetchall()
+    cur.close()
+    conn.close()
+
+    return render_template("movie.html", movie=movie, reviews=reviews, user_id=session['user_id'])
 
 if __name__ == '__main__':
     app.run(debug=True)
