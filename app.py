@@ -185,5 +185,40 @@ def movie_detail(movie_id):
 
     return render_template("movie.html", movie=movie, reviews=reviews, avg_rating=avg_rating, user_id=session['user_id'])
 
+@app.route('/user/<user_id>')
+def user_detail(user_id):
+    if 'user_id' not in session:
+        return redirect(url_for('index'))
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        select * from user_info where id = %s;
+    """, (user_id,))
+
+    user_info = cur.fetchone()
+
+    if user_info is None:
+        cur.close()
+        conn.close()
+        return "User not found", 404
+
+    cur.execute("""
+         select m.title, r.ratings, r.review, r.rev_time 
+         from reviews r 
+         join movies m on r.mid = m.id 
+         where r.uid = %s
+         order by r.rev_time desc;
+    """,(user_id,))
+
+    user_reviews = cur.fetchall()
+
+    is_self = (user_id == session['user_id'])
+    cur.close()
+    conn.close()
+
+    return render_template("user_info.html", user_info=user_info, user_review=user_reviews, user_id=session['user_id'], is_self=is_self)
+
 if __name__ == '__main__':
     app.run(debug=True)

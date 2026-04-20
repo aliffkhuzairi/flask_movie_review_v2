@@ -23,9 +23,9 @@
         {% for movie in movies %}
         <tr>
             <td><a href="{{ url_for('movie_detail', movie_id=movie[0]) }}">{{ movie[1] }}</a></td>
-            <td><a>{{ movie[2] }}</a></td>
-            <td><a>{{ movie[3] }}</a></td>
-            <td><a>{{ movie[4] }}</a></td>
+            <td>{{ movie[2] }}</td>
+            <td>{{ movie[3] }}</td>
+            <td>{{ movie[4] }}</td>
 
         </tr>
         {% endfor %}
@@ -46,7 +46,7 @@
         {% for review in reviews %}
         <tr>
             <td>{{ review[0] }}</td>
-            <td>{{ review[1] }}</td>
+            <td><a href="{{ url_for('user_detail', user_id=review[1]) }}">{{ review[1] }}</a></td>
             <td>{{ review[2] }}</td>
             <td>{{ review[3] }}</td>
             <td>{{ review[4] }}</td>
