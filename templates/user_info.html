@@ -60,6 +60,24 @@
     {% if not is_self %}
     <p>Current relationship: {{ relationship if relationship else 'none' }}</p>
 
+    {% if relationship == 'follow' %}
+    <form action="{{ url_for('unfollow_user', target_user_id=user_info[0]) }}" method="POST" style="display:inline;">
+        <button type="submit">Unfollow</button>
+    </form>
+
+    <form action="{{ url_for('mute_user', target_user_id=user_info[0]) }}" method="POST" style="display:inline;">
+        <button type="submit">Mute</button>
+    </form>
+    {% elif relationship == 'mute' %}
+    <form action="{{ url_for('follow_user', target_user_id=user_info[0]) }}" method="POST" style="display:inline;">
+        <button type="submit">Follow</button>
+    </form>
+
+    <form action="{{ url_for('unmute_user', target_user_id=user_info[0]) }}" method="POST" style="display:inline;">
+        <button type="submit">Unmute</button>
+    </form>
+
+    {% else %}
     <form action="{{ url_for('follow_user', target_user_id=user_info[0]) }}" method="POST" style="display:inline;">
         <button type="submit">Follow</button>
     </form>

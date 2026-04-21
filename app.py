@@ -275,6 +275,24 @@ def follow_user(target_user_id):
 
     return redirect(url_for('user_detail', user_id=target_user_id))
 
+@app.route('/unfollow/<target_user_id>', methods=['POST'])
+def unfollow_user(target_user_id):
+    if 'user_id' not in session:
+        return redirect(url_for('index'))
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        delete from ties
+        where id = %s and opid = %s and tie = 'follow';
+    """,(session['user_id'], target_user_id))
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect(url_for('user_detail', user_id=target_user_id))
 @app.route('/mute/<target_user_id>', methods=['POST'])
 def mute_user(target_user_id):
     if 'user_id' not in session:
