@@ -1,3 +1,5 @@
+from encodings import cp437
+
 from flask import Flask, render_template, request, redirect, url_for, session
 import psycopg2
 app = Flask(__name__)
@@ -293,6 +295,28 @@ def unfollow_user(target_user_id):
     conn.close()
 
     return redirect(url_for('user_detail', user_id=target_user_id))
+
+
+@app.route('/unmute/<target_user_id>', methods=['POST'])
+def unmute_user(target_user_id):
+    if 'user_id' not in session:
+        return redirect(url_for('index'))
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        delete from ties
+        where id = %s and opid = %s and tie = 'mute';
+    """,(session['user_id'], target_user_id))
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect(url_for('user_detail', user_id=target_user_id))
+
+
 @app.route('/mute/<target_user_id>', methods=['POST'])
 def mute_user(target_user_id):
     if 'user_id' not in session:
