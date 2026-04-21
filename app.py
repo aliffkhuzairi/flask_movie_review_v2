@@ -1,7 +1,7 @@
 from encodings import cp437
 
-from flask import Flask, render_template, request, redirect, url_for, session
-import psycopg2
+from flask import Flask, render_template, request, redirect, url_for, session, flash
+import psycopg2, re
 app = Flask(__name__)
 app.secret_key = "dev_secret_key"
 
@@ -224,9 +224,9 @@ def user_detail(user_id):
         return "User not found", 404
 
     cur.execute("""
-                select m.title, r.ratings, r.review, r.rev_time
+                select m.id, m.title, r.ratings, r.review, r.rev_time
                 from reviews r
-                         join movies m on r.mid = m.id
+                join movies m on r.mid = m.id
                 where r.uid = %s
                 order by r.rev_time desc;
                 """, (user_id,))
@@ -276,6 +276,7 @@ def user_detail(user_id):
 
     cur.close()
     conn.close()
+    clear_form = session.pop('clear_form', False)
 
     return render_template("user_info.html",
                            user_info=user_info,
@@ -286,9 +287,10 @@ def user_detail(user_id):
                            is_current_user_admin=is_current_user_admin,
                            relationship=relationship,
                            followed_users=followed_users,
-                           muted_users=muted_users)
+                           muted_users=muted_users,
+                           clear_form=clear_form)
 
-@app.route('/user_detail/<user_id>/edit', methods=['POST'])
+@app.route('/user/<user_id>/edit', methods=['POST'])
 def edit_user_profile(user_id):
     if 'user_id' not in session:
         return redirect(url_for('index'))
@@ -299,21 +301,41 @@ def edit_user_profile(user_id):
     name = request.form.get('name', '').strip()
     email = request.form.get('email', '').strip()
 
-    if not name or not email:
+    if not name and not email:
+        flash('Please enter at least one field to update.')
         return redirect(url_for('user_detail', user_id=user_id))
+
+    if name and len(name) < 2:
+        flash('Name must be at least 2 characters.')
+        return redirect(url_for('user_detail', user_id=user_id))
+
+    if email and not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+        flash('Please enter a valid email address.')
+        return redirect(url_for('user_detail', user_id=user_id))
+
 
     conn = get_db_connection()
     cur = conn.cursor()
 
-    cur.execute("""
-        update user_info
-        set name = %s, email = %s
-        where id = %s;
-    """, (name, email, user_id))
+    if name:
+        cur.execute("""
+                    update user_info
+                    set name  = %s
+                    where id = %s;
+                    """, (name, user_id))
+    if email:
+        cur.execute("""
+                    update user_info
+                    set email = %s
+                    where id = %s;
+                    """, (email, user_id))
+
 
     conn.commit()
     cur.close()
     conn.close()
+    flash('Profile updated successfully.')
+    session['clear_form'] = True
     return redirect(url_for('user_detail', user_id=user_id))
 
 @app.route('/follow/<target_user_id>', methods=['POST'])
