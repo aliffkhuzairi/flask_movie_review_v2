@@ -4,22 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}" />
-    <title>Title</title>
+    <title>Sign Up</title>
 </head>
 <body>
-
-    <div class="auth-shell">
+     <div class="auth-shell">
          <div class="auth-card">
-             <h1>Sign In</h1>
-            {% with messages = get_flashed_messages() %}
+             <h1>Create Account</h1>
+
+             {% with messages = get_flashed_messages() %}
                 {% if messages %}
                     {% for msg in messages %}
                         <div class="flash">{{ msg }}</div>
                     {% endfor %}
                 {% endif %}
-            {% endwith %}
+             {% endwith %}
 
-            <form action="{{ url_for('auth') }}" method="POST" class="form-grid">
+             <form action="{{ url_for('signup') }}" method="POST" class="form-grid">
 
                 <label for="id">ID:</label>
                 <input id="id" type="text" name="user_id" required>
@@ -27,17 +27,15 @@
                 <label for="password">Password:</label>
                 <input id="password" type="password" name="password" required>
 
-                <button type="submit">Sign In</button>
+                <button type="submit">Sign Up</button>
 
-            </form>
+             </form>
 
-            <p class="small-text">
-                Don't have an account?
-                <a href="{{ url_for('signup_page') }}">Sign Up</a>
-            </p>
+             <p class="small-text">
+                Already have an account?
+                <a href="{{ url_for('index') }}">Sign in</a>
+             </p>
          </div>
     </div>
-
-
 </body>
 </html>

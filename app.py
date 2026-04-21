@@ -20,56 +20,76 @@ def index():
 
 @app.route('/auth', methods=['POST'])
 def auth():
-    user_id = request.form.get('user_id').strip()
-    password = request.form.get('password').strip()
-    action = request.form.get('action').strip()
+    user_id = request.form.get('user_id', '').strip()
+    password = request.form.get('password', '').strip()
 
     if not user_id or not password:
-        return render_template('login.html', message="ID and password are required.")
+        flash("ID and password are required.")
+        return render_template('login.html')
 
     conn = get_db_connection()
     cur = conn.cursor()
 
-    if action == "signup":
-        try:
-            cur.execute(
-                "insert into users(id, password, role) values(%s, %s, %s)",
-                (user_id, password, "user")
-            )
-            cur.execute(
-                "insert into user_info(id, reg_date) values(%s, now());",
-                (user_id,)
-            )
-            conn.commit()
-            cur.close()
-            conn.close()
-            return render_template('login.html', message="Sign up successful. Please sign in.")
+    cur.execute("""
+        select id, role 
+        from users 
+        where id = %s and password = %s;
+    """, (user_id, password)
+    )
 
-        except:
-            conn.rollback()
-            cur.close()
-            conn.close()
-            return render_template('login.html', message="Sign up failed. ID may already exists.")
+    user = cur.fetchone()
+    cur.close()
+    conn.close()
 
-    elif action == "signin":
-        cur.execute("""
-            select id, role from users where id = %s and password = %s;
-        """, (user_id, password)
+    if user:
+        session['user_id'] = user[0]
+        session['user_role'] = user[1]
+        return redirect(url_for('home'))
+
+    flash("ID or password are invalid.")
+    return render_template('login.html')
+
+@app.route('/signup')
+def signup_page():
+    return render_template('signup.html')
+
+@app.route('/signup', methods=['POST'])
+def signup():
+    user_id = request.form.get('user_id', '').strip()
+    password = request.form.get('password', '').strip()
+
+    if not user_id or not password:
+        flash("ID and password are required.")
+        return render_template('signup.html')
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    try:
+        cur.execute(
+            "insert into users(id, password, role) values(%s, %s, %s)",
+            (user_id, password, "user")
         )
-        user = cur.fetchone()
+        cur.execute(
+            "insert into user_info(id, reg_date) values(%s, now());",
+            (user_id,)
+        )
+        conn.commit()
+
         cur.close()
         conn.close()
 
-        if user:
-            session['user_id'] = user[0]
-            session['user_role'] = user[1]
-            return redirect(url_for('home'))
-        else:
-            return render_template('login.html', message="Invalid ID or password")
+        flash("Account created. Please sign in.")
+        return redirect(url_for('index'))
 
-    cur.close()
-    conn.close()
-    return render_template('login.html', message="Invalid action")
+    except:
+        conn.rollback()
+        cur.close()
+        conn.close()
+        flash("Sign up failed. ID may already exists.")
+        return render_template('signup.html')
+
+
 @app.route('/home')
 def home():
     if 'user_id' not in session:
