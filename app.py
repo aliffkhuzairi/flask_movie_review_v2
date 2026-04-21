@@ -63,7 +63,6 @@ def auth():
         if user:
             session['user_id'] = user[0]
             session['user_role'] = user[1]
-            print(session['user_id'], session['user_role'])
             return redirect(url_for('home'))
         else:
             return render_template('login.html', message="Invalid ID or password")
@@ -130,7 +129,7 @@ def logout():
     session.clear()
     return redirect(url_for('index'))
 
-@app.route('/movie/movie_id=<movie_id>', methods=['GET', 'POST'])
+@app.route('/movie/<movie_id>', methods=['GET', 'POST'])
 def movie_detail(movie_id):
     if 'user_id' not in session:
         return redirect(url_for('index'))
@@ -216,7 +215,6 @@ def user_detail(user_id):
                 """, (user_id,))
 
     user_info = cur.fetchone()
-    print(user_info)
 
     if user_info is None:
         cur.close()
@@ -495,7 +493,44 @@ def unmute_user(target_user_id):
 
     return redirect(url_for('user_detail', user_id=target_user_id))
 
+@app.route('/add-movie', methods=['POST'])
+def add_movie():
+    if 'user_id' not in session:
+        return redirect(url_for('index'))
 
+    if session.get('user_role') != 'admin':
+        return redirect(url_for('home'))
+
+    movie_id = request.form.get('movie_id', '').strip()
+    title = request.form.get('movie_title', '').strip()
+    director = request.form.get('director', '').strip()
+    genre = request.form.get('genre', '').strip()
+    rel_date = request.form.get('rel_date', '').strip()
+
+    if not movie_id or not title or not director or not genre or not rel_date:
+        flash("All fields are required.")
+        return redirect(url_for('user_detail', user_id=session['user_id']))
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    try:
+        cur.execute("""
+            insert into movies(id, title, director, genre, rel_date)
+            values(%s, %s, %s, %s, %s)
+        """,(movie_id, title, director, genre, rel_date))
+
+        conn.commit()
+        flash("Movie added successfully!")
+
+    except Exception as e:
+        conn.rollback()
+        flash(f"Failed: {e}")
+
+    cur.close()
+    conn.close()
+
+    return redirect(url_for('user_detail', user_id=session['user_id']))
 
 if __name__ == '__main__':
     app.run(debug=True)

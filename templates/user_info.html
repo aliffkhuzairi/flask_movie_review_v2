@@ -154,5 +154,46 @@
     </form>
     {% endif %}
 
+    {% if is_self and session['user_role'] == 'admin' %}
+    <h2>Add Movies</h2>
+    <form action="{{ url_for('add_movie') }}" method="POST">
+        <label for="movie_id">Movie ID: </label>
+        <input id="movie_id" type="text" name="movie_id" required>
+
+        <br><br>
+
+        <label for="movie_title">Movie Title: </label>
+        <input id="movie_title" name="movie_title" type="text" required>
+
+        <br><br>
+
+        <label for="director">Director: </label>
+        <input id="director" type="text" name="director" required>
+
+        <br><br>
+
+        <label for="genre">Genre: </label>
+        <select id="genre" name="genre" required>
+            <option value="">-- Select Genre --</option>
+            <option value="action">action</option>
+            <option value="comedy">comedy</option>
+            <option value="drama">drama</option>
+            <option value="fantasy">fantasy</option>
+            <option value="romance">romance</option>
+            <option value="thriller">thriller</option>
+            <option value="western">western</option>
+        </select>
+
+        <br><br>
+
+        <label for="rel_date">Release Date: </label>
+        <input id="rel_date" name="rel_date" type="date" required>
+
+        <br><br>
+
+        <button type="submit">Add Movie</button>
+
+    </form>
+{% endif %}
 </body>
 </html>
