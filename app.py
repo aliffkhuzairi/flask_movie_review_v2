@@ -198,12 +198,13 @@ def movie_detail(movie_id):
 
     return render_template("movie.html", movie=movie, reviews=reviews, avg_rating=avg_rating, user_id=session['user_id'])
 
-@app.route('/user/<user_id>')
+@app.route('/user/<user_id>', methods=['GET', 'POST'])
 def user_detail(user_id):
     if 'user_id' not in session:
         return redirect(url_for('index'))
 
     current_user_role = session.get('user_role')
+
     conn = get_db_connection()
     cur = conn.cursor()
 
@@ -286,6 +287,34 @@ def user_detail(user_id):
                            relationship=relationship,
                            followed_users=followed_users,
                            muted_users=muted_users)
+
+@app.route('/user_detail/<user_id>/edit', methods=['POST'])
+def edit_user_profile(user_id):
+    if 'user_id' not in session:
+        return redirect(url_for('index'))
+
+    if session['user_id'] != user_id:
+        return redirect(url_for('user_detail', user_id=user_id))
+
+    name = request.form.get('name', '').strip()
+    email = request.form.get('email', '').strip()
+
+    if not name or not email:
+        return redirect(url_for('user_detail', user_id=user_id))
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        update user_info
+        set name = %s, email = %s
+        where id = %s;
+    """, (name, email, user_id))
+
+    conn.commit()
+    cur.close()
+    conn.close()
+    return redirect(url_for('user_detail', user_id=user_id))
 
 @app.route('/follow/<target_user_id>', methods=['POST'])
 def follow_user(target_user_id):
@@ -443,7 +472,6 @@ def unmute_user(target_user_id):
     conn.close()
 
     return redirect(url_for('user_detail', user_id=target_user_id))
-
 
 
 
