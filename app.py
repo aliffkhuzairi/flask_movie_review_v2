@@ -57,14 +57,13 @@ def auth():
         """, (user_id, password)
         )
         user = cur.fetchone()
-        print(user)
         cur.close()
         conn.close()
 
         if user:
             session['user_id'] = user[0]
-            session['role'] = user[1]
-            print(redirect(url_for('home')))
+            session['user_role'] = user[1]
+            print(session['user_id'], session['user_role'])
             return redirect(url_for('home'))
         else:
             return render_template('login.html', message="Invalid ID or password")
@@ -103,15 +102,21 @@ def home():
             select r.ratings, r.uid, m.title, r.review, r.rev_time
             from reviews r
             join movies m on r.mid = m.id
+            where r.uid not in (
+                select opid from ties where id = %s and tie = 'mute'
+                )
             order by r.rev_time desc;
-        """)
+        """,(session['user_id'],))
     elif review_sort == "title":
         cur.execute("""
             select r.ratings, r.uid, m.title, r.review, r.rev_time
             from reviews r
             join movies m on r.mid = m.id
+            where r.uid not in (
+                select opid from ties where id = %s and tie = 'mute'
+                )
             order by m.title desc;
-        """)
+        """,(session['user_id'],))
 
     reviews = cur.fetchall()
 
@@ -170,15 +175,21 @@ def movie_detail(movie_id):
     cur.execute("""
         select r.ratings, r.uid, r.review, r.rev_time
         from reviews r 
-        where r.mid = %s
+        where r.mid = %s and r.uid not in (
+            select opid from ties where id = %s and tie = 'mute' 
+            )
         order by r.rev_time desc
-    """, (movie_id,))
+    """, (movie_id, session['user_id'],))
 
     reviews = cur.fetchall()
 
     cur.execute("""
-        select round(avg(r.ratings), 2) from reviews r where r.mid = %s
-    """, (movie_id,))
+        select trunc(avg(r.ratings), 2) 
+        from reviews r 
+        where r.mid = %s and r.uid not in (
+            select opid from ties where id = %s and tie = 'mute'
+            )
+    """, (movie_id, session['user_id'],))
 
     avg_rating = cur.fetchone()[0]
 
@@ -191,13 +202,66 @@ def movie_detail(movie_id):
 def user_detail(user_id):
     if 'user_id' not in session:
         return redirect(url_for('index'))
-    is_self = (user_id == session['user_id'])
+
+    current_user_role = session.get('user_role')
     conn = get_db_connection()
     cur = conn.cursor()
 
+    cur.execute("""
+                select u.id, u.role, ui.name, ui.email, ui.reg_date
+                from users u
+                         join user_info ui on u.id = ui.id
+                where u.id = %s;
+                """, (user_id,))
+
+    user_info = cur.fetchone()
+    print(user_info)
+
+    if user_info is None:
+        cur.close()
+        conn.close()
+        return "User not found", 404
+
+    cur.execute("""
+                select m.title, r.ratings, r.review, r.rev_time
+                from reviews r
+                         join movies m on r.mid = m.id
+                where r.uid = %s
+                order by r.rev_time desc;
+                """, (user_id,))
+
+    user_reviews = cur.fetchall()
+
     relationship = None
 
-    if not is_self:
+    is_self = (user_id == session['user_id'])
+    is_admin_profile = (user_info[1] == 'admin')
+    is_current_user_admin = (current_user_role == 'admin')
+    followed_users = []
+    muted_users = []
+    if is_self:
+        cur.execute("""
+            select ui.id, ui.name 
+            from ties t 
+            join user_info ui on t.opid = ui.id
+            where t.id = %s and t.tie = 'follow'
+            order by ui.id;
+        """,(user_id,))
+
+        followed_users = cur.fetchall()
+
+        cur.execute("""
+                    select ui.id, ui.name
+                    from ties t
+                    join user_info ui on t.opid = ui.id
+                    where t.id = %s
+                    and t.tie = 'mute'
+                    order by ui.id;
+        """, (user_id,))
+
+        muted_users = cur.fetchall()
+
+    elif not is_self and not is_admin_profile and not is_current_user_admin:
         cur.execute("""
             select tie
             from ties
@@ -206,39 +270,30 @@ def user_detail(user_id):
 
         relation_row = cur.fetchone()
 
-        if  relation_row:
+        if relation_row:
             relationship =  relation_row[0]
-
-    cur.execute("""
-        select * from user_info where id = %s;
-    """, (user_id,))
-
-    user_info = cur.fetchone()
-
-    if user_info is None:
-        cur.close()
-        conn.close()
-        return "User not found", 404
-
-    cur.execute("""
-         select m.title, r.ratings, r.review, r.rev_time 
-         from reviews r 
-         join movies m on r.mid = m.id 
-         where r.uid = %s
-         order by r.rev_time desc;
-    """,(user_id,))
-
-    user_reviews = cur.fetchall()
 
     cur.close()
     conn.close()
 
-    return render_template("user_info.html", user_info=user_info, user_review=user_reviews, user_id=session['user_id'], is_self=is_self, relationship=relationship)
+    return render_template("user_info.html",
+                           user_info=user_info,
+                           user_reviews=user_reviews,
+                           user_id=session['user_id'],
+                           is_self=is_self,
+                           is_admin_profile=is_admin_profile,
+                           is_current_user_admin=is_current_user_admin,
+                           relationship=relationship,
+                           followed_users=followed_users,
+                           muted_users=muted_users)
 
 @app.route('/follow/<target_user_id>', methods=['POST'])
 def follow_user(target_user_id):
     if 'user_id' not in session:
         return redirect(url_for('index'))
+
+    if session.get('user_role') == 'admin':
+        return redirect(url_for('user_detail', user_id=target_user_id))
 
     current_user_id = session['user_id']
 
@@ -248,7 +303,17 @@ def follow_user(target_user_id):
     conn = get_db_connection()
     cur = conn.cursor()
 
-    if target_user_id == "admin":
+    cur.execute("""
+        select role from users where id = %s;
+    """,(target_user_id,))
+    target_user = cur.fetchone()
+
+    if target_user is None:
+        cur.close()
+        conn.close()
+        return "User not found", 404
+
+    if target_user[0] == "admin":
         cur.close()
         conn.close()
         return redirect(url_for('user_detail', user_id=target_user_id))
@@ -270,6 +335,69 @@ def follow_user(target_user_id):
             insert into ties(id, opid, tie)
             values(%s, %s, 'follow');
         """, (current_user_id, target_user_id))
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect(url_for('user_detail', user_id=target_user_id))
+
+@app.route('/mute/<target_user_id>', methods=['POST'])
+def mute_user(target_user_id):
+    if 'user_id' not in session:
+        return redirect(url_for('index'))
+
+    if session.get('user_role') == 'admin':
+        return redirect(url_for('user_detail', user_id=target_user_id))
+
+    current_user_id = session['user_id']
+
+    if current_user_id == target_user_id:
+        return redirect(url_for('user_detail', user_id=target_user_id))
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+                select role
+                from users
+                where id = %s;
+                """, (target_user_id,))
+    target_user = cur.fetchone()
+
+    if target_user is None:
+        cur.close()
+        conn.close()
+        return "User not found", 404
+
+    if target_user[0] == "admin":
+        cur.close()
+        conn.close()
+        return redirect(url_for('user_detail', user_id=target_user_id))
+
+    cur.execute("""
+                delete
+                from ties
+                where id = %s
+                  and opid = %s
+                  and tie = 'follow';
+                """, (current_user_id, target_user_id))
+
+    cur.execute("""
+                select 1
+                from ties
+                where id = %s
+                  and opid = %s
+                  and tie = 'mute'
+                """, (current_user_id, target_user_id))
+
+    existing_follow = cur.fetchone()
+
+    if not existing_follow:
+        cur.execute("""
+                    insert into ties(id, opid, tie)
+                    values (%s, %s, 'mute');
+                    """, (current_user_id, target_user_id))
 
     conn.commit()
     cur.close()
@@ -317,53 +445,7 @@ def unmute_user(target_user_id):
     return redirect(url_for('user_detail', user_id=target_user_id))
 
 
-@app.route('/mute/<target_user_id>', methods=['POST'])
-def mute_user(target_user_id):
-    if 'user_id' not in session:
-        return redirect(url_for('index'))
 
-    current_user_id = session['user_id']
-
-    if current_user_id == target_user_id:
-        return redirect(url_for('user_detail', user_id=target_user_id))
-
-    conn = get_db_connection()
-    cur = conn.cursor()
-
-    if target_user_id == "admin":
-        cur.close()
-        conn.close()
-        return redirect(url_for('user_detail', user_id=target_user_id))
-
-    cur.execute("""
-                delete
-                from ties
-                where id = %s
-                  and opid = %s
-                  and tie = 'follow';
-                """, (current_user_id, target_user_id))
-
-    cur.execute("""
-                select 1
-                from ties
-                where id = %s
-                  and opid = %s
-                  and tie = 'mute'
-                """, (current_user_id, target_user_id))
-
-    existing_follow = cur.fetchone()
-
-    if not existing_follow:
-        cur.execute("""
-                    insert into ties(id, opid, tie)
-                    values (%s, %s, 'mute');
-                    """, (current_user_id, target_user_id))
-
-    conn.commit()
-    cur.close()
-    conn.close()
-
-    return redirect(url_for('user_detail', user_id=target_user_id))
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -15,6 +15,11 @@
     <table border="1">
         <tr>
             <th>ID</th>
+
+            {% if session['user_role'] == 'admin' %}
+                <th>Role</th>
+            {% endif %}
+
             <th>Name</th>
             <th>Email</th>
             <th>Registration Date</th>
@@ -22,15 +27,18 @@
 
         <tr>
             <td>{{ user_info[0] }}</td>
-            <td>{{ user_info[1] }}</td>
+            {% if session['user_role'] == 'admin' %}
+                <td>{{ user_info[1] }}</td>
+            {% endif %}
+            <td>{{ user_info[2] }}</td>
 
             {% if is_self %}
-            <td>{{ user_info[2] }}</td>
+                <td>{{ user_info[3] }}</td>
             {% else %}
-            <td>Private</td>
+                <td>Private</td>
             {% endif %}
 
-            <td>{{ user_info[3] }}</td>
+            <td>{{ user_info[4] }}</td>
         </tr>
 
     </table>
@@ -46,7 +54,7 @@
             <th>Review Time</th>
         </tr>
 
-        {% for review in user_review %}
+        {% for review in user_reviews %}
         <tr>
             <td>{{ review[0] }}</td>
             <td>{{ review[1] }}</td>
@@ -57,37 +65,72 @@
         {% endfor %}
     </table>
 
-    {% if not is_self %}
+    {% if not is_self and not is_admin_profile and not is_current_user_admin %}
     <p>Current relationship: {{ relationship if relationship else 'none' }}</p>
 
-    {% if relationship == 'follow' %}
-    <form action="{{ url_for('unfollow_user', target_user_id=user_info[0]) }}" method="POST" style="display:inline;">
-        <button type="submit">Unfollow</button>
-    </form>
+        {% if relationship == 'follow' %}
+        <form action="{{ url_for('unfollow_user', target_user_id=user_info[0]) }}" method="POST" style="display:inline;">
+            <button type="submit">Unfollow</button>
+        </form>
 
-    <form action="{{ url_for('mute_user', target_user_id=user_info[0]) }}" method="POST" style="display:inline;">
-        <button type="submit">Mute</button>
-    </form>
-    {% elif relationship == 'mute' %}
-    <form action="{{ url_for('follow_user', target_user_id=user_info[0]) }}" method="POST" style="display:inline;">
-        <button type="submit">Follow</button>
-    </form>
+        <form action="{{ url_for('mute_user', target_user_id=user_info[0]) }}" method="POST" style="display:inline;">
+            <button type="submit">Mute</button>
+        </form>
 
-    <form action="{{ url_for('unmute_user', target_user_id=user_info[0]) }}" method="POST" style="display:inline;">
-        <button type="submit">Unmute</button>
-    </form>
+        {% elif relationship == 'mute' %}
+        <form action="{{ url_for('follow_user', target_user_id=user_info[0]) }}" method="POST" style="display:inline;">
+            <button type="submit">Follow</button>
+        </form>
 
-    {% else %}
-    <form action="{{ url_for('follow_user', target_user_id=user_info[0]) }}" method="POST" style="display:inline;">
-        <button type="submit">Follow</button>
-    </form>
+        <form action="{{ url_for('unmute_user', target_user_id=user_info[0]) }}" method="POST" style="display:inline;">
+            <button type="submit">Unmute</button>
+        </form>
 
-    <form action="{{ url_for('mute_user', target_user_id=user_info[0]) }}" method="POST" style="display:inline;">
-        <button type="submit">Mute</button>
-    </form>
+        {% else %}
+        <form action="{{ url_for('follow_user', target_user_id=user_info[0]) }}" method="POST" style="display:inline;">
+            <button type="submit">Follow</button>
+        </form>
+
+        <form action="{{ url_for('mute_user', target_user_id=user_info[0]) }}" method="POST" style="display:inline;">
+            <button type="submit">Mute</button>
+        </form>
+        {% endif %}
     {% endif %}
+
+    {% if is_self %}
+    <h2>Followed Users</h2>
+        {% if followed_users %}
+        <ul>
+            {% for followed in followed_users %}
+            <li>
+                <a href="{{ url_for('user_detail', user_id=followed[0]) }}">{{ followed[0] }}</a>
+                {% if followed[1] %}
+                    - {{ followed[1] }}
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+
+        {% else %}
+        <p>No followed users</p>
+        {% endif %}
+
+        <h2>Muted Users</h2>
+        {% if muted_users %}
+        <ul>
+            {% for muted in muted_users %}
+            <li>
+                 <a href="{{ url_for('user_detail', user_id=muted[0]) }}">{{ muted[0] }}</a>
+                {% if muted[1] %}
+                    - {{ muted[1] }}
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+
+        {% else %}
+        <p>No muted users</p>
+        {% endif %}
     {% endif %}
-
-
 </body>
 </html>
