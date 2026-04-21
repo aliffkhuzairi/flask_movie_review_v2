@@ -141,7 +141,7 @@ def movie_detail(movie_id):
         review = request.form.get('review', '').strip()
         rating = request.form.get('rating', '').strip()
 
-        if review and rating:
+        if review and rating.isdigit():
             cur.execute("""
                 select 1 from reviews where mid = %s and uid = %s;
             """,(movie_id, session['user_id']))
@@ -155,12 +155,15 @@ def movie_detail(movie_id):
                     where mid = %s and uid = %s;
                 """, (rating, review, movie_id, session['user_id']))
 
+                flash("Review updated successfully!")
+
             else:
                 cur.execute("""
                     insert into reviews(mid, uid, ratings, review, rev_time)
                     values(%s, %s, %s, %s, now());
                 """,(movie_id, session['user_id'], rating, review))
 
+                flash("Review added successfully!")
             conn.commit()
 
     cur.execute("""
