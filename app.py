@@ -192,10 +192,18 @@ def movie_detail(movie_id):
 
     avg_rating = cur.fetchone()[0]
 
+    cur.execute("""
+        select ratings, review
+        from reviews
+        where mid = %s and uid = %s;
+    """,(movie_id, session['user_id'],))
+
+    user_review = cur.fetchone()
     cur.close()
     conn.close()
 
-    return render_template("movie.html", movie=movie, reviews=reviews, avg_rating=avg_rating, user_id=session['user_id'])
+
+    return render_template("movie.html", movie=movie, reviews=reviews, avg_rating=avg_rating, user_review=user_review, user_id=session['user_id'])
 
 @app.route('/user/<user_id>', methods=['GET', 'POST'])
 def user_detail(user_id):
@@ -532,5 +540,23 @@ def add_movie():
 
     return redirect(url_for('user_detail', user_id=session['user_id']))
 
+@app.route('/review/<movie_id>/delete', methods=['POST'])
+def delete_review(movie_id):
+    if 'user_id' not in session:
+        return redirect(url_for('index'))
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        delete from reviews where mid = %s and uid = %s;
+    """,(movie_id, session['user_id']))
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    flash("Review deleted successfully.")
+    return redirect(url_for('user_detail', user_id=session['user_id']))
 if __name__ == '__main__':
     app.run(debug=True)

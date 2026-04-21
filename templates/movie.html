@@ -52,16 +52,23 @@
 
     <p>Average rating: {{ avg_rating }}</p>
 
+    {% if user_review %}
+    <h2>Update Your Review</h2>
+    {% else %}
+    <h2>Add Your Review</h2>
+    {% endif %}
+
     <form method="POST">
 
         <label for="rating">Rating:</label><br>
-        <input id="rating" name="rating" type="number" min="0" max="5" step="1" required>
+        <input id="rating" name="rating" type="number" min="0" max="5" step="1" value="{{ user_review[0] if user_review else '' }}" required>
 
         <label for="review">Review:</label><br>
-        <textarea id="review" name="review" cols="40" rows="4" required></textarea>
+        <textarea id="review" name="review" cols="40" rows="4" required>{{ user_review[1] if user_review else '' }}</textarea>
 
         <br><br>
-        <button type="submit">Add/Update Review</button>
+
+        <button type="submit">{{ 'Update Review' if user_review else 'Add Review' }}</button>
     </form>
 
 </body>
