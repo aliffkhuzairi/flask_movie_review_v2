@@ -121,7 +121,10 @@
                                         {{ review[3].strftime('%d %b %Y %H:%M') if review[3] else '' }}
                                     </p>
 
-                                    <p class="review-text">{{ review[2] }}</p>
+                                    <div class="review-text-block">
+                                        <p class="review-text clamp-text">{{ review[2] }}</p>
+                                        <button type="button" class="text-toggle" onclick="toggleReview(this)">Read more</button>
+                                    </div>
                                 </div>
                             {% endfor %}
                         </div>
@@ -132,7 +135,7 @@
             </div>
         </section>
 
-</main>
-
+    </main>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
