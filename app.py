@@ -175,7 +175,7 @@ def movie_detail(movie_id):
                     where mid = %s and uid = %s;
                 """, (rating, review, movie_id, session['user_id']))
 
-                flash("Review updated successfully!")
+                flash("Review updated!")
 
             else:
                 cur.execute("""
@@ -183,7 +183,7 @@ def movie_detail(movie_id):
                     values(%s, %s, %s, %s, now());
                 """,(movie_id, session['user_id'], rating, review))
 
-                flash("Review added successfully!")
+                flash("Review added!")
             conn.commit()
 
     cur.execute("""

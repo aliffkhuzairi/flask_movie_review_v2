@@ -2,56 +2,122 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, intitial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
     <title>Movies</title>
 </head>
 <body>
-    <p>Logged in as: {{ user_id }}</p>
-    <a href="{{ url_for('logout') }}">Logout</a>
 
-    <h1>Movie List</h1>
-    <a href="{{ url_for('home', movie_sort='latest', review_sort=request.args.get('review_sort', 'latest')) }}">Latest</a>
-    <a href="{{ url_for('home', movie_sort='genre', review_sort=request.args.get('review_sort', 'latest')) }}">Genre</a>
-    <table border="1">
-        <tr>
-            <th>Title</th>
-            <th>Director</th>
-            <th>Genre</th>
-            <th>Release Date</th>
-        </tr>
+    <!-- HEADER -->
+    <header class="header">
+        <div>
+            <strong>{{ user_id }}</strong>
+        </div>
+        <div class="button-row">
+            <a class="button-link primary" href="{{ url_for('user_detail', user_id=user_id) }}">Profile</a>
+            <a class="button-link logout" href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </header>
 
-        {% for movie in movies %}
-        <tr>
-            <td><a href="{{ url_for('movie_detail', movie_id=movie[0]) }}">{{ movie[1] }}</a></td>
-            <td>{{ movie[2] }}</td>
-            <td>{{ movie[3] }}</td>
-            <td>{{ movie[4] }}</td>
+    <!-- FLASH MESSAGE -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <div class="flash">{{ msg }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 
-        </tr>
-        {% endfor %}
-    </table>
+    <!-- MOVIE SECTION -->
+    <main class="page-container">
+        <div class="card">
+            <div class="movie-header">
+                <h1>Movies</h1>
 
-    <h1>Reviews</h1>
-    <a href="{{ url_for('home', movie_sort=request.args.get('movie_sort', 'latest'), review_sort='latest') }}">Latest</a>
-    <a href="{{ url_for('home', movie_sort=request.args.get('movie_sort', 'latest'), review_sort='title') }}">Title</a>
-    <table border="1">
-        <tr>
-            <th>Rating</th>
-            <th>User</th>
-            <th>Movie</th>
-            <th>Review</th>
-            <th>Time</th>
-        </tr>
+                <div class="button-row">
+                    <a class="button-link primary"
+                       href="{{ url_for('home', movie_sort='latest', review_sort=request.args.get('review_sort', 'latest')) }}">
+                        Latest
+                    </a>
 
-        {% for review in reviews %}
-        <tr>
-            <td>{{ review[0] }}</td>
-            <td><a href="{{ url_for('user_detail', user_id=review[1]) }}">{{ review[1] }}</a></td>
-            <td>{{ review[2] }}</td>
-            <td>{{ review[3] }}</td>
-            <td>{{ review[4] }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+                    <a class="button-link secondary"
+                       href="{{ url_for('home', movie_sort='genre', review_sort=request.args.get('review_sort', 'latest')) }}">
+                        Genre
+                    </a>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <tr>
+                        <th>Title</th>
+                        <th>Director</th>
+                        <th>Genre</th>
+                        <th>Release</th>
+                    </tr>
+
+                    {% for movie in movies %}
+                    <tr>
+                        <td>
+                            <a href="{{ url_for('movie_detail', movie_id=movie[0]) }}">
+                                {{ movie[1] }}
+                            </a>
+                        </td>
+                        <td>{{ movie[2] }}</td>
+                        <td>{{ movie[3] }}</td>
+                        <td>{{ movie[4] }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+        <!-- REVIEWS SECTION -->
+        <div class="card">
+            <div class="movie-header">
+                <h1>Reviews</h1>
+
+                <div class="button-row">
+                    <a class="button-link primary"
+                       href="{{ url_for('home', movie_sort=request.args.get('movie_sort', 'latest'), review_sort='latest') }}">
+                        Latest
+                    </a>
+
+                    <a class="button-link secondary"
+                       href="{{ url_for('home', movie_sort=request.args.get('movie_sort', 'latest'), review_sort='title') }}">
+                        Title
+                    </a>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <tr>
+                        <th>Rating</th>
+                        <th>User</th>
+                        <th>Movie</th>
+                        <th>Review</th>
+                        <th>Time</th>
+                    </tr>
+
+                    {% for review in reviews %}
+                    <tr>
+                        <td><strong>{{ review[0] }}/5</strong></td>
+
+                        <td>
+                            <a href="{{ url_for('user_detail', user_id=review[1]) }}">
+                                {{ review[1] }}
+                            </a>
+                        </td>
+
+                        <td>{{ review[2] }}</td>
+                        <td>{{ review[3] }}</td>
+                        <td class="small-text">{{ review[4].strftime('%d %b %Y %H:%M') }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </main>
 </body>
 </html>

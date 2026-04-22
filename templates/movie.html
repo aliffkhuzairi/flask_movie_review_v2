@@ -3,80 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Movie</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>{{ movie[1] }}</title>
 </head>
 <body>
-    <p>Logged in as: {{ user_id }}</p>
-    <a href="{{ url_for('logout') }}">Logout</a>
-    <a href="{{ url_for('home') }}">Home</a>
 
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-        {% for message in messages %}
-            <p>{{ message }}</p>
-        {% endfor %}
-    {% endif %}
-    {% endwith %}
-    <table border="1">
-        <tr>
-            <th>Title</th>
-            <th>Director</th>
-            <th>Genre</th>
-            <th>Release Date</th>
-        </tr>
+    <!-- HEADER -->
+    <header class="header">
+        <div>
+            <strong>{{ user_id }}</strong>
+        </div>
+        <div class="button-row">
+            <a class="button-link primary" href="{{ url_for('user_detail', user_id=user_id) }}">Profile</a>
+            <a class="button-link logout" href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </header>
 
-        <tr>
-            <td>{{ movie[1] }}</td>
-            <td>{{ movie[2] }}</td>
-            <td>{{ movie[3] }}</td>
-            <td>{{ movie[4] }}</td>
-        </tr>
-    </table>
+    <main class="page-container">
 
+        <section class="movie-hero card">
+            <div class="movie-hero-main">
+                <h1 class="movie-title">{{ movie[1] }}</h1>
 
-    <h2>Reviews</h2>
-    <table border="1">
-        <tr>
-            <th>User ID</th>
-            <th>Ratings</th>
-            <th>Review</th>
-            <th>Review Time</th>
-        </tr>
+                <div class="movie-tags">
+                    <span class="tag">{{ movie[3] }}</span>
+                    <span class="tag muted">Directed by {{ movie[2] }}</span>
+                    <span class="tag muted">{{ movie[4] }}</span>
+                </div>
+            </div>
 
-        {% for review in reviews %}
-        <tr>
-            <td><a href="{{ url_for('user_detail', user_id=review[1]) }}">
-                {{ review[1] }}
-            </a>
-            </td>
-            <td>{{ review[0] }}</td>
-            <td>{{ review[2] }}</td>
-            <td>{{ review[3] }}</td>
-        </tr>
+            <div class="movie-rating-box">
+                <p class="rating-label">Average Rating</p>
+                <div class="rating-value">
+                    {{ avg_rating if avg_rating is not none else 'N/A' }}
+                </div>
+            </div>
+        </section>
 
-        {% endfor %}
-    </table>
+        <section class="movie-layout">
+            <div class="movie-left-column">
+                <div class="card info-card">
+                    <h2>About this movie</h2>
+                    <div class="info-list">
+                        <div class="info-item">
+                            <span class="info-label">Title</span>
+                            <span class="info-value">{{ movie[1] }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Director</span>
+                            <span class="info-value">{{ movie[2] }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Genre</span>
+                            <span class="info-value">{{ movie[3] }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Release Date</span>
+                            <span class="info-value">{{ movie[4] }}</span>
+                        </div>
+                    </div>
+                </div>
 
-    <p>Average rating: {{ avg_rating }}</p>
+                <div class="card review-form-card">
+                    <div class="add-update-header">
+                        {% if user_review %}
+                            <h2>Update Your Review</h2>
+                        {% else %}
+                            <h2>Add Your Review</h2>
+                        {% endif %}
+                    </div>
 
-    {% if user_review %}
-    <h2>Update Your Review</h2>
-    {% else %}
-    <h2>Add Your Review</h2>
-    {% endif %}
+                    <form method="POST" class="form-grid">
+                        <label for="rating">Rating</label>
+                        <input id="rating" name="rating" type="number" min="0" max="5" step="1"
+                               value="{{ user_review[0] if user_review else '' }}" required>
 
-    <form method="POST">
+                        <label for="review">Review</label>
+                        <textarea id="review" name="review" rows="5" required>{{ user_review[1] if user_review else '' }}</textarea>
 
-        <label for="rating">Rating:</label><br>
-        <input id="rating" name="rating" type="number" min="0" max="5" step="1" value="{{ user_review[0] if user_review else '' }}" required>
+                        <div class="button-row">
+                            <button type="submit">
+                                {{ 'Update' if user_review else 'Add' }}
+                            </button>
+                        </div>
+                        <div class="flash-container">
+                            {% with messages = get_flashed_messages() %}
+                                {% if messages %}
+                                    {% for msg in messages %}
+                                        <div class="flash success">{{ msg }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endwith %}
+                        </div>
+                    </form>
+                </div>
 
-        <label for="review">Review:</label><br>
-        <textarea id="review" name="review" cols="40" rows="4" required>{{ user_review[1] if user_review else '' }}</textarea>
+            </div>
 
-        <br><br>
+            <!-- REVIEWS COLUMN -->
+            <div class="movie-right-column">
+                <div class="card reviews-card">
+                    <h2>Reviews</h2>
 
-        <button type="submit">{{ 'Update Review' if user_review else 'Add Review' }}</button>
-    </form>
+                    {% if reviews %}
+                        <div class="reviews-list">
+                            {% for review in reviews %}
+                                <div class="review-card">
+                                    <div class="review-card-top">
+                                        <a class="review-user" href="{{ url_for('user_detail', user_id=review[1]) }}">
+                                            {{ review[1] }}
+                                        </a>
+                                        <span class="review-rating">{{ review[0] }}/5</span>
+                                    </div>
+
+                                    <p class="review-time">
+                                        {{ review[3].strftime('%d %b %Y %H:%M') if review[3] else '' }}
+                                    </p>
+
+                                    <p class="review-text">{{ review[2] }}</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="empty-state">No reviews yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+</main>
 
 </body>
 </html>

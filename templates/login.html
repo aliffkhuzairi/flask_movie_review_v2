@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
     <title>Title</title>
 </head>
 <body>
@@ -11,13 +11,16 @@
     <div class="auth-shell">
          <div class="auth-card">
              <h1>Sign In</h1>
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    {% for msg in messages %}
-                        <div class="flash">{{ msg }}</div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
+
+             <div class="flash-container">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for msg in messages %}
+                        <div class="flash fail">{{ msg }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+              </div>
 
             <form action="{{ url_for('auth') }}" method="POST" class="form-grid">
 
@@ -27,7 +30,10 @@
                 <label for="password">Password:</label>
                 <input id="password" type="password" name="password" required>
 
-                <button type="submit">Sign In</button>
+                <div class="button-row">
+                    <button type="submit">Sign In</button>
+                </div>
+
 
             </form>
 
