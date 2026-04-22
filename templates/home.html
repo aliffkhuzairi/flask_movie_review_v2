@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>Movies</title>
 </head>
 <body>
@@ -31,17 +31,17 @@
     <!-- MOVIE SECTION -->
     <main class="page-container">
         <div class="card">
-            <div class="movie-header">
+            <div class="movie-header movies">
                 <h1>Movies</h1>
 
                 <div class="button-row">
                     <a class="button-link primary"
-                       href="{{ url_for('home', movie_sort='latest', review_sort=request.args.get('review_sort', 'latest')) }}">
+                       href="{{ url_for('home', movie_sort='latest', review_sort=request.args.get('review_sort', 'latest')) }}#movies">
                         Latest
                     </a>
 
                     <a class="button-link secondary"
-                       href="{{ url_for('home', movie_sort='genre', review_sort=request.args.get('review_sort', 'latest')) }}">
+                       href="{{ url_for('home', movie_sort='genre', review_sort=request.args.get('review_sort', 'latest')) }}#movies">
                         Genre
                     </a>
                 </div>
@@ -74,17 +74,17 @@
 
         <!-- REVIEWS SECTION -->
         <div class="card">
-            <div class="movie-header">
+            <div class="movie-header" id="reviews">
                 <h1>Reviews</h1>
 
                 <div class="button-row">
                     <a class="button-link primary"
-                       href="{{ url_for('home', movie_sort=request.args.get('movie_sort', 'latest'), review_sort='latest') }}">
+                       href="{{ url_for('home', movie_sort=request.args.get('movie_sort', 'latest'), review_sort='latest') }}#reviews">
                         Latest
                     </a>
 
                     <a class="button-link secondary"
-                       href="{{ url_for('home', movie_sort=request.args.get('movie_sort', 'latest'), review_sort='title') }}">
+                       href="{{ url_for('home', movie_sort=request.args.get('movie_sort', 'latest'), review_sort='title') }}#reviews">
                         Title
                     </a>
                 </div>
