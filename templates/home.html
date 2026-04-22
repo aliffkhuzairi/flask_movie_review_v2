@@ -30,20 +30,38 @@
 
     <!-- MOVIE SECTION -->
     <main class="page-container">
-        <div class="card">
-            <div class="movie-header movies">
+        <div class="card" id="movies">
+            <div class="movie-header">
                 <h1>Movies</h1>
 
                 <div class="button-row">
-                    <a class="button-link primary"
-                       href="{{ url_for('home', movie_sort='latest', review_sort=request.args.get('review_sort', 'latest')) }}#movies">
-                        Latest
-                    </a>
+                     <a class="button-link primary"
+               href="{{ url_for(
+                    'home',
+                    movie_sort='latest',
+                    movie_sort_dir='asc' if movie_sort == 'latest' and movie_sort_dir == 'desc' else 'desc',
+                    review_sort=review_sort,
+                    review_sort_dir=review_sort_dir
+               ) }}#movies">
+                Latest
+                {% if movie_sort == 'latest' %}
+                    {{ '↓' if movie_sort_dir == 'desc' else '↑' }}
+                {% endif %}
+            </a>
 
                     <a class="button-link secondary"
-                       href="{{ url_for('home', movie_sort='genre', review_sort=request.args.get('review_sort', 'latest')) }}#movies">
-                        Genre
-                    </a>
+               href="{{ url_for(
+                    'home',
+                    movie_sort='genre',
+                    movie_sort_dir='asc' if movie_sort == 'genre' and movie_sort_dir == 'desc' else 'desc',
+                    review_sort=review_sort,
+                    review_sort_dir=review_sort_dir
+               ) }}#movies">
+                Genre
+                {% if movie_sort == 'genre' %}
+                    {{ '↓' if movie_sort_dir == 'desc' else '↑' }}
+                {% endif %}
+            </a>
                 </div>
             </div>
 
@@ -73,20 +91,39 @@
         </div>
 
         <!-- REVIEWS SECTION -->
-        <div class="card">
-            <div class="movie-header" id="reviews">
+        <div class="card" id="reviews">
+            <div class="movie-header">
                 <h1>Reviews</h1>
 
                 <div class="button-row">
                     <a class="button-link primary"
-                       href="{{ url_for('home', movie_sort=request.args.get('movie_sort', 'latest'), review_sort='latest') }}#reviews">
-                        Latest
-                    </a>
+               href="{{ url_for(
+                    'home',
+                    movie_sort=movie_sort,
+                    movie_sort_dir=movie_sort_dir,
+                    review_sort='latest',
+                    review_sort_dir='asc' if review_sort == 'latest' and review_sort_dir == 'desc' else 'desc'
+               ) }}#reviews">
+                Latest
+                {% if review_sort == 'latest' %}
+                    {{ '↓' if review_sort_dir == 'desc' else '↑' }}
+                {% endif %}
+            </a>
+
 
                     <a class="button-link secondary"
-                       href="{{ url_for('home', movie_sort=request.args.get('movie_sort', 'latest'), review_sort='title') }}#reviews">
-                        Title
-                    </a>
+               href="{{ url_for(
+                    'home',
+                    movie_sort=movie_sort,
+                    movie_sort_dir=movie_sort_dir,
+                    review_sort='title',
+                    review_sort_dir='asc' if review_sort == 'title' and review_sort_dir == 'desc' else 'desc'
+               ) }}#reviews">
+                Title
+                {% if review_sort == 'title' %}
+                    {{ '↓' if review_sort_dir == 'desc' else '↑' }}
+                {% endif %}
+            </a>
                 </div>
             </div>
 

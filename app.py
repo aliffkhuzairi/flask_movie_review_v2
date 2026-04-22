@@ -98,51 +98,87 @@ def home():
     cur = conn.cursor()
 
     movie_sort = request.args.get('movie_sort', 'latest')
+    movie_sort_dir = request.args.get('movie_sort_dir', 'desc').lower()
+
     review_sort = request.args.get('review_sort', 'latest')
+    review_sort_dir = request.args.get('review_sort_dir', 'desc').lower()
+
+    if movie_sort_dir not in ['asc', 'desc']:
+        movie_sort_dir = 'desc'
+    if review_sort_dir not in ['asc', 'desc']:
+        review_sort_dir = 'desc'
 
     # Movies sorting
     if movie_sort == "latest":
+        cur.execute(f"""
+            select id, title, director, genre, rel_date
+            from movies
+            order by rel_date {movie_sort_dir};
+        """)
+    elif movie_sort == "genre":
+        cur.execute(f"""
+            select id, title, director, genre, rel_date
+            from movies
+            order by genre {movie_sort_dir};
+        """)
+
+    else:
         cur.execute("""
             select id, title, director, genre, rel_date
             from movies
             order by rel_date desc;
         """)
-    elif movie_sort == "genre":
-        cur.execute("""
-            select id, title, director, genre, rel_date
-            from movies
-                order by genre desc;
-        """)
 
     movies = cur.fetchall()
 
+    # Review sort
     if review_sort == "latest":
-        cur.execute("""
+        cur.execute(f"""
             select r.ratings, r.uid, m.title, r.review, r.rev_time
             from reviews r
             join movies m on r.mid = m.id
             where r.uid not in (
                 select opid from ties where id = %s and tie = 'mute'
                 )
-            order by r.rev_time desc;
+            order by r.rev_time {review_sort_dir};
         """,(session['user_id'],))
     elif review_sort == "title":
-        cur.execute("""
+        cur.execute(f"""
             select r.ratings, r.uid, m.title, r.review, r.rev_time
             from reviews r
             join movies m on r.mid = m.id
             where r.uid not in (
                 select opid from ties where id = %s and tie = 'mute'
                 )
-            order by m.title desc;
+            order by m.title {review_sort_dir};
         """,(session['user_id'],))
+
+    else:
+        cur.execute("""
+            select r.ratings, r.uid, m.title, r.review, r.rev_time
+            from reviews r
+                     join movies m on r.mid = m.id
+            where r.uid not in (select opid
+                                from ties
+                                where id = %s and tie = 'mute')
+            order by r.rev_time desc;
+        """, (session['user_id'],))
 
     reviews = cur.fetchall()
 
     cur.close()
     conn.close()
 
-    return render_template("home.html", movies=movies, reviews=reviews, user_id=session['user_id'])
+    return render_template(
+        "home.html",
+        movies=movies,
+        reviews=reviews,
+        user_id=session['user_id'],
+        movie_sort=movie_sort,
+        movie_sort_dir=movie_sort_dir,
+        review_sort=review_sort,
+        review_sort_dir=review_sort_dir
+    )
 
 @app.route('/logout')
 def logout():
