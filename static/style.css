@@ -29,6 +29,11 @@ body {
     box-shadow: 0 5px 20px rgb(0 0 0 / 0.36);
 }
 
+.auth-card h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
 /* FLASH SUCCESS */
 .flash-container {
     min-height: 60px;
@@ -51,10 +56,6 @@ body {
     color: #065f46;
 }
 
-.auth-card h1 {
-    text-align: center;
-    margin-bottom: 20px;
-}
 
 /* FORM */
 .form-grid {
@@ -77,11 +78,12 @@ input {
 .button-row {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
     margin: 10px 0;
 }
 
 button {
-    width: 100%;
     padding: 10px 12px;
     border: none;
     border-radius: 5px;
@@ -94,7 +96,12 @@ button:hover {
     background: #1d4ed8;
 }
 
-/* HOME PAGE */
+.form-grid button,
+.auth-card button {
+    width: 100%;
+}
+
+/* HEADER */
 .header {
     position: fixed;
     top: 0;
@@ -127,6 +134,7 @@ button:hover {
     background: #bc1111;
 }
 
+/* MAIN SECTION */
 .page-container {
     max-width: 1200px;
     margin: 70px auto 20px;
@@ -154,12 +162,6 @@ button:hover {
 .movie-header h1 {
     font-size: 1.5rem;
     color: #111827;
-}
-
-.button-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
 }
 
 .button-link {
@@ -528,12 +530,6 @@ textarea{
     margin: 0;
 }
 
-.profile-list {
-    list-style: none;
-    padding: 0;
-    margin: 10px 0 0;
-}
-
 .hero-actions {
     display: flex;
     flex-direction: column;
@@ -558,27 +554,12 @@ textarea{
     margin-top: 10px;
 }
 
-.profile-list li {
-    padding: 10px 0;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-.profile-list li:last-child {
-    border-bottom: none;
-}
 
 .profile-card h2,
 .list-card h2,
 .action-card h2,
 .admin-card h2 {
     margin-bottom: 12px;
-}
-
-.title-genre {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    flex-wrap: wrap;
 }
 
 .action-card {

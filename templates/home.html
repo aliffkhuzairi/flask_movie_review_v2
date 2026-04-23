@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Movies</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <title>Movie Review Web App</title>
+    </head>
 <body>
 
     <!-- HEADER -->
@@ -21,19 +21,10 @@
         </div>
     </header>
 
-    <!-- FLASH MESSAGE -->
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for msg in messages %}
-                <div class="flash">{{ msg }}</div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-
     <!-- MOVIE SECTION -->
     <main class="page-container">
-        <div class="card" >
-            <div class="movie-header" id="movies">
+        <div class="card" id="movies">
+            <div class="movie-header">
                 <h1>Movies</h1>
 
                 <div class="button-row">
@@ -93,8 +84,8 @@
         </div>
 
         <!-- REVIEWS SECTION -->
-        <div class="card" >
-            <div class="movie-header" id="reviews">
+        <div class="card" id="reviews">
+            <div class="movie-header">
                 <h1>Reviews</h1>
 
                 <div class="button-row">

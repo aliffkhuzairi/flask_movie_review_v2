@@ -22,9 +22,13 @@
     </header>
 
     <main class="page-container">
+
+        <!-- HOME BUTTON -->
         <div class="top-action">
             <a class="button-link home" href="{{ url_for('home') }}">Back to Home</a>
         </div>
+
+        <!-- MOVIE HERO -->
         <section class="movie-hero card">
             <div class="movie-hero-main">
                 <h1 class="movie-title">{{ movie[1] }}</h1>
@@ -44,8 +48,13 @@
             </div>
         </section>
 
+        <!-- MOVIE INFO -->
         <section class="movie-layout">
+
+            <!-- LEFT COLUMN -->
             <div class="movie-left-column">
+
+                <!-- MOVIE INFO -->
                 <div class="card info-card">
                     <h2>About this movie</h2>
                     <div class="info-list">
@@ -68,6 +77,7 @@
                     </div>
                 </div>
 
+                <!-- ADD/UPDATE REVIEW FORM -->
                 <div class="card review-form-card">
                     <div class="add-update-header">
                         {% if user_review %}
@@ -75,6 +85,16 @@
                         {% else %}
                             <h2>Add Your Review</h2>
                         {% endif %}
+                    </div>
+                    
+                    <div class="flash-container">
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                {% for msg in messages %}
+                                    <div class="flash success">{{ msg }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
                     </div>
 
                     <form method="POST" class="form-grid">
@@ -89,15 +109,6 @@
                             <button type="submit">
                                 {{ 'Update' if user_review else 'Add' }}
                             </button>
-                        </div>
-                        <div class="flash-container">
-                            {% with messages = get_flashed_messages() %}
-                                {% if messages %}
-                                    {% for msg in messages %}
-                                        <div class="flash success">{{ msg }}</div>
-                                    {% endfor %}
-                                {% endif %}
-                            {% endwith %}
                         </div>
                     </form>
                 </div>

@@ -1,5 +1,3 @@
-from encodings import cp437
-
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import psycopg2, re
 app = Flask(__name__)
@@ -25,7 +23,7 @@ def auth():
 
     if not user_id or not password:
         flash("ID and password are required.")
-        return render_template('login.html')
+        return redirect(url_for('index'))
 
     conn = get_db_connection()
     cur = conn.cursor()
@@ -60,7 +58,7 @@ def signup():
 
     if not user_id or not password:
         flash("ID and password are required.")
-        return render_template('signup.html')
+        return redirect(url_for('signup_page'))
 
     conn = get_db_connection()
     cur = conn.cursor()
@@ -82,7 +80,7 @@ def signup():
         flash("Account created. Please sign in.")
         return redirect(url_for('index'))
 
-    except:
+    except Exception:
         conn.rollback()
         cur.close()
         conn.close()
@@ -220,7 +218,8 @@ def movie_detail(movie_id):
                 """,(movie_id, session['user_id'], rating, review))
 
                 flash("Review added!")
-            conn.commit()
+                conn.commit()
+                return redirect(url_for('movie_detail', movie_id=movie_id))
 
     cur.execute("""
         select id, title, director, genre, rel_date
@@ -264,7 +263,7 @@ def movie_detail(movie_id):
 
     return render_template("movie.html", movie=movie, reviews=reviews, avg_rating=avg_rating, user_review=user_review, user_id=session['user_id'])
 
-@app.route('/user/<user_id>', methods=['GET', 'POST'])
+@app.route('/user/<user_id>', methods=['GET'])
 def user_detail(user_id):
     if 'user_id' not in session:
         return redirect(url_for('index'))
