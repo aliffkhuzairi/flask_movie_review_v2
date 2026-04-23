@@ -183,7 +183,7 @@ def logout():
     session.clear()
     return redirect(url_for('index'))
 
-@app.route('/movie/<movie_id>', methods=['GET', 'POST'])
+@app.route('/movie/<int:movie_id>', methods=['GET', 'POST'])
 def movie_detail(movie_id):
     if 'user_id' not in session:
         return redirect(url_for('index'))
@@ -567,13 +567,13 @@ def add_movie():
     if session.get('user_role') != 'admin':
         return redirect(url_for('home'))
 
-    movie_id = request.form.get('movie_id', '').strip()
+
     title = request.form.get('movie_title', '').strip()
     director = request.form.get('director', '').strip()
     genre = request.form.get('genre', '').strip()
     rel_date = request.form.get('rel_date', '').strip()
 
-    if not movie_id or not title or not director or not genre or not rel_date:
+    if not title or not director or not genre or not rel_date:
         flash("All fields are required.")
         return redirect(url_for('user_detail', user_id=session['user_id']))
 
@@ -582,9 +582,9 @@ def add_movie():
 
     try:
         cur.execute("""
-            insert into movies(id, title, director, genre, rel_date)
-            values(%s, %s, %s, %s, %s)
-        """,(movie_id, title, director, genre, rel_date))
+            insert into movies(title, director, genre, rel_date)
+            values(%s, %s, %s, %s)
+        """,(title, director, genre, rel_date))
 
         conn.commit()
         flash("Movie added successfully!")
@@ -598,7 +598,7 @@ def add_movie():
 
     return redirect(url_for('user_detail', user_id=session['user_id']))
 
-@app.route('/review/<movie_id>/delete', methods=['POST'])
+@app.route('/review/<int:movie_id>/delete', methods=['POST'])
 def delete_review(movie_id):
     if 'user_id' not in session:
         return redirect(url_for('index'))
