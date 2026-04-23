@@ -169,8 +169,8 @@ def home():
 
     return render_template(
         "home.html",
-        movies=movies,
-        reviews=reviews,
+        movies=movies[:4],
+        reviews=reviews[:5],
         user_id=session['user_id'],
         movie_sort=movie_sort,
         movie_sort_dir=movie_sort_dir,
@@ -261,7 +261,12 @@ def movie_detail(movie_id):
     conn.close()
 
 
-    return render_template("movie.html", movie=movie, reviews=reviews, avg_rating=avg_rating, user_review=user_review, user_id=session['user_id'])
+    return render_template("movie.html",
+                           movie=movie,
+                           reviews=reviews,
+                           avg_rating=avg_rating,
+                           user_review=user_review,
+                           user_id=session['user_id'])
 
 @app.route('/user/<user_id>', methods=['GET'])
 def user_detail(user_id):

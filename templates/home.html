@@ -22,8 +22,114 @@
     </header>
 
     <!-- MOVIE SECTION -->
+
     <main class="page-container">
-        <div class="card" id="movies">
+        <section id="movies" class="movie-container">
+            <div class="section-head">
+                <div>
+                    <h1>Movies</h1>
+                    <p class="small-text">Showing 4 movies on the home page</p>
+                </div>
+
+                <div class="button-row">
+                    <a class="button-link primary"
+                       href="{{ url_for(
+                            'home',
+                            movie_sort='latest',
+                            movie_sort_dir='asc' if movie_sort == 'latest' and movie_sort_dir == 'desc' else 'desc',
+                            review_sort=review_sort,
+                            review_sort_dir=review_sort_dir
+                       ) }}">
+                        Latest
+                        {% if movie_sort == 'latest' %}
+                            {{ '↓' if movie_sort_dir == 'desc' else '↑' }}
+                        {% endif %}
+                    </a>
+
+                    <a class="button-link secondary"
+                       href="{{ url_for(
+                            'home',
+                            movie_sort='genre',
+                            movie_sort_dir='asc' if movie_sort == 'genre' and movie_sort_dir == 'desc' else 'desc',
+                            review_sort=review_sort,
+                            review_sort_dir=review_sort_dir
+                       ) }}">
+                        Genre
+                        {% if movie_sort == 'genre' %}
+                            {{ '↓' if movie_sort_dir == 'desc' else '↑' }}
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+
+            <div class="movie-list">
+                {% for movie in movies[:4] %}
+                <a href="{{ url_for('movie_detail', movie_id=movie[0]) }}" class="movie-card">
+                    <div class="movie-card-top">
+                        <h3>{{ movie[1] }}</h3>
+                    </div>
+
+                    <div class="movie-card-body">
+                        <span class="tag">{{ movie[3] }}</span>
+
+                        <div class="movie-info">
+                            <p><strong>Director</strong></p>
+                            <p class="small-text">{{ movie[2] }}</p>
+                        </div>
+
+                        <div class="movie-info">
+                            <p><strong>Release</strong></p>
+                            <p class="small-text">
+                                {{ movie[4].strftime('%d %b %Y') if movie[4] else '' }}
+                            </p>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--        <section id="movie" class="movie-container">-->
+<!--            <div class="movie-list">-->
+<!--                {% for movie in movies %}-->
+<!--                <a href="{{ url_for('movie_detail', movie_id=movie[0]) }}" class="movie-card">-->
+<!--                    <div class="movie-title">-->
+<!--                        <h3>{{ movie[1] }}</h3>-->
+<!--                    </div>-->
+<!--                    <div class="movie-info">-->
+<!--                        <span>{{ movie[2] }}</span>-->
+<!--                        <span>{{ movie[3] }}</span>-->
+<!--                        <span>{{ movie[4] }}</span>-->
+<!--                    </div>-->
+<!--                </a>-->
+<!--                {% endfor %}-->
+<!--            </div>-->
+<!--        </section>-->
+
+
+
+
+
+
+
+
+
+        <div class="card" id="m">
             <div class="movie-header">
                 <h1>Movies</h1>
 

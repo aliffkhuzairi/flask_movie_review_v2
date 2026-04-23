@@ -22,3 +22,17 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
+// Restore scroll position after reload
+window.addEventListener('load', function () {
+    const scrollPos = localStorage.getItem('scrollPosition');
+
+    if (scrollPos !== null) {
+        window.scrollTo({
+            top: parseInt(scrollPos),
+            behavior: 'smooth'
+        });
+        localStorage.removeItem('scrollPosition');
+    }
+});
+
