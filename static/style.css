@@ -96,21 +96,24 @@ button:hover {
 
 /* HOME PAGE */
 .header {
-    display: flex;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    justify-content: space-between;
-    align-items: center;
     gap: 12px;
     background: #ffffff;
     border: 1px solid #e5e7eb;
-    padding: 8px 18px;
-    margin-bottom: 24px;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
 }
 
+.header-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 18px;
+}
 .header strong {
     font-size: 1rem;
     color: #111827;
@@ -216,7 +219,9 @@ td {
 }
 
 .review-text-block {
-    max-width: 360px;
+    max-width: 450px;
+    line-height: 1.45;
+    word-break: break-word;
 }
 
 .clamp-text {
@@ -266,14 +271,22 @@ td a:hover {
     color: #6b7280;
 }
 
-/* optional: make review text easier to read */
-.review-text {
-    max-width: 320px;
-    line-height: 1.45;
-    word-break: break-word;
+/* MOVIE PAGE */
+
+.top-action {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
 }
 
-/* MOVIE PAGE */
+.home {
+    background: #214185;
+}
+
+.home:hover {
+    background: #2563eb;
+}
+
 .movie-hero {
     display: flex;
     justify-content: space-between;
@@ -457,12 +470,216 @@ textarea{
     color: #6b7280;
 }
 
-.logout {
+/* USER PROFILE */
+.profile-hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.profile-title {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.profile-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.profile-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 24px;
+}
+
+.profile-left-column,
+.profile-right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.title-genre {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.delete {
+    margin-top: 14px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.delete button {
+    width: auto;
     background: #dc2626;
 }
 
-.logout:hover {
+.delete button:hover {
     background: #b91c1c;
+}
+
+.action-card .button-row form,
+.admin-card form {
+    margin: 0;
+}
+
+.profile-list {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0;
+}
+
+.hero-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.hero-actions form {
+    margin: 0;
+}
+
+.hero-actions .button-row,
+.hero-actions {
+    width: auto;
+}
+
+.profile-card {
+    margin-bottom: 0;
+}
+
+.profile-card button {
+    margin-top: 10px;
+}
+
+.profile-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.profile-list li:last-child {
+    border-bottom: none;
+}
+
+.profile-card h2,
+.list-card h2,
+.action-card h2,
+.admin-card h2 {
+    margin-bottom: 12px;
+}
+
+.title-genre {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.action-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0;
+}
+
+.action-card .button-row {
+    margin-top: 12px;
+}
+
+.admin-card .form-grid {
+    margin-top: 10px;
+}
+
+.list-card {
+    margin-bottom: 0;
+}
+
+
+.btn-follow {
+    background: #2563eb;
+    color: white;
+}
+
+.btn-follow:hover {
+    background: #1d4ed8;
+}
+
+.btn-unfollow {
+    background: #dc2626;
+    color: white;
+}
+
+.btn-unfollow:hover {
+    background: #b91c1c;
+}
+
+.btn-mute {
+    background: #6b7280;
+    color: white;
+}
+
+.btn-mute:hover {
+    background: #4b5563;
+}
+
+.btn-unmute {
+    background: #374151;
+    color: white;
+}
+
+.btn-unmute:hover {
+    background: #1f2937;
+}
+
+.relation-list {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.relation-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.relation-item:last-child {
+    border-bottom: none;
+}
+
+.relation-user {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.relation-item form {
+    margin: 0;
+}
+
+.relation-item button {
+    width: auto;
+    padding: 8px 12px;
+}
+
+/* mobile */
+@media (max-width: 768px) {
+    .profile-layout {
+        grid-template-columns: 1fr;
+    }
 }
 
 

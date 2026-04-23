@@ -289,7 +289,7 @@ def user_detail(user_id):
         return "User not found", 404
 
     cur.execute("""
-                select m.id, m.title, r.ratings, r.review, r.rev_time
+                select m.id, m.title, r.ratings, r.review, r.rev_time, m.genre
                 from reviews r
                 join movies m on r.mid = m.id
                 where r.uid = %s

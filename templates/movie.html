@@ -10,18 +10,21 @@
 
     <!-- HEADER -->
     <header class="header">
-        <div>
-            <strong>{{ user_id }}</strong>
-        </div>
-        <div class="button-row">
-            <a class="button-link primary" href="{{ url_for('user_detail', user_id=user_id) }}">Profile</a>
-            <a class="button-link logout" href="{{ url_for('logout') }}">Logout</a>
-            <a class="button-link" href="{{ url_for('home') }}">Home</a>
+        <div class="header-wrap">
+            <div>
+                <strong>{{ user_id }}</strong>
+            </div>
+            <div class="button-row">
+                <a class="button-link primary" href="{{ url_for('user_detail', user_id=user_id) }}">Profile</a>
+                <a class="button-link logout" href="{{ url_for('logout') }}">Logout</a>
+            </div>
         </div>
     </header>
 
     <main class="page-container">
-
+        <div class="top-action">
+            <a class="button-link home" href="{{ url_for('home') }}">Back to Home</a>
+        </div>
         <section class="movie-hero card">
             <div class="movie-hero-main">
                 <h1 class="movie-title">{{ movie[1] }}</h1>
