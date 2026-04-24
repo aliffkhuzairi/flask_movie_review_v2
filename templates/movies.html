@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <title>All Movie</title>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-wrap">
+            <!-- HOME BUTTON -->
+            <div class="top-action">
+                <a class="button-link home" href="{{ url_for('home') }}">Back to Home</a>
+            </div>
+            <div>
+                <strong>{{ user_id }}</strong>
+            </div>
+            <div class="button-row">
+                <a class="button-link primary" href="{{ url_for('user_detail', user_id=user_id) }}">Profile</a>
+                <a class="button-link logout" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-container">
+
+        <!-- MOVIES META AND SORT BUTTONS -->
+        <div class="section-head">
+            <div>
+                <h1>All Movies</h1>
+                <p>Browse all full movie list</p>
+            </div>
+
+            <div class="button-row">
+                <a class="button-link primary"
+                   href="{{ url_for(
+                        'movie_list',
+                        movie_sort='latest',
+                        movie_sort_dir='asc' if movie_sort == 'latest' and movie_sort_dir == 'desc' else 'desc'
+                   ) }}">
+                    Latest
+                    {% if movie_sort == 'latest' %}
+                        {{ '↓' if movie_sort_dir == 'desc' else '↑' }}
+                    {% endif %}
+                </a>
+
+                <a class="button-link secondary"
+                   href="{{ url_for(
+                        'movie_list',
+                        movie_sort='title',
+                        movie_sort_dir='asc' if movie_sort == 'title' and movie_sort_dir == 'desc' else 'desc'
+                   ) }}">
+                    Title
+                    {% if movie_sort == 'title' %}
+                        {{ '↓' if movie_sort_dir == 'desc' else '↑' }}
+                    {% endif %}
+                </a>
+
+                <a class="button-link secondary"
+                   href="{{ url_for(
+                        'movie_list',
+                        movie_sort='genre',
+                        movie_sort_dir='asc' if movie_sort == 'genre' and movie_sort_dir == 'desc' else 'desc'
+                   ) }}">
+                    Genre
+                    {% if movie_sort == 'genre' %}
+                        {{ '↓' if movie_sort_dir == 'desc' else '↑' }}
+                    {% endif %}
+                </a>
+            </div>
+        </div>
+
+        <section id="movies" class="movie-list">
+
+            <!-- MOVIES LIST -->
+            {% if movies %}
+            <div class="movie-list">
+
+                {% for movie in movies %}
+                <a href="{{ url_for('movie_detail', movie_id=movie[0]) }}" class="movie-card">
+                    <div class="movie-card-top">
+                        <h3>{{ movie[1] }}</h3>
+                    </div>
+
+                    <div class="movie-card-body">
+                        <span class="tag">{{ movie[3] }}</span>
+
+                        <div class="movie-info">
+                            <p><strong>Director</strong></p>
+                            <p class="small-text">{{ movie[2] }}</p>
+                        </div>
+
+                        <div class="movie-info">
+                            <p><strong>Release</strong></p>
+                            <p class="small-text">
+                                {{ movie[4].strftime('%d %b %Y') if movie[4] else '' }}
+                            </p>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="empty-state">No movies available.</p>
+            {% endif %}
+
+        </section>
+    </main>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

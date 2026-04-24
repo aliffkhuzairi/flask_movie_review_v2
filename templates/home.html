@@ -24,49 +24,21 @@
     <!-- MOVIE SECTION -->
 
     <main class="page-container">
+
         <section id="movies" class="movie-container">
             <div class="section-head">
                 <div>
                     <h1>Latest Movies</h1>
                     <p class="small-text">Recently added movies</p>
                 </div>
-
-                <a class="button-link secondary" href="{{ url_for('movie_list') }}">
-                    View All Movies
-                </a>
-<!--
                 <div class="button-row">
-                    <a class="button-link primary"
-                       href="{{ url_for(
-                            'home',
-                            movie_sort='latest',
-                            movie_sort_dir='asc' if movie_sort == 'latest' and movie_sort_dir == 'desc' else 'desc',
-                            review_sort=review_sort,
-                            review_sort_dir=review_sort_dir
-                       ) }}">
-                        Latest
-                        {% if movie_sort == 'latest' %}
-                            {{ '↓' if movie_sort_dir == 'desc' else '↑' }}
-                        {% endif %}
-                    </a>
-
-                    <a class="button-link secondary"
-                       href="{{ url_for(
-                            'home',
-                            movie_sort='genre',
-                            movie_sort_dir='asc' if movie_sort == 'genre' and movie_sort_dir == 'desc' else 'desc',
-                            review_sort=review_sort,
-                            review_sort_dir=review_sort_dir
-                       ) }}">
-                        Genre
-                        {% if movie_sort == 'genre' %}
-                            {{ '↓' if movie_sort_dir == 'desc' else '↑' }}
-                        {% endif %}
+                    <a class="button-link secondary" href="{{ url_for('movie_list') }}">
+                        View All Movies
                     </a>
                 </div>
-                -->
             </div>
 
+            <!-- MOVIE LIST -->
             <div class="movie-list">
                 {% for movie in movies[:4] %}
                 <a href="{{ url_for('movie_detail', movie_id=movie[0]) }}" class="movie-card">
@@ -93,6 +65,8 @@
                 {% endfor %}
             </div>
         </section>
+
+        <!-- REVIEWS SECTION -->
         <section id="reviews" class="card">
             <div class="section-head">
                 <div>
@@ -133,175 +107,6 @@
             </div>
         </section>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--        <section id="movie" class="movie-container">-->
-<!--            <div class="movie-list">-->
-<!--                {% for movie in movies %}-->
-<!--                <a href="{{ url_for('movie_detail', movie_id=movie[0]) }}" class="movie-card">-->
-<!--                    <div class="movie-title">-->
-<!--                        <h3>{{ movie[1] }}</h3>-->
-<!--                    </div>-->
-<!--                    <div class="movie-info">-->
-<!--                        <span>{{ movie[2] }}</span>-->
-<!--                        <span>{{ movie[3] }}</span>-->
-<!--                        <span>{{ movie[4] }}</span>-->
-<!--                    </div>-->
-<!--                </a>-->
-<!--                {% endfor %}-->
-<!--            </div>-->
-<!--        </section>-->
-
-
-
-
-
-
-
-
-
-        <div class="card" id="m">
-            <div class="movie-header">
-                <h1>Movies</h1>
-
-                <div class="button-row">
-                     <a class="button-link primary"
-               href="{{ url_for(
-                    'home',
-                    movie_sort='latest',
-                    movie_sort_dir='asc' if movie_sort == 'latest' and movie_sort_dir == 'desc' else 'desc',
-                    review_sort=review_sort,
-                    review_sort_dir=review_sort_dir
-               ) }}#movies">
-                Latest
-                {% if movie_sort == 'latest' %}
-                    {{ '↓' if movie_sort_dir == 'desc' else '↑' }}
-                {% endif %}
-            </a>
-
-                    <a class="button-link secondary"
-               href="{{ url_for(
-                    'home',
-                    movie_sort='genre',
-                    movie_sort_dir='asc' if movie_sort == 'genre' and movie_sort_dir == 'desc' else 'desc',
-                    review_sort=review_sort,
-                    review_sort_dir=review_sort_dir
-               ) }}#movies">
-                Genre
-                {% if movie_sort == 'genre' %}
-                    {{ '↓' if movie_sort_dir == 'desc' else '↑' }}
-                {% endif %}
-            </a>
-                </div>
-            </div>
-
-            <div class="table-wrap">
-                <table>
-                    <tr>
-                        <th>Title</th>
-                        <th>Director</th>
-                        <th>Genre</th>
-                        <th>Release</th>
-                    </tr>
-
-                    {% for movie in movies %}
-                    <tr>
-                        <td>
-                            <a href="{{ url_for('movie_detail', movie_id=movie[0]) }}">
-                                {{ movie[1] }}
-                            </a>
-                        </td>
-                        <td>{{ movie[2] }}</td>
-                        <td>{{ movie[3] }}</td>
-                        <td>{{ movie[4] }}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
-            </div>
-        </div>
-
-        <!-- REVIEWS SECTION -->
-        <div class="card" id="revis">
-            <div class="movie-header">
-                <h1>Reviews</h1>
-
-                <div class="button-row">
-                    <a class="button-link primary"
-               href="{{ url_for(
-                    'home',
-                    movie_sort=movie_sort,
-                    movie_sort_dir=movie_sort_dir,
-                    review_sort='latest',
-                    review_sort_dir='asc' if review_sort == 'latest' and review_sort_dir == 'desc' else 'desc'
-               ) }}#reviews">
-                Latest
-                {% if review_sort == 'latest' %}
-                    {{ '↓' if review_sort_dir == 'desc' else '↑' }}
-                {% endif %}
-            </a>
-
-
-                    <a class="button-link secondary"
-               href="{{ url_for(
-                    'home',
-                    movie_sort=movie_sort,
-                    movie_sort_dir=movie_sort_dir,
-                    review_sort='title',
-                    review_sort_dir='asc' if review_sort == 'title' and review_sort_dir == 'desc' else 'desc'
-               ) }}#reviews">
-                Title
-                {% if review_sort == 'title' %}
-                    {{ '↓' if review_sort_dir == 'desc' else '↑' }}
-                {% endif %}
-            </a>
-                </div>
-            </div>
-
-            <div class="table-wrap">
-                <table>
-                    <tr>
-                        <th>Rating</th>
-                        <th>User</th>
-                        <th>Movie</th>
-                        <th>Review</th>
-                        <th>Time</th>
-                    </tr>
-
-                    {% for review in reviews %}
-                    <tr>
-                        <td><strong>{{ review[0] }}/5</strong></td>
-
-                        <td>
-                            <a href="{{ url_for('user_detail', user_id=review[1]) }}">
-                                {{ review[1] }}
-                            </a>
-                        </td>
-
-                        <td>{{ review[2] }}</td>
-                        <td>
-                            <div class="review-text-block">
-                                <div class="review-text clamp-text">{{ review[3] }}</div>
-                                <button type="button" class="text-toggle" onclick="toggleReview(this)">Read more</button>
-                            </div></td>
-                        <td class="small-text">{{ review[4].strftime('%d %b %Y %H:%M') }}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
-            </div>
-        </div>
     </main>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>

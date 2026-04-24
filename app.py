@@ -130,21 +130,50 @@ def home():
     )
 
 
-@app.route('/movie')
+@app.route('/movies')
 def movie_list():
     if 'user_id' not in session:
         return redirect(url_for('index'))
 
+    movie_sort = request.args.get('movie_sort', '').strip()
+    movie_sort_dir = request.args.get('movie_sort_dir', '').strip()
+
+    if movie_sort_dir not in ['asc', 'desc']:
+        movie_sort_dir = 'desc'
+
     conn = get_db_connection()
     cur = conn.cursor()
 
-    cur.execute("""
-        select id, title, director, genre, rel_date
-        from movies
-        order by rel_date desc;
-    """)
+    if movie_sort == 'genre':
+        cur.execute(f"""
+            select id, title, director, genre, rel_date
+            from movies
+            order by genre {movie_sort_dir}, title asc;
+        """)
 
-    return render_template('movie_list.html')
+    elif movie_sort == 'title':
+        cur.execute(f"""
+            select id, title, director, genre, rel_date
+            from movies
+            order by title {movie_sort_dir};
+        """)
+    else:
+        cur.execute(f"""
+            select id, title, director, genre, rel_date
+            from movies
+            order by rel_date {movie_sort_dir};
+        """)
+
+    movies = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return render_template('movies.html',
+                           movies=movies,
+                           user_id=session['user_id'],
+                           movie_sort=movie_sort,
+                           movie_sort_dir=movie_sort_dir)
 @app.route('/logout')
 def logout():
     session.clear()

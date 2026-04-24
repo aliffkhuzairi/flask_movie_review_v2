@@ -11,6 +11,11 @@
     <!-- HEADER -->
     <header class="header">
         <div class="header-wrap">
+
+             <!-- HOME BUTTON -->
+            <div class="top-action">
+                <a class="button-link home" href="{{ url_for('home') }}">Back to Home</a>
+            </div>
             <div>
                 <strong>{{ user_id }}</strong>
             </div>
@@ -22,11 +27,6 @@
     </header>
 
     <main class="page-container">
-
-        <!-- HOME BUTTON -->
-        <div class="top-action">
-            <a class="button-link home" href="{{ url_for('home') }}">Back to Home</a>
-        </div>
 
         <!-- MOVIE HERO -->
         <section class="movie-hero card">
