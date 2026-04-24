@@ -27,10 +27,14 @@
         <section id="movies" class="movie-container">
             <div class="section-head">
                 <div>
-                    <h1>Movies</h1>
-                    <p class="small-text">Showing 4 movies on the home page</p>
+                    <h1>Latest Movies</h1>
+                    <p class="small-text">Recently added movies</p>
                 </div>
 
+                <a class="button-link secondary" href="{{ url_for('movie_list') }}">
+                    View All Movies
+                </a>
+<!--
                 <div class="button-row">
                     <a class="button-link primary"
                        href="{{ url_for(
@@ -60,6 +64,7 @@
                         {% endif %}
                     </a>
                 </div>
+                -->
             </div>
 
             <div class="movie-list">
@@ -86,6 +91,45 @@
                     </div>
                 </a>
                 {% endfor %}
+            </div>
+        </section>
+        <section id="reviews" class="card">
+            <div class="section-head">
+                <div>
+                    <h1>Recent Reviews</h1>
+                    <p class="small-text">Latest activity from users</p>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <tr>
+                            <th>Rating</th>
+                            <th>User</th>
+                            <th>Movie</th>
+                            <th>Review</th>
+                            <th>Time</th>
+                        </tr>
+
+                        {% for review in reviews %}
+                        <tr>
+                            <td><strong>{{ review[0] }}/5</strong></td>
+
+                            <td>
+                                <a href="{{ url_for('user_detail', user_id=review[1]) }}">
+                                    {{ review[1] }}
+                                </a>
+                            </td>
+
+                            <td>{{ review[2] }}</td>
+                            <td>
+                                <div class="review-text-block">
+                                    <div class="review-text clamp-text">{{ review[3] }}</div>
+                                    <button type="button" class="text-toggle" onclick="toggleReview(this)">Read more</button>
+                                </div></td>
+                            <td class="small-text">{{ review[4].strftime('%d %b %Y %H:%M') }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
             </div>
         </section>
 
@@ -190,7 +234,7 @@
         </div>
 
         <!-- REVIEWS SECTION -->
-        <div class="card" id="reviews">
+        <div class="card" id="revis">
             <div class="movie-header">
                 <h1>Reviews</h1>
 

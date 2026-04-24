@@ -95,72 +95,27 @@ def home():
     conn = get_db_connection()
     cur = conn.cursor()
 
-    movie_sort = request.args.get('movie_sort', 'latest')
-    movie_sort_dir = request.args.get('movie_sort_dir', 'desc').lower()
-
-    review_sort = request.args.get('review_sort', 'latest')
-    review_sort_dir = request.args.get('review_sort_dir', 'desc').lower()
-
-    if movie_sort_dir not in ['asc', 'desc']:
-        movie_sort_dir = 'desc'
-    if review_sort_dir not in ['asc', 'desc']:
-        review_sort_dir = 'desc'
-
     # Movies sorting
-    if movie_sort == "latest":
-        cur.execute(f"""
-            select id, title, director, genre, rel_date
-            from movies
-            order by rel_date {movie_sort_dir};
-        """)
-    elif movie_sort == "genre":
-        cur.execute(f"""
-            select id, title, director, genre, rel_date
-            from movies
-            order by genre {movie_sort_dir};
-        """)
-
-    else:
-        cur.execute("""
-            select id, title, director, genre, rel_date
-            from movies
-            order by rel_date desc;
-        """)
+    cur.execute("""
+        select id, title, director, genre, rel_date
+        from movies
+        order by rel_date desc
+        limit 5;
+    """)
 
     movies = cur.fetchall()
 
     # Review sort
-    if review_sort == "latest":
-        cur.execute(f"""
-            select r.ratings, r.uid, m.title, r.review, r.rev_time
-            from reviews r
-            join movies m on r.mid = m.id
-            where r.uid not in (
-                select opid from ties where id = %s and tie = 'mute'
-                )
-            order by r.rev_time {review_sort_dir};
-        """,(session['user_id'],))
-    elif review_sort == "title":
-        cur.execute(f"""
-            select r.ratings, r.uid, m.title, r.review, r.rev_time
-            from reviews r
-            join movies m on r.mid = m.id
-            where r.uid not in (
-                select opid from ties where id = %s and tie = 'mute'
-                )
-            order by m.title {review_sort_dir};
-        """,(session['user_id'],))
-
-    else:
-        cur.execute("""
-            select r.ratings, r.uid, m.title, r.review, r.rev_time
-            from reviews r
-                     join movies m on r.mid = m.id
-            where r.uid not in (select opid
-                                from ties
-                                where id = %s and tie = 'mute')
-            order by r.rev_time desc;
-        """, (session['user_id'],))
+    cur.execute("""
+        select r.ratings, r.uid, m.title, r.review, r.rev_time
+        from reviews r
+                 join movies m on r.mid = m.id
+        where r.uid not in (select opid
+                            from ties
+                            where id = %s and tie = 'mute')
+        order by r.rev_time desc
+        limit 5;
+    """, (session['user_id'],))
 
     reviews = cur.fetchall()
 
@@ -171,13 +126,25 @@ def home():
         "home.html",
         movies=movies[:4],
         reviews=reviews[:5],
-        user_id=session['user_id'],
-        movie_sort=movie_sort,
-        movie_sort_dir=movie_sort_dir,
-        review_sort=review_sort,
-        review_sort_dir=review_sort_dir
+        user_id=session['user_id']
     )
 
+
+@app.route('/movie')
+def movie_list():
+    if 'user_id' not in session:
+        return redirect(url_for('index'))
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        select id, title, director, genre, rel_date
+        from movies
+        order by rel_date desc;
+    """)
+
+    return render_template('movie_list.html')
 @app.route('/logout')
 def logout():
     session.clear()
