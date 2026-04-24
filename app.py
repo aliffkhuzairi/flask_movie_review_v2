@@ -583,16 +583,32 @@ def add_movie():
 
     try:
         cur.execute("""
+            select 1 from movies
+            where lower(trim(title)) = lower(trim(%s))
+            and rel_date = %s;
+        """,(title, rel_date))
+
+        existing = cur.fetchone()
+
+        if existing:
+            flash("Movie already exists!")
+            return redirect(url_for('user_detail', user_id=session['user_id']))
+
+        cur.execute("""
             insert into movies(title, director, genre, rel_date)
             values(%s, %s, %s, %s)
+            on conflict (title, rel_date) do nothing;
         """,(title, director, genre, rel_date))
 
-        conn.commit()
-        flash("Movie added successfully!")
+        if cur.rowcount == 0:
+            flash("Movie already exists!")
+        else:
+            conn.commit()
+            flash("Movie added successfully!")
 
     except Exception as e:
         conn.rollback()
-        flash(f"Failed: {e}")
+        flash(f"Failed to add movie: {e}")
 
     cur.close()
     conn.close()

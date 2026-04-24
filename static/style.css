@@ -112,6 +112,7 @@ button:hover {
     background: #ffffff;
     border: 1px solid #e5e7eb;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    z-index: 5;
 }
 
 .header-wrap {
@@ -268,7 +269,12 @@ button:hover {
     background: #4b5563;
 }
 
+.review-head {
+    margin: 0;
+}
+
 .table-wrap {
+    width: 100%;
     overflow-x: auto;
 }
 
