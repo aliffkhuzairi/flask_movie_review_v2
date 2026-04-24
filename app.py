@@ -107,7 +107,7 @@ def home():
 
     # Review sort
     cur.execute("""
-        select r.ratings, r.uid, m.title, r.review, r.rev_time
+        select r.ratings, r.uid, m.title, r.review, r.rev_time, m.genre
         from reviews r
                  join movies m on r.mid = m.id
         where r.uid not in (select opid

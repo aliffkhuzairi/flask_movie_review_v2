@@ -259,38 +259,28 @@ button:hover {
     margin: 0;
 }
 
-.table-wrap {
-    width: 100%;
-    overflow-x: auto;
+.review-title {
+    font-weight: 600;
+    font-size: 1.2rem;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 8px;
-    background: #fff;
-    border-radius: 10px;
-    overflow: hidden;
+.review-feed {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
 }
 
-th {
-    background: #c3c3c3;
-    color: #111827;
-    text-align: left;
-    padding: 12px 14px;
-    font-size: 0.95rem;
-    border-bottom: 1px solid #e5e7eb;
+.home-review-feed .review-card {
+    flex: 1 1 calc(50% - 8px);
+    max-width: calc(50% - 8px);
+    min-height: 200px;
 }
 
-td {
-    padding: 12px 14px;
-    border-bottom: 1px solid #e5e7eb;
-    vertical-align: top;
-    color: #374151;
+.homepage {
+    max-width: 350px;
 }
 
 .review-text-block {
-    max-width: 450px;
     line-height: 1.45;
     word-break: break-word;
 }
@@ -648,6 +638,10 @@ textarea{
 
 .list-card {
     margin-bottom: 0;
+}
+
+.user-page{
+    max-width: 450px;
 }
 
 
