@@ -258,6 +258,7 @@
                 <div class="card reviews-card">
                     <h2>Your Reviews</h2>
 
+                    {% if user_reviews %}
                     <div class="reviews-list">
                         {% for review in user_reviews %}
                             <div class="review-card">
@@ -290,6 +291,9 @@
                             </div>
                         {% endfor %}
                     </div>
+                    {% else %}
+                        <p class="empty-state">No reviews yet.</p>
+                    {% endif %}
                 </div>
             </div>
         </section>

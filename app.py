@@ -95,7 +95,7 @@ def home():
     conn = get_db_connection()
     cur = conn.cursor()
 
-    # Movies sorting
+    # Movies
     cur.execute("""
         select id, title, director, genre, rel_date
         from movies
@@ -105,7 +105,7 @@ def home():
 
     movies = cur.fetchall()
 
-    # Review sort
+    # Review
     cur.execute("""
         select r.ratings, r.uid, m.title, r.review, r.rev_time, m.genre
         from reviews r
@@ -135,8 +135,8 @@ def movie_list():
     if 'user_id' not in session:
         return redirect(url_for('index'))
 
-    movie_sort = request.args.get('movie_sort', '').strip()
-    movie_sort_dir = request.args.get('movie_sort_dir', '').strip()
+    movie_sort = request.args.get('movie_sort', 'latest').strip()
+    movie_sort_dir = request.args.get('movie_sort_dir', 'desc').strip()
 
     if movie_sort_dir not in ['asc', 'desc']:
         movie_sort_dir = 'desc'

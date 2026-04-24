@@ -84,13 +84,13 @@ input {
     margin: 10px 0;
 }
 
-button {
+button,
+.button-link {
     padding: 10px 12px;
     border: none;
     border-radius: 5px;
-    background: #2563eb;
-    color: white;
     cursor: pointer;
+    font-weight: 600;
 }
 
 button:hover {
@@ -168,7 +168,7 @@ button:hover {
     align-items: flex-start;
     gap: 16px;
     flex-wrap: wrap;
-    margin: 24px 0 15px;
+    margin-bottom: 17px;
 }
 
 .movie-list {
@@ -421,7 +421,9 @@ td a:hover {
 }
 
 .movie-left-column,
-.movie-right-column {
+.movie-right-column,
+.profile-left-column,
+.profile-right-column {
     display: flex;
     flex-direction: column;
     gap: 24px;
@@ -555,13 +557,6 @@ textarea{
     gap: 24px;
 }
 
-.profile-left-column,
-.profile-right-column {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
 .title-genre {
     display: flex;
     gap: 10px;
@@ -643,7 +638,6 @@ textarea{
 .user-page{
     max-width: 450px;
 }
-
 
 .btn-follow {
     background: #2563eb;
