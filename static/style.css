@@ -228,20 +228,6 @@ button:hover {
     margin: 0;
 }
 
-.movie-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
-    flex-wrap: wrap;
-}
-
-.movie-header h1 {
-    font-size: 1.5rem;
-    color: #111827;
-}
-
 .button-link {
     display: inline-block;
     color: white;

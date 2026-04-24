@@ -45,7 +45,7 @@ def auth():
         return redirect(url_for('home'))
 
     flash("ID or password are invalid.")
-    return render_template('login.html')
+    return redirect(url_for('index'))
 
 @app.route('/signup')
 def signup_page():
@@ -85,7 +85,7 @@ def signup():
         cur.close()
         conn.close()
         flash("Sign up failed. ID may already exists.")
-        return render_template('signup.html')
+        return redirect(url_for('signup_page'))
 
 
 @app.route('/home')
@@ -100,7 +100,7 @@ def home():
         select id, title, director, genre, rel_date
         from movies
         order by rel_date desc
-        limit 5;
+        limit 4;
     """)
 
     movies = cur.fetchall()
@@ -124,8 +124,8 @@ def home():
 
     return render_template(
         "home.html",
-        movies=movies[:4],
-        reviews=reviews[:5],
+        movies=movies,
+        reviews=reviews,
         user_id=session['user_id']
     )
 
@@ -214,8 +214,8 @@ def movie_detail(movie_id):
                 """,(movie_id, session['user_id'], rating, review))
 
                 flash("Review added!")
-                conn.commit()
-                return redirect(url_for('movie_detail', movie_id=movie_id))
+            conn.commit()
+            return redirect(url_for('movie_detail', movie_id=movie_id))
 
     cur.execute("""
         select id, title, director, genre, rel_date

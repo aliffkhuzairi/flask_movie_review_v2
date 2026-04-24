@@ -40,7 +40,7 @@
 
             <!-- MOVIE LIST -->
             <div class="movie-list">
-                {% for movie in movies[:4] %}
+                {% for movie in movies %}
                 <a href="{{ url_for('movie_detail', movie_id=movie[0]) }}" class="movie-card">
                     <div class="movie-card-top">
                         <h3>{{ movie[1] }}</h3>
@@ -108,6 +108,5 @@
         </section>
 
     </main>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
