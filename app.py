@@ -3,7 +3,7 @@ from flask import Flask, flash, redirect, render_template, request, session, url
 from werkzeug.security import check_password_hash, generate_password_hash
 from contextlib import contextmanager
 from functools import wraps
-from datetime import datetime
+from datetime import datetime, date
 
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'dev_secret_key')
@@ -77,28 +77,38 @@ def time_ago(value):
     if value is None:
         return ""
 
+    if isinstance(value, date) and not isinstance(value, datetime):
+        value = datetime.combine(value, datetime.min.time())
+
     now = datetime.now()
     diff = now - value
 
-    seconds = diff.total_seconds()
+    seconds = int(diff.total_seconds())
     minutes = seconds // 60
     hours = minutes // 60
-    days = hours // 24
+    days = diff.days
+    weeks = days // 7
     months = days // 30
     years = days // 365
 
     if seconds < 60:
         return "just now"
     elif minutes < 60:
-        return f"{int(minutes)} minute{'s' if minutes != 1 else ''} ago"
+        return f"{minutes}m"
     elif hours < 24:
-        return f"{int(hours)} hour{'s' if hours != 1 else ''} ago"
-    elif days < 30:
-        return f"{int(days)} day{'s' if days != 1 else ''} ago"
+        return f"{hours}h"
+    elif days == 1:
+        return "Yesterday"
+    elif days < 7:
+        return f"{days}d"
+    elif weeks == 1:
+        return "Last week"
+    elif weeks < 5:
+        return f"{weeks}w"
     elif months < 12:
-        return f"{int(months)} month{'s' if months != 1 else ''} ago"
+        return f"{months}mo"
     else:
-        return f"{int(years)} year{'s' if years != 1 else ''} ago"
+        return f"{years}y"
 
 app.jinja_env.filters["time_ago"] = time_ago
 
