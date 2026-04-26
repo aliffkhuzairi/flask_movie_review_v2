@@ -4,8 +4,6 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from contextlib import contextmanager
 from functools import wraps
 
-from app_refactored import ALLOWED_SORTS
-
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'dev_secret_key')
 
@@ -59,6 +57,8 @@ def admin_required(function):
         if session.get("user_role") != "admin":
             return redirect(url_for("home"))
 
+        return function(*args, **kwargs)
+
     return wrapper
 
 def is_valid_email(email):
@@ -82,7 +82,7 @@ def auth():
     password = request.form.get("password", "").strip()
 
     if not user_id or not password:
-        flash("Please enter both ID and password")
+        flash("Please enter both ID and password", "warning")
         return redirect(url_for("index"))
 
     with db_cursor() as cur:
@@ -97,10 +97,10 @@ def auth():
     if user and password_matches(user[1], password):
         session.clear()
         session["user_id"] = user[0]
-        session["user_role"] = user[1]
+        session["user_role"] = user[2]
         return redirect(url_for("home"))
 
-    flash("ID or password are invalid.")
+    flash("ID or password are invalid.", "error")
     return redirect(url_for("index"))
 
 @app.route("/signup")
@@ -113,17 +113,17 @@ def signup():
     password = request.form.get("password", "").strip()
 
     if not user_id or not password:
-        flash("Please enter both ID and password")
+        flash("Please enter both ID and password", "warning")
         return redirect(url_for("signup_page"))
 
     if len(password) < 8:
-        flash("Password must be at least 8 characters")
+        flash("Password must be at least 8 characters", "warning")
         return redirect(url_for("signup_page"))
 
     hashed_password = generate_password_hash(password)
 
     try:
-        with db_cursor() as cur:
+        with db_cursor(commit=True) as cur:
             cur.execute("""
                 insert into users(id, password, role)
                 values(%s, %s, 'user');
@@ -134,11 +134,11 @@ def signup():
                 values(%s, now());
             """,(user_id,))
 
-        flash("Account created successfully. Please sign in.")
+        flash("Account created successfully. Please sign in.", "success")
         return redirect(url_for("index"))
 
     except Exception:
-        flash("Sign up failed, ID may already exist.")
+        flash("Sign up failed, ID may already exist.", "error")
         return redirect(url_for("signup_page"))
 @app.route("/logout")
 def logout():
@@ -245,7 +245,7 @@ def movie_detail(movie_id):
                     where mid = %s and uid = %s;
                 """,(rating, review, movie_id, session["user_id"]))
 
-                flash("Review updated!")
+                flash("Review updated!", "success")
 
             else:
                 cur.execute("""
@@ -253,7 +253,7 @@ def movie_detail(movie_id):
                     values(%s, %s, %s, %s, now());
                 """,(movie_id, session["user_id"], rating, review))
 
-                flash("Review added!")
+                flash("Review added!", "success")
 
         return redirect(url_for("movie_detail", movie_id=movie_id))
 
@@ -353,7 +353,7 @@ def user_detail(user_id):
         """, (user_id,))
 
         followed_users = cur.fetchall()
-        
+
 
         if is_self:
 
@@ -378,6 +378,8 @@ def user_detail(user_id):
             if relation_row:
                 relationship = relation_row[0]
 
+    followed_count = len(followed_users)
+    muted_count = len(muted_users)
     clear_form = session.pop("clear_form", False)
 
     return render_template("user_info.html",
@@ -390,6 +392,8 @@ def user_detail(user_id):
                            relationship=relationship,
                            followed_users=followed_users,
                            muted_users=muted_users,
+                           followed_count=followed_count,
+                           muted_count=muted_count,
                            clear_form=clear_form)
 
 @app.route("/user/<user_id>/edit", methods=["POST"])
@@ -402,15 +406,15 @@ def edit_user_profile(user_id):
     email = request.form.get("email", "").strip()
 
     if not name and not email:
-        flash("Please enter a name or email.")
+        flash("Please enter a name or email.", "warning")
         return redirect(url_for("user_detail", user_id=user_id))
 
     if name and len(name) < 4:
-        flash("Name must be at least 4 characters.")
+        flash("Name must be at least 4 characters.", "warning")
         return redirect(url_for("user_detail", user_id=user_id))
 
     if email and not is_valid_email(email):
-        flash("Please enter a valid email address.")
+        flash("Please enter a valid email address.", "warning")
         return redirect(url_for("user_detail", user_id=user_id))
 
     with db_cursor(commit=True) as cur:
@@ -428,7 +432,7 @@ def edit_user_profile(user_id):
                 where id = %s;
             """, (email, user_id))
 
-    flash("Your profile has been updated.")
+    flash("Your profile has been updated.", "success")
     return redirect(url_for("user_detail", user_id=user_id))
 
 def can_manage_relationship(target_user_id):
@@ -476,7 +480,7 @@ def unfollow_user(target_user_id):
             where id = %s and opid = %s and tie = 'follow';
         """, (session["user_id"], target_user_id))
 
-    return redirect(url_for("user_detail", user_id=target_user_id))
+    return redirect(url_for("user_detail", user_id=session["user_id"]))
 
 @app.route("/mute/<target_user_id>", methods=["POST"])
 @login_required
@@ -492,7 +496,7 @@ def mute_user(target_user_id):
             set tie = 'mute';
         """, (session["user_id"], target_user_id))
 
-    return redirect(url_for("user_detail", user_id=target_user_id))
+    return redirect(url_for("user_detail", user_id=session["user_id"]))
 
 @app.route("/unmute/<target_user_id>", methods=["POST"])
 @login_required
@@ -514,12 +518,12 @@ def add_movie():
     genre = request.form.get("genre", "").strip()
     rel_date = request.form.get("rel_date", "").strip()
 
-    if not title and not director and not genre and not rel_date:
-        flash("All fields are required.")
+    if not title or not director or not genre or not rel_date:
+        flash("All fields are required.", "warning")
         return redirect(url_for("user_detail", user_id=session["user_id"]))
 
     if genre not in ALLOWED_GENRES:
-        flash("Please select a valid genre.")
+        flash("Please select a valid genre.", "warning")
         return redirect(url_for("user_detail", user_id=session["user_id"]))
 
     try:
@@ -531,12 +535,12 @@ def add_movie():
             """, (title, director, genre, rel_date))
 
             if cur.rowcount == 0:
-                flash("Movie already exists.")
+                flash("Movie already exists.", "warning")
             else:
-                flash("Movie added successfully.")
+                flash("Movie added successfully.", "success")
 
     except Exception as err:
-        flash(f"Failed to add movie: {err}")
+        flash(f"Failed to add movie: {err}", "error")
 
     return redirect(url_for("user_detail", user_id=session["user_id"]))
 
@@ -549,7 +553,7 @@ def delete_review(movie_id):
             where mid = %s and uid = %s;
         """,(movie_id, session["user_id"]))
 
-    flash("Review deleted.")
+    flash("Review deleted.", "success")
     return redirect(url_for("user_detail", user_id=session["user_id"]))
 
 if __name__ == "__main__":

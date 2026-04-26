@@ -36,7 +36,7 @@ body {
 
 /* FLASH SUCCESS */
 .flash-container {
-    min-height: 60px;
+    max-height: 60px;
 }
 
 .flash {
@@ -46,14 +46,19 @@ body {
     margin-bottom: 10px;
 }
 
-.fail {
-    background: #ffb5b5;
-    color: #5f0606;
-}
-
-.success {
+.flash.success {
     background: #d1fae5;
     color: #065f46;
+}
+
+.flash.error {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.flash.warning {
+    background: #fef3c7;
+    color: #92400e;
 }
 
 .login {
@@ -65,14 +70,15 @@ body {
 .form-grid {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
 }
 
 label {
     font-weight: bold;
 }
 
-input {
+input,
+select {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -90,11 +96,16 @@ input {
 
 button,
 .button-link {
+    display: inline-block;
+    color: #eff6ff;
     padding: 10px 12px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 0.95rem;
     font-weight: 600;
+    text-decoration: none;
+
 }
 
 button:hover {
@@ -232,15 +243,6 @@ button:hover {
     margin: 0;
 }
 
-.button-link {
-    display: inline-block;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 0.95rem;
-    font-weight: 600;
-}
 
 .primary {
     background: #2563eb;
@@ -322,6 +324,7 @@ button:hover {
 .small-text {
     font-size: 0.88rem;
     color: #6b7280;
+    margin: 5px 0;
 }
 
 /* MOVIE PAGE */
@@ -534,7 +537,7 @@ textarea{
 
 .profile-title {
     font-size: 2rem;
-    margin-bottom: 10px;
+    margin: 10px 0;
 }
 
 .profile-tags {
@@ -553,6 +556,7 @@ textarea{
     display: flex;
     gap: 10px;
     align-items: center;
+    margin: 5px 0;
 }
 
 .delete {
@@ -595,15 +599,15 @@ textarea{
     margin-bottom: 0;
 }
 
-.profile-card button {
+.profile-card button,
+.admin-card button{
     margin-top: 10px;
 }
 
 
 .profile-card h2,
 .list-card h2,
-.action-card h2,
-.admin-card h2 {
+.action-card h2 {
     margin-bottom: 12px;
 }
 
@@ -620,7 +624,7 @@ textarea{
 }
 
 .admin-card .form-grid {
-    margin-top: 10px;
+    margin-top: 16px;
 }
 
 .list-card {

@@ -132,6 +132,16 @@
                 <div class="card profile-card">
                     <h2>Edit Profile</h2>
 
+                     <div class="flash-container">
+                         {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                {% for category, msg in messages %}
+                                    <div class="flash {{ category }}">{{ msg }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                     </div>
+
                     <form action="{{ url_for('edit_user_profile', user_id=user_info[0]) }}" method="POST" class="form-grid">
 
                         <label>Name</label>
@@ -149,105 +159,116 @@
 
 
                 <!--  FOLLOWED AND MUTED USERS  -->
-                {% if not is_current_user_admin %}
-                <div class="card list-card">
+                {% if is_self and not is_current_user_admin %}
+                    <div class="card list-card">
 
-                    {% if followed_users %}
-                    <!--  FOLLOWED USERS  -->
-                    <h2>Followed Users</h2>
-                        <ul class="relation-list">
 
-                            {% for followed in followed_users[:5] %}
-                            <li class="relation-item">
-                                <div class="relation-user">
-                                    <a href="{{ url_for('user_detail', user_id=followed[0]) }}">
-                                        {{ followed[0] }}
-                                    </a>
-                                    {% if followed[1] %}
-                                        <span class="small-text">{{ followed[1] }}</span>
-                                    {% endif %}
-                                </div>
-                                {% if is_self %}
-                                <form action="{{ url_for('unfollow_user', target_user_id=followed[0]) }}"
-                                      method="POST"
-                                      onsubmit="return confirm('Unfollow this user?');">
-                                    <button type="submit" class="btn-unfollow">Unfollow</button>
-                                </form>
-                                {% endif %}
-                            </li>
-                            {% endfor %}
+                        <!--  FOLLOWED USERS  -->
+                        <h2>Followed Users
+                            {% if followed_count > 0 %}
+                            <span class="count-badge">({{ followed_count }})</span>
+                            {% endif %}
+                        </h2>
 
-                        </ul>
-                    {% else %}
-                        <p class="empty-state">No followed users.</p>
-                    {% endif %}
-               </div>
+                            {% if followed_users %}
+                            <ul class="relation-list">
 
-                <!--  MUTED USERS  -->
-                {% if is_self %}
-                <div class="card list-card">
-                    <h2>Muted Users</h2>
-
-                    {% if muted_users %}
-                        <ul class="relation-list">
-                            {% for muted in muted_users[:5] %}
+                                {% for followed in followed_users[:5] %}
                                 <li class="relation-item">
                                     <div class="relation-user">
-                                        <a href="{{ url_for('user_detail', user_id=muted[0]) }}">
-                                            {{ muted[0] }}
+                                        <a href="{{ url_for('user_detail', user_id=followed[0]) }}">
+                                            {{ followed[0] }}
                                         </a>
-                                        {% if muted[1] %}
-                                            <span class="small-text">{{ muted[1] }}</span>
+                                        {% if followed[1] %}
+                                            <span class="small-text">{{ followed[1] }}</span>
                                         {% endif %}
                                     </div>
-
-                                    <form action="{{ url_for('unmute_user', target_user_id=muted[0]) }}"
-                                          method="POST"
-                                          onsubmit="return confirm('Unmute this user?');">
-                                        <button type="submit" class="btn-unmute">Unmute</button>
-                                    </form>
+                                    {% if is_self %}
+                                        <form action="{{ url_for('unfollow_user', target_user_id=followed[0]) }}"
+                                              method="POST"
+                                              onsubmit="return confirm('Unfollow this user?');">
+                                            <button type="submit" class="btn-unfollow">Unfollow</button>
+                                        </form>
+                                    {% endif %}
                                 </li>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
-                        <p class="empty-state">No muted users.</p>
+                                {% endfor %}
+
+                            </ul>
+                            {% else %}
+                                <p class="empty-state">No followed users.</p>
+                            {% endif %}
+                    </div>
+
+                    <!--  MUTED USERS  -->
+                    {% if is_self %}
+                    <div class="card list-card">
+                        <h2>Muted Users
+                            {% if muted_count > 0 %}
+                            <span class="count-badge">({{ muted_count }})</span>
+                            {% endif %}
+                        </h2>
+
+                        {% if muted_users %}
+                            <ul class="relation-list">
+                                {% for muted in muted_users[:5] %}
+                                    <li class="relation-item">
+                                        <div class="relation-user">
+                                            <a href="{{ url_for('user_detail', user_id=muted[0]) }}">
+                                                {{ muted[0] }}
+                                            </a>
+                                            {% if muted[1] %}
+                                                <span class="small-text">{{ muted[1] }}</span>
+                                            {% endif %}
+                                        </div>
+
+                                        <form action="{{ url_for('unmute_user', target_user_id=muted[0]) }}"
+                                              method="POST"
+                                              onsubmit="return confirm('Unmute this user?');">
+                                            <button type="submit" class="btn-unmute">Unmute</button>
+                                        </form>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="empty-state">No muted users.</p>
+                        {% endif %}
+                    </div>
                     {% endif %}
-                </div>
                 {% endif %}
+
 
                 <!-- IF CURRENT USER IS ADMIN -->
-                {% if is_self and session['user_role'] == 'admin' %}
-                <div class="card admin-card">
-                    <h2>Admin Panel</h2>
-                    <p class="small-text">Add a new movie to the platform.</p>
+                {% if is_self and is_current_user_admin %}
+                    <div class="card admin-card">
+                        <h2>Admin Panel</h2>
+                        <p class="small-text">Add a new movie to the platform.</p>
 
-                    <form action="{{ url_for('add_movie') }}" method="POST" class="form-grid">
+                        <form action="{{ url_for('add_movie') }}" method="POST" class="form-grid">
 
-                        <label for="movie_title">Title</label>
-                        <input id="movie_title" name="movie_title" type="text" required>
+                            <label for="movie_title">Title</label>
+                            <input id="movie_title" name="movie_title" type="text" required>
 
-                        <label for="director">Director</label>
-                        <input id="director" name="director" type="text" required>
+                            <label for="director">Director</label>
+                            <input id="director" name="director" type="text" required>
 
-                        <label for="genre">Genre</label>
-                        <select id="genre" name="genre" required>
-                            <option value="">-- Select Genre --</option>
-                            <option value="action">action</option>
-                            <option value="comedy">comedy</option>
-                            <option value="drama">drama</option>
-                            <option value="fantasy">fantasy</option>
-                            <option value="romance">romance</option>
-                            <option value="thriller">thriller</option>
-                            <option value="western">western</option>
-                        </select>
+                            <label for="genre">Genre</label>
+                            <select id="genre" name="genre" required>
+                                <option value="">-- Select Genre --</option>
+                                <option value="action">action</option>
+                                <option value="comedy">comedy</option>
+                                <option value="drama">drama</option>
+                                <option value="fantasy">fantasy</option>
+                                <option value="romance">romance</option>
+                                <option value="thriller">thriller</option>
+                                <option value="western">western</option>
+                            </select>
 
-                        <label for="rel_date">Release Date</label>
-                        <input id="rel_date" name="rel_date" type="date" required>
+                            <label for="rel_date">Release Date</label>
+                            <input id="rel_date" name="rel_date" type="date" required>
 
-                        <button type="submit">Add Movie</button>
-                    </form>
-                </div>
-                {% endif %}
+                            <button type="submit" class="button-link primary">Add Movie</button>
+                        </form>
+                    </div>
                 {% endif %}
 
             </div>

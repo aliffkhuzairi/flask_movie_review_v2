@@ -12,14 +12,14 @@
              <h1>Create Account</h1>
 
              <div class="flash-container">
-                {% with messages = get_flashed_messages() %}
+                 {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}
-                        {% for msg in messages %}
-                        <div class="flash fail">{{ msg }}</div>
+                        {% for category, msg in messages %}
+                            <div class="flash {{ category }}">{{ msg }}</div>
                         {% endfor %}
                     {% endif %}
-                {% endwith %}
-              </div>
+                 {% endwith %}
+             </div>
 
              <form action="{{ url_for('signup') }}" method="POST" class="form-grid">
 
