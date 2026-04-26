@@ -196,7 +196,7 @@ button:hover {
     width: 100%;
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     gap: 16px;
     flex-wrap: wrap;
     margin-bottom: 17px;
@@ -275,7 +275,7 @@ button:hover {
 
 .search-form input {
     flex: 1;
-    min-width: 240px;
+    min-width: 300px;
 }
 
 .search-form button {
@@ -605,6 +605,14 @@ textarea{
     gap: 10px;
     align-items: center;
     margin: 5px 0;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 18px;
 }
 
 .delete {

@@ -53,7 +53,7 @@
             </div>
 
             <div class="button-row">
-                <a class="button-link primary"
+                <a class="button-link {{ 'primary' if movie_sort == 'latest' else 'secondary' }}"
                    href="{{ url_for(
                         'movie_list',
                         movie_sort='latest',
@@ -66,7 +66,7 @@
                     {% endif %}
                 </a>
 
-                <a class="button-link secondary"
+                <a class="button-link {{ 'primary' if movie_sort == 'title' else 'secondary' }}"
                    href="{{ url_for(
                         'movie_list',
                         movie_sort='title',
@@ -79,7 +79,7 @@
                     {% endif %}
                 </a>
 
-                <a class="button-link secondary"
+                <a class="button-link {{ 'primary' if movie_sort == 'genre' else 'secondary' }}"
                    href="{{ url_for(
                         'movie_list',
                         movie_sort='genre',

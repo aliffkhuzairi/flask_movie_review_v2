@@ -274,7 +274,26 @@
 
                 <!-- USER'S REVIEWS -->
                 <div class="card reviews-card">
-                    <h2>Your Reviews</h2>
+                    <div class="section-head">
+                        <h2>Your Reviews</h2>
+                        <div class="button-row">
+                            <a class="button-link {{ 'primary' if review_sort == 'latest' else 'secondary' }}"
+                               href="{{ url_for('user_detail', user_id=user_info[0], review_sort='latest') }}">
+                                Latest
+                            </a>
+
+                            <a class="button-link {{ 'primary' if review_sort == 'highest' else 'secondary' }}"
+                               href="{{ url_for('user_detail', user_id=user_info[0], review_sort='highest') }}">
+                                Highest
+                            </a>
+
+                            <a class="button-link {{ 'primary' if review_sort == 'lowest' else 'secondary' }}"
+                               href="{{ url_for('user_detail', user_id=user_info[0], review_sort='lowest') }}">
+                                Lowest
+                            </a>
+                        </div>
+                    </div>
+
 
                     {% if user_reviews %}
                     <div class="reviews-list">
@@ -311,6 +330,29 @@
                     </div>
                     {% else %}
                         <p class="empty-state">No reviews yet.</p>
+                    {% endif %}
+
+                    {% if total_pages > 1 %}
+                    <div class="pagination">
+                        {% if page > 1 %}
+                            <a class="button-link secondary"
+                               href="{{ url_for('user_detail', user_id=user_info[0], page=page-1) }}">
+                                Previous
+                            </a>
+                        {% endif %}
+
+                        <span class="small-text">
+                            Page {{ page }} of {{ total_pages }}
+                        </span>
+
+                        {% if page < total_pages %}
+                            <a class="button-link secondary"
+                               href="{{ url_for('user_detail', user_id=user_info[0], page=page+1) }}" >
+                                Next
+                            </a>
+                        {% endif %}
+
+                    </div>
                     {% endif %}
                 </div>
             </div>

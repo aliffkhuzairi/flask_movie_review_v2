@@ -1,4 +1,5 @@
 import psycopg2, os, re
+
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 from contextlib import contextmanager
@@ -207,7 +208,7 @@ def home():
                       where t.id = %s and t.opid = r.uid and t.tie = 'mute'
                       )
             order by r.rev_time desc
-            limit 5;
+            limit 6;
         """, (session["user_id"],))
 
         reviews = cur.fetchall()
@@ -361,8 +362,24 @@ def movie_detail(movie_id):
 @login_required
 def user_detail(user_id):
     current_user_role = session.get("user_role")
+    review_sort = request.args.get("review_sort", "latest").strip()
+
+    sort_review = ["latest", "highest", "lowest"]
+
+    if review_sort not in sort_review:
+        review_sort = "latest"
+
+    # REVIEW SORT SQL COMMAND
+    if review_sort == "highest":
+        order_by = "r.ratings desc, r.rev_time desc"
+    elif review_sort == "lowest":
+        order_by = "r.ratings asc, r.rev_time desc"
+    else:
+        order_by = "r.rev_time desc"
 
     with db_cursor() as cur:
+
+        # GET USER INFO
         cur.execute("""
             select u.id, u.role, ui.name, ui.email, ui.reg_date
             from users u
@@ -375,19 +392,38 @@ def user_detail(user_id):
         if user_info is None:
             return "User not found", 404
 
-        cur.execute("""
+        # REVIEWS PAGINATION
+        page = request.args.get("page", 1, type=int)
+        per_page = 5
+        offset = (page - 1) * per_page
+
+        cur.execute(f"""
             select m.id, m.title, r.ratings, r.review, r.rev_time, m.genre
             from reviews r 
             join movies m on r.mid = m.id
             where r.uid = %s
-            order by r.rev_time desc;
-        """, (user_id,))
+            order by {order_by}
+            limit %s offset %s;
+        """, (user_id, per_page, offset))
+
         user_reviews = cur.fetchall()
 
+        cur.execute("""
+            select count(*)
+            from reviews
+            where uid = %s;
+        """, (user_id,))
+
+        total_reviews = cur.fetchone()[0]
+        total_pages = (total_reviews + per_page - 1) //  per_page
+
+        # ROLE DIFFERENTIATION
         is_self = user_id == session["user_id"]
         is_admin_profile = user_info[1] == "admin"
         is_current_user_admin = current_user_role == "admin"
 
+
+        # SOCIAL STATUS AND INTERACTIONS
         relationship = None
         followed_users = []
         muted_users = []
@@ -434,6 +470,9 @@ def user_detail(user_id):
                            user_info=user_info,
                            user_reviews=user_reviews,
                            user_id=session["user_id"],
+                           page=page,
+                           review_sort=review_sort,
+                           total_pages=total_pages,
                            is_self=is_self,
                            is_admin_profile=is_admin_profile,
                            is_current_user_admin=is_current_user_admin,
