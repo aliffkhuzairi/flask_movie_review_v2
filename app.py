@@ -212,6 +212,7 @@ def home():
 def movie_list():
     movie_sort = request.args.get("movie_sort", "latest").strip()
     movie_sort_dir = request.args.get("movie_sort_dir", "desc").strip()
+    search = request.args.get("search", "").strip()
 
     if movie_sort not in ALLOWED_SORTS:
         movie_sort = "latest"
@@ -226,20 +227,26 @@ def movie_list():
 
     order_column = sort_columns[movie_sort]
 
+    search_pattern = f"%{search}%"
+
     with db_cursor() as cur:
         if movie_sort == "genre":
             cur.execute(f"""
                 select id, title, director, genre, rel_date
                 from movies
+                where title ilike %s
+                or director ilike %s or genre ilike %s
                 order by {order_column} {movie_sort_dir}, title asc;
-            """)
+            """, (search_pattern, search_pattern, search_pattern))
 
         else:
             cur.execute(f"""
                 select id, title, director, genre, rel_date
                 from movies
+                where title ilike %s
+                or director ilike %s or genre ilike %s
                 order by {order_column} {movie_sort_dir};
-            """)
+            """,(search_pattern, search_pattern, search_pattern))
 
         movies = cur.fetchall()
 
@@ -247,6 +254,7 @@ def movie_list():
                            movies=movies,
                            movie_sort=movie_sort,
                            movie_sort_dir=movie_sort_dir,
+                           search=search,
                            user_id=session["user_id"])
 
 @app.route("/movies/<int:movie_id>", methods=["GET", "POST"])

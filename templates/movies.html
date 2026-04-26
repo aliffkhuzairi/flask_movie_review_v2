@@ -22,6 +22,29 @@
 
     <main class="page-container">
 
+        <!-- SEARCH BAR -->
+        <section class="search-section">
+            <form action="{{ url_for('movie_list') }}" method="GET" class="search-form">
+                <input
+                    type="text"
+                    name="search"
+                    class="search-bar"
+                    placeholder="Search by title, director, or genre"
+                    value="{{ search or '' }}"
+                >
+
+                <input type="hidden" name="movie_sort" value="{{ movie_sort }}">
+                <input type="hidden" name="movie_sort_dir" value="{{ movie_sort_dir }}">
+
+                <button type="submit" class="button-link primary">Search</button>
+
+                {% if search %}
+                    <a class="button-link secondary" href="{{ url_for('movie_list') }}">Clear</a>
+                {% endif %}
+            </form>
+
+        </section>
+
         <!-- MOVIES META AND SORT BUTTONS -->
         <div class="section-head">
             <div>
@@ -34,7 +57,8 @@
                    href="{{ url_for(
                         'movie_list',
                         movie_sort='latest',
-                        movie_sort_dir='asc' if movie_sort == 'latest' and movie_sort_dir == 'desc' else 'desc'
+                        movie_sort_dir='asc' if movie_sort == 'latest' and movie_sort_dir == 'desc' else 'desc',
+                        search=search
                    ) }}">
                     Latest
                     {% if movie_sort == 'latest' %}
@@ -46,7 +70,8 @@
                    href="{{ url_for(
                         'movie_list',
                         movie_sort='title',
-                        movie_sort_dir='asc' if movie_sort == 'title' and movie_sort_dir == 'desc' else 'desc'
+                        movie_sort_dir='asc' if movie_sort == 'title' and movie_sort_dir == 'desc' else 'desc',
+                        search=search
                    ) }}">
                     Title
                     {% if movie_sort == 'title' %}
@@ -58,7 +83,8 @@
                    href="{{ url_for(
                         'movie_list',
                         movie_sort='genre',
-                        movie_sort_dir='asc' if movie_sort == 'genre' and movie_sort_dir == 'desc' else 'desc'
+                        movie_sort_dir='asc' if movie_sort == 'genre' and movie_sort_dir == 'desc' else 'desc',
+                        search=search
                    ) }}">
                     Genre
                     {% if movie_sort == 'genre' %}

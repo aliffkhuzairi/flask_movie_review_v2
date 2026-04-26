@@ -259,6 +259,31 @@ button:hover {
     margin: 0;
 }
 
+.search-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100px;
+}
+
+.search-form {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+}
+
+.search-form input {
+    flex: 1;
+    min-width: 240px;
+}
+
+.search-form button {
+    width: auto;
+    padding: 8px 10px;
+}
+
+
 
 .primary {
     background: #2563eb;
