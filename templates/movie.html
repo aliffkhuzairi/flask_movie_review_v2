@@ -15,7 +15,8 @@
                 <span>MovieReview</span>
             </a>
             <div class="button-row">
-                <a class="button-link primary" href="{{ url_for('user_detail', user_id=user_id) }}">Profile</a>
+                <a class="button-link nav" href="{{ url_for('movie_list') }}">Movies</a>
+                <a class="button-link nav" href="{{ url_for('user_detail', user_id=user_id) }}">Profile</a>
                 <a class="button-link logout" href="{{ url_for('logout') }}">Logout</a>
             </div>
         </div>
@@ -29,9 +30,9 @@
                 <h1 class="movie-title">{{ movie[1] }}</h1>
 
                 <div class="movie-tags">
-                    <span class="tag">{{ movie[3] }}</span>
+                    <span class="tag info-page">{{ movie[3] }}</span>
                     <span class="tag muted">Directed by {{ movie[2] }}</span>
-                    <span class="tag muted">{{ movie[4] }}</span>
+                    <span class="tag muted">{{ movie[4].strftime('%d %b %Y') if movie[4] else '' }}</span>
                 </div>
             </div>
 
@@ -44,7 +45,7 @@
         </section>
 
         <!-- MOVIE INFO -->
-        <section class="movie-layout">
+        <section class="two-cols-layout">
 
             <!-- LEFT COLUMN -->
             <div class="movie-left-column">
@@ -67,7 +68,7 @@
                         </div>
                         <div class="info-item">
                             <span class="info-label">Release Date</span>
-                            <span class="info-value">{{ movie[4] }}</span>
+                            <span class="info-value">{{ movie[4].strftime('%d %b %Y') if movie[4] else '' }}</span>
                         </div>
                     </div>
                 </div>
@@ -120,17 +121,18 @@
                             {% for review in reviews %}
                                 <div class="review-card">
                                     <div class="review-card-top">
-                                        <a class="review-user" href="{{ url_for('user_detail', user_id=review[1]) }}">
-                                            {{ review[1] }}
-                                        </a>
+                                        <div class="title-genre">
+                                            <a class="review-user" href="{{ url_for('user_detail', user_id=review[1]) }}">
+                                                {{ review[1] }}
+                                            </a>
+                                            <p class="review-time">
+                                                {{ review[3] | time_ago }}
+                                            </p>
+                                        </div>
                                         <span class="review-rating">{{ review[0] }}/5</span>
                                     </div>
 
-                                    <p class="review-time">
-                                        {{ review[3] | time_ago }}
-                                    </p>
-
-                                    <div class="review-text-block">
+                                    <div class="review-text-block user-page">
                                         <p class="review-text clamp-text">{{ review[2] }}</p>
                                         <button type="button" class="text-toggle" onclick="toggleReview(this)">Read more</button>
                                     </div>

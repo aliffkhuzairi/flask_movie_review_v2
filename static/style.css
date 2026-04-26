@@ -1,4 +1,41 @@
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Megrim&display=swap');
+:root {
+    /* Background */
+    --bg-main: linear-gradient(180deg, #000000, #0e1a22, #152331);
+    --bg-surface: #0b1116;
+
+    /* Header */
+    --bg-header: rgba(0, 0, 0, 0.15);
+
+    /* Text */
+    --text-main: #e5e7eb;
+    --text-muted: #8c959c;
+    --text-dark: #04151f;
+
+    /* Accent */
+    --primary: #c44900;
+    --primary-hover: #a63c00;
+
+    --secondary: #efd6ac;
+    --secondary-hover: #e4c58e;
+
+    /* Danger */
+    --danger: #dc2626;
+    --danger-hover: #b91c1c;
+    --bg-error: #fee2e2;
+    --bg-error-text: #b91c1c;
+
+    /* Status */
+    --success-bg: #0f3d2e;
+    --success-text: #a7f3d0;
+
+    /* Tags */
+    --tag-bg: #233a45;
+    --tag-text: #d1d5db;
+
+    /* Shadow */
+    --shadow: 0 6px 20px #ffffff66;
+}
 
 * {
     box-sizing: border-box;
@@ -6,11 +43,15 @@
     padding: 0;
 }
 
+html {
+    min-height: 100vh;
+}
+
 /* BODY */
 body {
     font-family: 'Lexend', Helvetica, sans-serif;
-    background: #d1d1d5;
-    color: #1f2937;
+    background: var(--bg-main);
+    color: var(--text-main);
 }
 
 /* CENTER LOGIN PAGE */
@@ -23,17 +64,31 @@ body {
 
 /* LOGIN CARD */
 .auth-card {
-    background: #ffffff;
+    background: var(--bg-surface);
+    color: var(--text-main);
     height: 70vh;
-    padding: 30px;
+    padding: 30px 60px;
     border-radius: 10px;
-    width: 350px;
-    box-shadow: 0 5px 20px rgb(0 0 0 / 0.36);
+    width: 460px;
+    box-shadow: var(--shadow);
 }
 
 .auth-card h1 {
     text-align: center;
     margin-bottom: 20px;
+}
+
+.auth-card .flash-container {
+    min-height: 60px;
+}
+
+.auth-option {
+    text-decoration: none;
+    color: var(--secondary);
+}
+
+.auth-option:hover {
+    color: var(--secondary-hover);
 }
 
 /* FLASH MESSAGES */
@@ -49,13 +104,13 @@ body {
 }
 
 .flash.success {
-    background: #d1fae5;
-    color: #065f46;
+    background: var(--success-bg);
+    color: var(--success-text);
 }
 
 .flash.error {
-    background: #fee2e2;
-    color: #991b1b;
+    background: var(--bg-error);
+    color: var(--bg-error-text);
 }
 
 .flash.warning {
@@ -67,8 +122,8 @@ body {
     color: #eff6ff;
 }
 
-
 /* FORM */
+
 .form-grid {
     display: flex;
     flex-direction: column;
@@ -81,7 +136,7 @@ label {
 
 input,
 select {
-    padding: 8px;
+    padding: 10px 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
@@ -96,10 +151,9 @@ select {
     margin: 10px 0;
 }
 
-button,
 .button-link {
     display: inline-block;
-    color: #eff6ff;
+    color: var(--text-main);
     padding: 10px 12px;
     border: none;
     border-radius: 5px;
@@ -107,11 +161,6 @@ button,
     font-size: 0.95rem;
     font-weight: 600;
     text-decoration: none;
-
-}
-
-button:hover {
-    background: #1d4ed8;
 }
 
 .form-grid button,
@@ -125,10 +174,11 @@ button:hover {
     top: 0;
     left: 0;
     width: 100%;
+    padding: 7px 0;
     gap: 12px;
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    background: var(--bg-header);
+    border: none;
+    transition: all 0.6s;
     z-index: 5;
 }
 
@@ -138,7 +188,7 @@ button:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 18px;
+    padding: 0 10px;
 }
 .brand {
     font-size: 1.5rem;
@@ -146,11 +196,43 @@ button:hover {
     font-weight: 800;
     letter-spacing: 1.2px;
     text-decoration: none;
-    color: #111827;
+    color: var(--text-main);
+    transition: all 0.13s ease-in-out;
+}
+
+.nav,
+.logout {
+    padding: 6px 12px;
 }
 
 .brand:hover {
-    color: #2563eb;
+    color: var(--primary-hover);
+}
+
+.nav:hover {
+    color: var(--secondary-hover);
+}
+
+header.sticky {
+    padding: 5px;
+    background-color: #ccc;
+    box-shadow: 0 0 10px #000;
+}
+
+header.sticky .nav {
+    color: var(--text-dark);
+}
+
+header.sticky .nav:hover {
+    color: var(--primary-hover);
+}
+
+header.sticky .brand{
+    color: var(--text-dark);
+}
+
+header.sticky .brand:hover{
+    color: var(--primary-hover);
 }
 
 .nav-actions {
@@ -160,27 +242,24 @@ button:hover {
 }
 
 .logout {
-    background: #f61616;
+    background: var(--danger);
 }
 
 .logout:hover {
-    background: #bc1111;
+    background: var(--danger-hover);
 }
 
 /* MAIN SECTION */
 .page-container {
     max-width: 1200px;
-    margin: 70px auto 20px;
+    margin: 60px auto 20px;
     padding: 24px 16px 40px;
 }
 
 .card {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
     border-radius: 14px;
     padding: 20px;
     margin-bottom: 24px;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
 }
 
 #movies,
@@ -190,6 +269,10 @@ button:hover {
 
 .movie-container {
     margin: 24px 0 40px;
+}
+
+.review-container {
+    margin-top: 100px;
 }
 
 .section-head {
@@ -204,39 +287,39 @@ button:hover {
 
 .movie-list {
     display: flex;
-    gap: 18px;
+    gap: 20px;
     flex-wrap: wrap;
 }
 
 .movie-card {
     flex: 1 1 240px;
     max-width: 280px;
-    min-height: 260px;
+    min-height: 340px;
     display: flex;
     flex-direction: column;
     text-decoration: none;
     color: inherit;
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 14px;
+    background: #121a21;
+    border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow);
     transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
 .movie-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgb(255 255 255 / 0.17);
 }
 
 .movie-card-top {
-    background: #374151;
     padding: 16px 14px;
+    background: var(--primary);
 }
 
 .movie-card-top h3 {
     font-size: 1.2rem;
-    color: #ffffff;
+    color: var(--text-main);
     text-align: center;
     line-height: 1.3;
 }
@@ -249,10 +332,29 @@ button:hover {
     flex: 1;
 }
 
+.tag {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.home-tag {
+    background: #edb68f;
+    color: #954a32;
+}
+
+.review-tag {
+    background: var(--tag-bg);
+    color: var(--tag-text);
+}
+
 .movie-info {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    color: var(--text-main);
 }
 
 .movie-info p {
@@ -283,24 +385,23 @@ button:hover {
     padding: 8px 10px;
 }
 
-
-
 .primary {
-    background: #2563eb;
-    color: #eff6ff;
+    background: var(--primary);
+    color: var(--text-main);
 }
 
 .button-link.primary:hover {
-    background: #1d4ed8;
+    background: var(--primary-hover);
     text-decoration: none;
 }
 
 .button-link.secondary {
-    background: #6b7280;
+    background: var(--secondary);
+    color: var(--text-dark);
 }
 
 .button-link.secondary:hover {
-    background: #4b5563;
+    background: var(--secondary-hover);
 }
 
 .review-head {
@@ -309,24 +410,25 @@ button:hover {
 
 .review-title {
     font-weight: 600;
-    color: #111827;
-    font-size: 1.2rem;
+    color: var(--text-main);
+    font-size: 1.7rem;
     text-decoration: none;
+    transition: color 0.12s ease-in-out;
 }
 
 .review-title:hover {
-    color: #1d4ed8;
+    color: var(--secondary-hover);
 }
 
 .review-feed {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 32px;
 }
 
 .home-review-feed .review-card {
-    flex: 1 1 calc(50% - 8px);
-    max-width: calc(50% - 8px);
+    flex: 1 1 calc(50% - 20px);
+    max-width: calc(50% - 20px);
     min-height: 200px;
 }
 
@@ -356,7 +458,8 @@ button:hover {
     padding: 0;
     border: none;
     background: none;
-    color: #2563eb;
+    color: var(--secondary);
+    opacity: 0.85;
     cursor: pointer;
     font-size: 0.9rem;
     font-weight: 600;
@@ -370,7 +473,7 @@ button:hover {
 
 .small-text {
     font-size: 0.88rem;
-    color: #6b7280;
+    color: var(--text-muted);
     margin: 5px 0;
 }
 
@@ -381,20 +484,12 @@ button:hover {
     justify-content: flex-end;
 }
 
-.home {
-    background: #214185;
-}
-
-.home:hover {
-    background: #2563eb;
-}
-
 .movie-hero {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 20px;
     margin-bottom: 24px;
+
 }
 
 .movie-hero-main {
@@ -410,7 +505,7 @@ button:hover {
 .movie-title {
     font-size: 2rem;
     margin-bottom: 14px;
-    color: #111827;
+    color: var(--text-main);
 }
 
 .movie-tags {
@@ -419,19 +514,13 @@ button:hover {
     gap: 10px;
 }
 
-.tag {
-    display: inline-block;
-    padding: 6px 14px;
-    border-radius: 6px;
-    background: #dbeafe;
-    color: #1d4ed8;
-    font-size: 0.9rem;
-    font-weight: 600;
+.tag.info-page {
+    padding-left: 3px;
 }
 
 .tag.muted {
     background: none;
-    color: #4b5563;
+    color: var(--text-muted);
 }
 
 .movie-rating-box {
@@ -439,24 +528,22 @@ button:hover {
     text-align: center;
     padding: 18px;
     border-radius: 12px;
-    background: #eff6ff;
-    border: 1px solid #75baff;
+    background: var(--secondary-hover);
+    color: var(--text-dark);
 }
 
 .rating-label {
     font-size: 0.9rem;
-    color: #4b5563;
     margin-bottom: 8px;
     font-weight: 600;
 }
 
 .rating-value {
     font-size: 2rem;
-    font-weight: 700;
-    color: #1d4ed8;
+    font-weight: 600;
 }
 
-.movie-layout {
+.two-cols-layout {
     display: grid;
     grid-template-columns: 1fr 1.2fr;
     gap: 24px;
@@ -474,6 +561,7 @@ button:hover {
 /* MOVIE LEFT COLUMN */
 .info-card {
     margin: 0;
+    box-shadow: none;
 }
 
 .info-card h2,
@@ -503,11 +591,11 @@ button:hover {
 
 .info-label {
     font-weight: 700;
-    color: #374151;
+    color: var(--text-muted);
 }
 
 .info-value {
-    color: #111827;
+    color: var(--text-main);
     text-align: right;
 }
 
@@ -520,8 +608,8 @@ textarea{
     padding: 9px;
     font-family: Arial, sans-serif;
 }
-/* MOVIE RIGHT COLUMN */
 
+/* MOVIE RIGHT COLUMN */
 .reviews-list {
     display: flex;
     flex-direction: column;
@@ -529,11 +617,16 @@ textarea{
 }
 
 .review-card {
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 16px;
-    background: #ffffff;
+    border-bottom: 1px solid var(--text-main);
+    padding: 24px 8px;
+    margin-bottom: 16px;
+    background: none;
 }
+
+/*.review-card:hover {*/
+/*    transform: translateY(-3px);*/
+/*    box-shadow: 0 8px 25px rgba(0,0,0,0.4);*/
+/*}*/
 
 .review-card-top {
     display: flex;
@@ -544,8 +637,11 @@ textarea{
 }
 
 .review-user {
-    font-weight: 700;
-    color: #2563eb;
+    font-weight: 500;
+    font-size: 1.2rem;
+    padding-left: 3px;
+    /*color: var(--primary);*/
+    color: #66eaea;
     text-decoration: none;
 }
 
@@ -553,20 +649,19 @@ textarea{
     display: inline-block;
     padding: 4px 10px;
     border-radius: 999px;
-    background: #fef3c7;
-    color: #92400e;
+    background: var(--secondary-hover);
+    color: var(--primary);
     font-size: 0.9rem;
     font-weight: 700;
 }
 
 .review-time {
     font-size: 0.88rem;
-    color: #6b7280;
-    margin-bottom: 10px;
+    color: var(--text-muted);
 }
 
 .review-text {
-    color: #1f2937;
+    color: var(--text-muted);
     line-height: 1.5;
     word-break: break-word;
 }
@@ -584,7 +679,7 @@ textarea{
 }
 
 .profile-title {
-    font-size: 2rem;
+    font-size: 2.5rem;
     margin: 10px 0;
 }
 
@@ -592,12 +687,6 @@ textarea{
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
-}
-
-.profile-layout {
-    display: grid;
-    grid-template-columns: 1fr 1.5fr;
-    gap: 24px;
 }
 
 .title-genre {
@@ -623,11 +712,11 @@ textarea{
 
 .delete button {
     width: auto;
-    background: #dc2626;
+    background: var(--danger);
 }
 
 .delete button:hover {
-    background: #b91c1c;
+    background: var(--danger-hover);
 }
 
 .action-card .button-row form,
@@ -741,8 +830,8 @@ textarea{
     justify-content: space-between;
     align-items: center;
     gap: 14px;
-    padding: 10px 0;
-    border-bottom: 1px solid #e5e7eb;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--text-main);
 }
 
 .relation-item:last-child {
@@ -755,6 +844,16 @@ textarea{
     gap: 4px;
 }
 
+.id-user {
+    font-size: 1.2rem;
+    text-decoration: none;
+    color: var(--text-main);
+}
+
+.id-user:hover {
+    color: var(--secondary-hover);
+}
+
 .relation-item form {
     margin: 0;
 }
@@ -764,61 +863,3 @@ textarea{
     padding: 8px 12px;
 }
 
-/* mobile */
-@media (max-width: 768px) {
-    .profile-layout {
-        grid-template-columns: 1fr;
-    }
-}
-
-
-@media (max-width: 900px) {
-    .movie-layout {
-        grid-template-columns: 1fr;
-    }
-
-    .movie-hero {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .movie-rating-box {
-        width: 100%;
-    }
-
-    .info-item {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .info-value {
-        text-align: left;
-    }
-}
-
-/* mobile */
-@media (max-width: 768px) {
-    .page-container {
-        padding: 16px 12px 28px;
-    }
-
-    .topbar,
-    .movie-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .button-row {
-        width: 100%;
-    }
-
-    .button-link {
-        width: 100%;
-        text-align: center;
-    }
-
-    th, td {
-        padding: 10px;
-        font-size: 0.92rem;
-    }
-}

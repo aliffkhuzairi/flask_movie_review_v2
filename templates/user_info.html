@@ -14,7 +14,8 @@
                 <span>MovieReview</span>
             </a>
             <div class="button-row">
-                <a class="button-link primary" href="{{ url_for('user_detail', user_id=user_id) }}">Profile</a>
+                <a class="button-link nav" href="{{ url_for('movie_list') }}">Movies</a>
+                <a class="button-link nav" href="{{ url_for('user_detail', user_id=user_id) }}">Profile</a>
                 <a class="button-link logout" href="{{ url_for('logout') }}">Logout</a>
             </div>
         </div>
@@ -32,7 +33,7 @@
                 </h1>
 
                 <div class="profile-tags">
-                    <span class="tag">{{ user_info[0] }}</span>
+                    <span class="tag info-page">{{ user_info[0] }}</span>
                     <span class="tag muted">
                         Joined {{ user_info[4].strftime('%d %b %Y') if user_info[4] else '' }}
                     </span>
@@ -74,7 +75,7 @@
             {% endif %}
         </section>
 
-        <section class="profile-layout">
+        <section class="two-cols-layout">
 
             <!-- LEFT COLUMN -->
             <div class="profile-left-column">
@@ -171,7 +172,7 @@
                                 {% for followed in followed_users[:5] %}
                                 <li class="relation-item">
                                     <div class="relation-user">
-                                        <a href="{{ url_for('user_detail', user_id=followed[0]) }}">
+                                        <a href="{{ url_for('user_detail', user_id=followed[0]) }}" class="id-user">
                                             {{ followed[0] }}
                                         </a>
                                         {% if followed[1] %}
@@ -182,7 +183,7 @@
                                         <form action="{{ url_for('unfollow_user', target_user_id=followed[0]) }}"
                                               method="POST"
                                               onsubmit="return confirm('Unfollow this user?');">
-                                            <button type="submit" class="btn-unfollow">Unfollow</button>
+                                            <button type="submit" class="button-link btn-unfollow">Unfollow</button>
                                         </form>
                                     {% endif %}
                                 </li>
@@ -208,7 +209,7 @@
                                 {% for muted in muted_users[:5] %}
                                     <li class="relation-item">
                                         <div class="relation-user">
-                                            <a href="{{ url_for('user_detail', user_id=muted[0]) }}">
+                                            <a href="{{ url_for('user_detail', user_id=muted[0]) }}" class="id-user">
                                                 {{ muted[0] }}
                                             </a>
                                             {% if muted[1] %}
@@ -301,17 +302,19 @@
                             <div class="review-card">
                                 <div class="review-card-top">
                                     <div class="title-genre">
-                                        <a class="review-user" href="{{ url_for('movie_detail', movie_id=review[0]) }}">
+                                        <a class="review-title" href="{{ url_for('movie_detail', movie_id=review[0]) }}">
                                             {{ review[1] }}
-                                        </a><span class="tag">{{ review[5] }}</span>
+                                        </a>
+                                        <span class="tag review-tag">{{ review[5].strftime('%Y') if review[5] else '' }}</span>
+                                        <p class="review-time">
+                                            {{ review[4] | time_ago }}
+                                        </p>
                                     </div>
 
                                     <span class="review-rating">{{ review[2] }}/5</span>
                                 </div>
 
-                                <p class="review-time">
-                                    {{ review[4] | time_ago }}
-                                </p>
+
 
                                 <div class="review-text-block user-page">
                                     <p class="review-text clamp-text">{{ review[3] }}</p>

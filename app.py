@@ -200,7 +200,7 @@ def home():
         movies = cur.fetchall()
 
         cur.execute("""
-            select r.ratings, r.uid, m.title, r.review, r.rev_time, m.genre, m.id
+            select r.ratings, r.uid, m.title, r.review, r.rev_time, m.rel_date, m.id
             from reviews r 
             join movies m on r.mid = m.id
             where not exists (
@@ -398,7 +398,7 @@ def user_detail(user_id):
         offset = (page - 1) * per_page
 
         cur.execute(f"""
-            select m.id, m.title, r.ratings, r.review, r.rev_time, m.genre
+            select m.id, m.title, r.ratings, r.review, r.rev_time, m.rel_date
             from reviews r 
             join movies m on r.mid = m.id
             where r.uid = %s
