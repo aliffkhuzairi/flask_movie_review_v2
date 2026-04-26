@@ -56,6 +56,10 @@ body {
     color: #065f46;
 }
 
+.login {
+    color: #eff6ff;
+}
+
 
 /* FORM */
 .form-grid {
@@ -240,6 +244,7 @@ button:hover {
 
 .primary {
     background: #2563eb;
+    color: #eff6ff;
 }
 
 .button-link.primary:hover {
@@ -312,19 +317,6 @@ button:hover {
 .text-toggle:hover {
     text-decoration: underline;
     background: none;
-}
-
-tr:hover td {
-    background: #f9fafb;
-}
-
-td a {
-    font-weight: 600;
-    color: #2563eb;
-}
-
-td a:hover {
-    text-decoration: underline;
 }
 
 .small-text {

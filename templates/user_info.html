@@ -142,7 +142,7 @@
                         <input name="email" type="email"
                                value="{{ '' if clear_form else (user_info[3] or '') }}">
 
-                        <button type="submit">Update Profile</button>
+                        <button type="submit" class="button-link primary">Update Profile</button>
                     </form>
                 </div>
                 {% endif %}
@@ -152,10 +152,9 @@
                 {% if not is_current_user_admin %}
                 <div class="card list-card">
 
+                    {% if followed_users %}
                     <!--  FOLLOWED USERS  -->
                     <h2>Followed Users</h2>
-
-                    {% if followed_users %}
                         <ul class="relation-list">
 
                             {% for followed in followed_users[:5] %}
@@ -168,12 +167,13 @@
                                         <span class="small-text">{{ followed[1] }}</span>
                                     {% endif %}
                                 </div>
-
+                                {% if is_self %}
                                 <form action="{{ url_for('unfollow_user', target_user_id=followed[0]) }}"
                                       method="POST"
                                       onsubmit="return confirm('Unfollow this user?');">
                                     <button type="submit" class="btn-unfollow">Unfollow</button>
                                 </form>
+                                {% endif %}
                             </li>
                             {% endfor %}
 
@@ -184,6 +184,7 @@
                </div>
 
                 <!--  MUTED USERS  -->
+                {% if is_self %}
                 <div class="card list-card">
                     <h2>Muted Users</h2>
 
@@ -247,6 +248,7 @@
                     </form>
                 </div>
                 {% endif %}
+                {% endif %}
 
             </div>
 
@@ -284,7 +286,7 @@
                                 {% if is_self %}
                                 <form action="{{ url_for('delete_review', movie_id=review[0]) }}" method="POST"
                                       onsubmit="return confirm('This action cannot be undone. Delete review?');" class="delete">
-                                    <button type="submit">Delete</button>
+                                    <button type="submit" class="button-link logout">Delete</button>
                                 </form>
                                 {% endif %}
 
