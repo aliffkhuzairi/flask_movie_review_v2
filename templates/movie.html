@@ -127,7 +127,7 @@
                                     </div>
 
                                     <p class="review-time">
-                                        {{ review[3].strftime('%d %b %Y %H:%M') if review[3] else '' }}
+                                        {{ review[3] | time_ago }}
                                     </p>
 
                                     <div class="review-text-block">

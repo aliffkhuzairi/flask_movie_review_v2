@@ -284,7 +284,13 @@ button:hover {
 
 .review-title {
     font-weight: 600;
+    color: #111827;
     font-size: 1.2rem;
+    text-decoration: none;
+}
+
+.review-title:hover {
+    color: #1d4ed8;
 }
 
 .review-feed {
@@ -515,6 +521,7 @@ textarea{
 .review-user {
     font-weight: 700;
     color: #2563eb;
+    text-decoration: none;
 }
 
 .review-rating {
