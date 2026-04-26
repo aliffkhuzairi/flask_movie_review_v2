@@ -11,9 +11,9 @@
     <!-- HEADER -->
     <header class="header">
         <div class="header-wrap">
-            <div>
-                <strong>{{ user_id }}</strong>
-            </div>
+            <a href="{{ url_for('home') }}" class="brand">
+                <span>MovieReview</span>
+            </a>
             <div class="button-row">
                 <a class="button-link primary" href="{{ url_for('user_detail', user_id=user_id) }}">Profile</a>
                 <a class="button-link logout" href="{{ url_for('logout') }}">Logout</a>
