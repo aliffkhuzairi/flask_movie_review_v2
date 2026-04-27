@@ -106,7 +106,7 @@
 
             <!-- MOVIES LIST -->
             {% if movies %}
-            <div class="movie-list compact-movie-list">
+            <div class="movie-list">
 
                 {% for movie in movies %}
                 <a href="{{ url_for('movie_detail', movie_id=movie[0]) }}" class="movie-card">

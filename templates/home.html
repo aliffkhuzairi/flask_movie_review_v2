@@ -46,7 +46,7 @@
             </div>
 
             <!-- MOVIE LIST -->
-            <div class="movie-list home-movie-list">
+            <div class="movie-list">
                 {% for movie in movies %}
                 <a href="{{ url_for('movie_detail', movie_id=movie[0]) }}" class="movie-card">
                     <div class="movie-card-top">
