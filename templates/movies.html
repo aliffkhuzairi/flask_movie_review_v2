@@ -110,13 +110,12 @@
 
                 {% for movie in movies %}
                 <a href="{{ url_for('movie_detail', movie_id=movie[0]) }}" class="movie-card">
-                    <div class="movie-card-top">
+                    <div class="movie-card-top fake-poster">
+                        <span class="poster-genre">{{ movie[3] }}</span>
                         <h3>{{ movie[1] }}</h3>
                     </div>
 
                     <div class="movie-card-body">
-                        <span class="tag home-tag">{{ movie[3] }}</span>
-
                         <div class="movie-info">
                             <p><strong>Director</strong></p>
                             <p class="small-text">{{ movie[2] }}</p>

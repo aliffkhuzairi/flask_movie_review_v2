@@ -243,7 +243,7 @@
                 {% if is_self and is_current_user_admin %}
                     <div class="card admin-card">
                         <h2>Admin Panel</h2>
-                        <p class="small-text">Add a new movie to the platform.</p>
+                        <p class="small-text admin-panel">Add a new movie to the platform.</p>
 
                         <form action="{{ url_for('add_movie') }}" method="POST" class="form-grid">
 
@@ -306,21 +306,18 @@
                     <div class="reviews-list">
                         {% for review in user_reviews %}
                             <div class="review-card">
-                                <div class="review-card-top">
-                                    <div class="title-genre">
+                                <div class="title-genre">
+                                    <div class="title-year">
                                         <a class="review-title" href="{{ url_for('movie_detail', movie_id=review[0]) }}">
                                             {{ review[1] }}
                                         </a>
-                                        <span class="tag review-tag">{{ review[5].strftime('%Y') if review[5] else '' }}</span>
+                                        <span class="tag year-tag">{{ review[5].strftime('%Y') if review[5] else '' }}</span>
                                         <p class="review-time">
                                             {{ review[4] | time_ago }}
                                         </p>
                                     </div>
-
                                     <span class="review-rating">{{ review[2] }}/5</span>
                                 </div>
-
-
 
                                 <div class="review-text-block user-page">
                                     <p class="review-text clamp-text">{{ review[3] }}</p>

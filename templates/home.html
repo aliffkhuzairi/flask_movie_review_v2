@@ -38,9 +38,9 @@
                     <h1>Latest Movies</h1>
                     <p class="small-text">Recently added movies</p>
                 </div>
-                <div class="button-row">
-                    <a class="button-link secondary" href="{{ url_for('movie_list') }}">
-                        View All Movies
+                <div class="view-more-link">
+                    <a class="view-more" href="{{ url_for('movie_list') }}">
+                        View More...
                     </a>
                 </div>
             </div>
@@ -49,12 +49,13 @@
             <div class="movie-list">
                 {% for movie in movies %}
                 <a href="{{ url_for('movie_detail', movie_id=movie[0]) }}" class="movie-card">
-                    <div class="movie-card-top">
+
+                    <div class="movie-card-top fake-poster">
+                        <span class="poster-genre">{{ movie[3] }}</span>
                         <h3>{{ movie[1] }}</h3>
                     </div>
 
                     <div class="movie-card-body">
-                        <span class="tag home-tag">{{ movie[3] }}</span>
 
                         <div class="movie-info">
                             <p><strong>Director</strong></p>
@@ -90,26 +91,27 @@
                     <div class="review-card">
 
                         <div class="title-genre">
-                            <a href="{{ url_for('movie_detail', movie_id=review[6]) }}" class="review-title">
-                                {{ review[2] }}
-                            </a>
-                            <span class="tag review-tag">{{ review[5].strftime('%Y') if review[5] else '' }}</span>
-                            <p class="review-time">
-                                {{ review[4] | time_ago }}
-                            </p>
+                            <div class="title-year">
+                                <a href="{{ url_for('movie_detail', movie_id=review[6]) }}" class="review-title">
+                                    {{ review[2] }}
+                                </a>
+                                <span class="tag year-tag">{{ review[5].strftime('%Y') if review[5] else '' }}</span>
+                                    <p class="review-time">
+                                        {{ review[4] | time_ago }}
+                                    </p>
+                                </div>
+                            <div>
+                                <span class="review-rating">{{ review[0] }}/5</span>
+                            </div>
                         </div>
 
-                        <div class="review-card-top">
-                            <div class="title-genre">
-                                <p class="small-text">Watched by
-                                    <a class="review-user" href="{{ url_for('user_detail', user_id=review[1]) }}">
-                                        {{ review[1] }}
-                                    </a>
-                                </p>
+                        <div class="title-genre">
+                            <p class="small-text">Watched by
+                                <a class="review-user" href="{{ url_for('user_detail', user_id=review[1]) }}">
+                                    {{ review[1] }}
+                                </a>
+                            </p>
 
-                            </div>
-
-                            <span class="review-rating">{{ review[0] }}/5</span>
                         </div>
 
                         <div class="review-text-block homepage">
