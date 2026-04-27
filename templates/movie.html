@@ -128,7 +128,7 @@
                             {% for review in reviews %}
                                 <div class="review-card">
                                     <div class="review-card-top">
-                                        <div class="title-genre">
+                                        <div class="title-year">
                                             <a class="review-user" href="{{ url_for('user_detail', user_id=review[1]) }}">
                                                 {{ review[1] }}
                                             </a>
@@ -136,7 +136,10 @@
                                                 {{ review[3] | time_ago }}
                                             </p>
                                         </div>
-                                        <span class="review-rating">{{ review[0] }}/5</span>
+                                        <div>
+                                            <span class="review-rating">{{ review[0] }}/5</span>
+                                        </div>
+
                                     </div>
 
                                     <div class="review-text-block user-page">
