@@ -97,24 +97,48 @@ input,
 select,
 textarea {
     padding: 10px 8px;
-    border-radius: 5px;
+    border: 0;
+    border-bottom: 2px solid var(--text-muted);
     font-family: inherit;
     background: rgb(239 246 255 / 0.2);
     color: var(--text-main);
-    transition: border 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.3s ease-in-out;
 }
 
 input:focus,
 select:focus,
 textarea:focus {
     outline: none;
-    border-color: var(--primary);
+    border-bottom: 2px solid var(--primary);
     box-shadow: 0 0 0 2px rgba(196, 73, 0, 0.2);
+
 }
 
 input:focus::placeholder,
 textarea:focus::placeholder {
     opacity: 0.5;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
+
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, var(--secondary) 50%),
+                      linear-gradient(135deg, var(--secondary) 50%, transparent 50%);
+    background-position: calc(100% - 18px) 50%,
+                         calc(100% - 12px) 50%;
+    background-size: 6px 6px, 6px 6px;
+    background-repeat: no-repeat;
+}
+
+select option {
+    background: var(--bg-surface);
+    color: var(--text-main);
 }
 
 .auth-form {
