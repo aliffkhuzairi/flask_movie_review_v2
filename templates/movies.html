@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <title>All Movie</title>
 </head>
 <body>
@@ -13,7 +15,12 @@
             <a href="{{ url_for('home') }}" class="brand">
                 <span>MovieReview</span>
             </a>
-            <div class="button-row">
+
+            <button class="menu-toggle" type="button" onclick="toggleMenu(this)">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <div class="button-row nav-actions" id="navMenu">
                 <a class="button-link nav" href="{{ url_for('movie_list') }}">Movies</a>
                 <a class="button-link nav" href="{{ url_for('user_detail', user_id=user_id) }}">Profile</a>
                 <a class="button-link logout" href="{{ url_for('logout') }}">Logout</a>
@@ -99,7 +106,7 @@
 
             <!-- MOVIES LIST -->
             {% if movies %}
-            <div class="movie-list">
+            <div class="movie-list compact-movie-list">
 
                 {% for movie in movies %}
                 <a href="{{ url_for('movie_detail', movie_id=movie[0]) }}" class="movie-card">
@@ -108,7 +115,7 @@
                     </div>
 
                     <div class="movie-card-body">
-                        <span class="tag">{{ movie[3] }}</span>
+                        <span class="tag home-tag">{{ movie[3] }}</span>
 
                         <div class="movie-info">
                             <p><strong>Director</strong></p>

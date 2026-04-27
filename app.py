@@ -2,10 +2,12 @@ import psycopg2, os, re
 
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
+from dotenv import load_dotenv
 from contextlib import contextmanager
 from functools import wraps
 from datetime import datetime, date
 
+load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'dev_secret_key')
 
@@ -17,7 +19,7 @@ def get_db_connection():
     return psycopg2.connect(
         dbname=os.getenv('DATABASE_NAME', 'term_project'),
         user=os.getenv('DATABASE_USER', 'postgres'),
-        password=os.getenv('DATABASE_PASSWORD', '@100pluS'),
+        password=os.getenv('DATABASE_PASSWORD'),
         host=os.getenv('DATABASE_HOST', 'localhost'),
         port=os.getenv('DATABASE_PORT', '5432'),
     )
@@ -194,7 +196,7 @@ def home():
             select id, title, director, genre, rel_date
             from movies
             order by rel_date desc
-            limit 4;
+            limit 5;
         """)
 
         movies = cur.fetchall()

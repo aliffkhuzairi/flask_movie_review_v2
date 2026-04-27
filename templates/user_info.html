@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, intitial-scale=1.0" />
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>{{ user_info[0] }}</title>
 </head>
 <body>
@@ -13,7 +14,12 @@
             <a href="{{ url_for('home') }}" class="brand">
                 <span>MovieReview</span>
             </a>
-            <div class="button-row">
+
+            <button class="menu-toggle" type="button" onclick="toggleMenu(this)">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <div class="button-row nav-actions" id="navMenu">
                 <a class="button-link nav" href="{{ url_for('movie_list') }}">Movies</a>
                 <a class="button-link nav" href="{{ url_for('user_detail', user_id=user_id) }}">Profile</a>
                 <a class="button-link logout" href="{{ url_for('logout') }}">Logout</a>
@@ -49,26 +55,26 @@
 
                 {% if relationship == 'follow' %}
                     <form action="{{ url_for('unfollow_user', target_user_id=user_info[0]) }}" method="POST">
-                        <button type="submit" class="btn-unfollow">Unfollow</button>
+                        <button type="submit" class="button-link btn-unfollow">Unfollow</button>
                     </form>
                     <form action="{{ url_for('mute_user', target_user_id=user_info[0]) }}" method="POST">
-                        <button type="submit" class="btn-mute">Mute</button>
+                        <button type="submit" class="button-link btn-mute">Mute</button>
                     </form>
 
                 {% elif relationship == 'mute' %}
                     <form action="{{ url_for('follow_user', target_user_id=user_info[0]) }}" method="POST">
-                        <button type="submit" class="btn-follow">Follow</button>
+                        <button type="submit" class="button-link btn-follow">Follow</button>
                     </form>
                     <form action="{{ url_for('unmute_user', target_user_id=user_info[0]) }}" method="POST">
-                        <button type="submit" class="btn-unmute">Unmute</button>
+                        <button type="submit" class="button-link btn-unmute">Unmute</button>
                     </form>
 
                 {% else %}
                     <form action="{{ url_for('follow_user', target_user_id=user_info[0]) }}" method="POST">
-                        <button type="submit" class="btn-follow">Follow</button>
+                        <button type="submit" class="button-link btn-follow">Follow</button>
                     </form>
                     <form action="{{ url_for('mute_user', target_user_id=user_info[0]) }}" method="POST">
-                        <button type="submit" class="btn-mute">Mute</button>
+                        <button type="submit" class="button-link btn-mute">Mute</button>
                     </form>
                 {% endif %}
             </div>
@@ -220,7 +226,7 @@
                                         <form action="{{ url_for('unmute_user', target_user_id=muted[0]) }}"
                                               method="POST"
                                               onsubmit="return confirm('Unmute this user?');">
-                                            <button type="submit" class="btn-unmute">Unmute</button>
+                                            <button type="submit" class="button-link btn-unmute">Unmute</button>
                                         </form>
                                     </li>
                                 {% endfor %}

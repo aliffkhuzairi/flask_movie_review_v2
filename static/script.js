@@ -1,4 +1,4 @@
-function toggleReview(button) {
+const toggleReview = (button) => {
     const text = button.previousElementSibling;
 
     if (text.classList.contains('expanded')) {
@@ -7,6 +7,23 @@ function toggleReview(button) {
     } else {
         text.classList.add('expanded');
         button.textContent = 'Show less';
+    }
+}
+
+const toggleMenu = (button) => {
+    const menu = document.getElementById('navMenu');
+    const icon = button.querySelector('i');
+
+    menu.classList.toggle('open');
+
+    if (menu.classList.contains('open')) {
+        icon.classList.remove('fa-bars');
+        icon.classList.add('fa-xmark');
+    }
+
+    else {
+        icon.classList.remove('fa-xmark');
+        icon.classList.add('fa-bars');
     }
 }
 
