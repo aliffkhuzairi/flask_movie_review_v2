@@ -740,11 +740,34 @@ header.sticky .brand:hover{
 }
 
 .review-card {
-    border-bottom: 1px solid var(--text-main);
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--text-muted);
     padding: 24px 8px;
     margin-bottom: 16px;
     background: none;
     cursor: pointer;
+    transition: border-bottom 0.3s ease;
+}
+
+.review-card::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    /*height: 2px;*/
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    transition: width 0.3s ease;
+}
+
+.review-card:hover::after {
+    width: 100%;
+}
+
+.review-card:hover {
+    border-bottom: 1px solid transparent;
 }
 
 .review-card-top {
