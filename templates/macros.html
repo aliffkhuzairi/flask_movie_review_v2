@@ -1,0 +1,13 @@
+{% macro render_stars(rating) %}
+    {% set rating = rating|int %}
+
+    <span class="stars">
+        {% for i in range(rating) %}
+            <i class="fa-solid fa-star"></i>
+        {% endfor %}
+
+        {% for i in range(5 - rating) %}
+            <i class="fa-regular fa-star"></i>
+        {% endfor %}
+    </span>
+{% endmacro %}

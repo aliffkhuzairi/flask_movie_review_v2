@@ -8,6 +8,7 @@
     <title>{{ user_info[0] }}</title>
 </head>
 <body>
+    {% from "macros.html" import render_stars %}
      <!-- HEADER -->
     <header class="header">
         <div class="header-wrap">
@@ -318,22 +319,22 @@
                     <div class="reviews-list">
                         {% for review in user_reviews %}
                             <div class="review-card">
-                                <div class="title-genre">
-                                    <div class="title-year">
+                                <div class="review-card-top">
+                                    <div class="review-title-meta">
                                         <a class="review-title" href="{{ url_for('movie.movie_detail', movie_id=review[0]) }}">
                                             {{ review[1] }}
                                         </a>
-                                        <span class="tag year-tag">{{ review[5].strftime('%Y') if review[5] else '' }}</span>
+                                        <span class="year-tag">{{ review[5].strftime('%Y') if review[5] else '' }}</span>
                                         <p class="review-time">
                                             {{ review[4] | time_ago }}
                                         </p>
                                     </div>
                                     <div>
-                                        <span class="review-rating">{{ review[2] }}/5</span>
+                                        <span class="review-rating">{{ render_stars(review[0]) }}</span>
                                     </div>
                                 </div>
 
-                                <div class="review-text-block user-page">
+                                <div class="review-text-block detail-page">
                                     <p class="review-text clamp-text">{{ review[3] }}</p>
                                     <button type="button" class="text-toggle" onclick="toggleReview(this)">Read more</button>
                                 </div>

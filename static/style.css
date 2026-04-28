@@ -432,7 +432,7 @@ header.sticky .brand:hover{
     line-height: 1.2;
 }
 
-.poster-genre {
+.genre-tag {
     padding: 4px 9px;
     border-radius: 999px;
     background: rgb(220 194 155 / 0.18);
@@ -454,30 +454,166 @@ header.sticky .brand:hover{
     margin-top: auto;
 }
 
-.title-genre {
+/* REVIEW CARDS SECTION */
+.home-review-feed .review-card {
+    flex: 1 1 calc(50% - 20px);
+    max-width: calc(50% - 20px);
+    min-height: 200px;
+}
+
+.review-card {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--text-muted);
+    padding: 24px 8px;
+    margin-bottom: 16px;
+    background: none;
+    cursor: pointer;
+    transition: border-bottom 0.3s ease;
+}
+
+.review-card::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    transition: width 0.3s ease;
+}
+
+.review-card:hover::after {
+    width: 100%;
+}
+
+.review-card:hover {
+    border-bottom: 1px solid transparent;
+}
+
+.review-feed {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+}
+
+.review-card-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin: 5px 0;
 }
 
-.title-year {
+.review-title-meta {
     display: flex;
     align-items: center;
     gap: 12px;
+    min-width: 0;
 }
 
-.tag {
+.review-title {
+    font-weight: 600;
+    color: var(--text-main);
+    line-height: 1.2;
+    font-size: 1.7rem;
+    max-width: 300px;   /* adjust based on your layout */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-decoration: none;
+    transition: color 0.12s ease-in-out;
+}
+
+.review-title:hover {
+    color: var(--secondary-hover);
+}
+
+.year-tag {
     display: inline-block;
     padding: 6px 14px;
     border-radius: 4px;
     font-size: 0.9rem;
     font-weight: 600;
-}
-
-.year-tag {
     background: var(--tag-bg);
     color: var(--tag-text);
+}
+
+.review-text-block {
+    line-height: 1.45;
+    word-break: break-word;
+}
+
+.homepage {
+    max-width: 350px;
+}
+
+.review-time {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+}
+
+.review-rating {
+    display: inline-block;
+    padding: 4px 10px;
+}
+
+.stars {
+    display: inline-flex;
+    align-items: center;
+}
+
+.small-text {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin: 5px 0;
+}
+
+.review-user {
+    font-weight: 500;
+    font-size: 1.2rem;
+    padding-left: 3px;
+    color: #66eaea;
+    text-decoration: none;
+}
+
+.review-text {
+    color: var(--text-muted);
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+.clamp-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.clamp-text.expanded {
+    display: block;
+    overflow: visible;
+}
+
+.text-toggle {
+    margin-top: 8px;
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--secondary);
+    opacity: 0.85;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    width: auto;
+}
+
+.text-toggle:hover {
+    text-decoration: underline;
+    background: none;
+}
+
+.empty-state {
+    color: var(--text-muted);
 }
 
 .movie-info {
@@ -533,78 +669,6 @@ header.sticky .brand:hover{
     background: var(--secondary-hover);
 }
 
-.review-head {
-    margin: 0;
-}
-
-.review-title {
-    font-weight: 600;
-    color: var(--text-main);
-    font-size: 1.7rem;
-    text-decoration: none;
-    transition: color 0.12s ease-in-out;
-}
-
-.review-title:hover {
-    color: var(--secondary-hover);
-}
-
-.review-feed {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 32px;
-}
-
-.home-review-feed .review-card {
-    flex: 1 1 calc(50% - 20px);
-    max-width: calc(50% - 20px);
-    min-height: 200px;
-}
-
-.homepage {
-    max-width: 350px;
-}
-
-.review-text-block {
-    line-height: 1.45;
-    word-break: break-word;
-}
-
-.clamp-text {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.clamp-text.expanded {
-    display: block;
-    overflow: visible;
-}
-
-.text-toggle {
-    margin-top: 8px;
-    padding: 0;
-    border: none;
-    background: none;
-    color: var(--secondary);
-    opacity: 0.85;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 600;
-    width: auto;
-}
-
-.text-toggle:hover {
-    text-decoration: underline;
-    background: none;
-}
-
-.small-text {
-    font-size: 0.88rem;
-    color: var(--text-muted);
-    margin: 5px 0;
-}
 
 /* MOVIE PAGE */
 
@@ -739,77 +803,9 @@ header.sticky .brand:hover{
     gap: 16px;
 }
 
-.review-card {
-    position: relative;
-    overflow: hidden;
-    border-bottom: 1px solid var(--text-muted);
-    padding: 24px 8px;
-    margin-bottom: 16px;
-    background: none;
-    cursor: pointer;
-    transition: border-bottom 0.3s ease;
-}
-
-.review-card::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0%;
-    /*height: 2px;*/
-    height: 3px;
-    background: linear-gradient(90deg, var(--primary), var(--secondary));
-    transition: width 0.3s ease;
-}
-
-.review-card:hover::after {
-    width: 100%;
-}
-
-.review-card:hover {
-    border-bottom: 1px solid transparent;
-}
-
-.review-card-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 6px;
-}
-
-.review-user {
-    font-weight: 500;
-    font-size: 1.2rem;
-    padding-left: 3px;
-    /*color: var(--primary);*/
-    color: #66eaea;
-    text-decoration: none;
-}
-
-.review-rating {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 999px;
-    background: var(--secondary-hover);
-    color: var(--primary);
-    font-size: 0.9rem;
-    font-weight: 700;
-}
-
-.review-time {
-    font-size: 0.88rem;
-    color: var(--text-muted);
-}
-
-.review-text {
-    color: var(--text-muted);
-    line-height: 1.5;
-    word-break: break-word;
-}
-
-.empty-state {
-    color: #6b7280;
+.detail-page{
+    max-width: 450px;
+    margin-top: 12px;
 }
 
 /* USER PROFILE */
@@ -909,10 +905,6 @@ header.sticky .brand:hover{
 
 .list-card {
     margin-bottom: 0;
-}
-
-.user-page{
-    max-width: 450px;
 }
 
 .btn-follow {
@@ -1019,6 +1011,23 @@ header.sticky .brand:hover{
     .movie-info {
         font-size: 0.9rem;
     }
+
+    .review-card-top {
+        display: block;
+    }
+
+    .title-year {
+        margin-bottom: 10px;
+    }
+
+    .review-rating {
+        margin: 10px 0;
+        padding: 0;
+    }
+
+    .watch {
+        margin: 5px 0 8px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -1079,6 +1088,10 @@ header.sticky .brand:hover{
         padding: 0 12px;
     }
 
+    .review-card-top {
+        display: flex;
+    }
+
     .section-head {
         flex-direction: column;
         gap: 8px;
@@ -1103,6 +1116,11 @@ header.sticky .brand:hover{
         text-align: center;
     }
 
+    .watch {
+        text-align: unset;
+        margin: 5px 0 8px;
+    }
+
     .admin-panel {
         text-align: unset;
     }
@@ -1123,6 +1141,15 @@ header.sticky .brand:hover{
 }
 
 @media (max-width: 480px) {
+
+    .page-container {
+        margin: 60px 20px 20px;
+    }
+
+    .review-card-top {
+        display: block;
+    }
+
     .section-head {
         flex-direction: column;
         gap: 8px;
@@ -1130,7 +1157,9 @@ header.sticky .brand:hover{
 
     .search-form {
         flex-direction: column;
+        gap: 14px;
     }
+
 
     .nav-actions.open {
         width: 100%;

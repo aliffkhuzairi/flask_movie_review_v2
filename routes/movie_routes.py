@@ -20,7 +20,7 @@ def home():
         movies = cur.fetchall()
 
         cur.execute("""
-            select r.ratings, r.uid, m.title, r.review, r.rev_time, m.rel_date, m.id
+            select m.id, m.title, m.rel_date, r.uid, r.review, r.rev_time, r.ratings 
             from reviews r 
             join movies m on r.mid = m.id
             where not exists (
@@ -139,7 +139,7 @@ def movie_detail(movie_id):
             return "Movie not found", 404
 
         cur.execute("""
-            select r.ratings, r.uid, r.review, r.rev_time
+            select r.uid, r.review, r.rev_time, r.ratings
             from reviews r 
             where r.mid = %s
             and not exists (

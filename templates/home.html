@@ -8,7 +8,7 @@
         <title>Movie Review Web App</title>
     </head>
 <body>
-
+    {% from "macros.html" import render_stars %}
     <!-- HEADER -->
     <header class="header">
         <div class="header-wrap">
@@ -51,7 +51,7 @@
                 <a href="{{ url_for('movie.movie_detail', movie_id=movie[0]) }}" class="movie-card">
 
                     <div class="movie-card-top fake-poster">
-                        <span class="poster-genre">{{ movie[3] }}</span>
+                        <span class="genre-tag">{{ movie[3] }}</span>
                         <h3>{{ movie[1] }}</h3>
                     </div>
 
@@ -89,33 +89,34 @@
                 <div class="review-feed">
                     {% for review in reviews %}
                     <div class="review-card">
-
-                        <div class="title-genre">
-                            <div class="title-year">
-                                <a href="{{ url_for('movie.movie_detail', movie_id=review[6]) }}" class="review-title">
-                                    {{ review[2] }}
-                                </a>
-                                <span class="tag year-tag">{{ review[5].strftime('%Y') if review[5] else '' }}</span>
-                                    <p class="review-time">
-                                        {{ review[4] | time_ago }}
-                                    </p>
-                            </div>
-                            <div>
-                                <span class="review-rating">{{ review[0] }}/5</span>
-                            </div>
-                        </div>
-
-                        <div class="title-genre">
-                            <p class="small-text">Watched by
-                                <a class="review-user" href="{{ url_for('user.user_detail', user_id=review[1]) }}">
+                        <div class="review-card-top">
+                            <div class="review-title-meta">
+                                <a class="review-title" href="{{ url_for('movie.movie_detail', movie_id=review[0]) }}">
                                     {{ review[1] }}
                                 </a>
-                            </p>
+                                <span class="year-tag">
+                                    {{ review[2].strftime('%Y') if review[2] else '' }}
+                                </span>
+                                <p class="review-time">
+                                    {{ review[5] | time_ago }}
+                                </p>
+                            </div>
+                            <span class="review-rating">
+                                {{ render_stars(review[6]) }}
+                            </span>
 
+                        </div>
+
+                        <div class="review-card-top">
+                            <p class="small-text watch">Watched by
+                                <a class="review-user" href="{{ url_for('user.user_detail', user_id=review[3]) }}">
+                                    {{ review[3] }}
+                                </a>
+                            </p>
                         </div>
 
                         <div class="review-text-block homepage">
-                            <p class="review-text clamp-text">{{ review[3] }}</p>
+                            <p class="review-text clamp-text">{{ review[4] }}</p>
                             <button type="button" class="text-toggle" onclick="toggleReview(this)">Read more</button>
                         </div>
                     </div>
