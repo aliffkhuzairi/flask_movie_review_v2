@@ -79,10 +79,6 @@ body {
     margin-bottom: 20px;
 }
 
-.flash-container {
-    margin-bottom: 16px;
-}
-
 .auth-card .flash-container {
     min-height: 60px;
 }

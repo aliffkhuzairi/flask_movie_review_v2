@@ -16,7 +16,7 @@ def auth():
     password = request.form.get("password", "").strip()
 
     if not user_id or not password:
-        flash("Please enter both ID and password", "warning")
+        flash("Please enter both ID and password", "warning-auth")
         return redirect(url_for("index"))
 
     with db_cursor() as cur:
@@ -34,7 +34,7 @@ def auth():
         session["user_role"] = user[2]
         return redirect(url_for("movie.home"))
 
-    flash("ID or password are invalid.", "error")
+    flash("ID or password are invalid.", "error-auth")
     return redirect(url_for("auth.index"))
 
 @auth_bp.route("/signup")
@@ -47,11 +47,11 @@ def signup():
     password = request.form.get("password", "").strip()
 
     if not user_id or not password:
-        flash("Please enter both ID and password", "warning")
+        flash("Please enter both ID and password", "warning-auth")
         return redirect(url_for("auth.signup_page"))
 
     if len(password) < 8:
-        flash("Password must be at least 8 characters", "warning")
+        flash("Password must be at least 8 characters", "warning-auth")
         return redirect(url_for("auth.signup_page"))
 
     hashed_password = generate_password_hash(password)
@@ -68,11 +68,11 @@ def signup():
                 values(%s, now());
             """,(user_id,))
 
-        flash("Account created successfully. Please sign in.", "success")
+        flash("Account created successfully. Please sign in.", "success-auth")
         return redirect(url_for("auth.index"))
 
     except Exception:
-        flash("Sign up failed, ID may already exist.", "error")
+        flash("Sign up failed, ID may already exist.", "error-auth")
         return redirect(url_for("auth.signup_page"))
 
 @auth_bp.route("/logout")

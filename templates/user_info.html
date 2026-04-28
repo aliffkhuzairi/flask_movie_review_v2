@@ -135,13 +135,13 @@
                     <h2>Edit Profile</h2>
 
                      <div class="flash-container">
-                         {% with messages = get_flashed_messages(with_categories=true) %}
+                         {% with messages = get_flashed_messages(with_categories=true, category_filter=['success-profile', 'error-profile', 'warning-profile']) %}
                             {% if messages %}
                                 {% for category, msg in messages %}
-                                    <div class="flash {{ category }}">{{ msg }}</div>
+                                    <div class="flash {{ category.split('-')[0] }}">{{ msg }}</div>
                                 {% endfor %}
                             {% endif %}
-                        {% endwith %}
+                         {% endwith %}
                      </div>
 
                     <form action="{{ url_for('user.edit_user_profile', user_id=user_info[0]) }}" method="POST" class="form-grid">
@@ -247,10 +247,10 @@
                         <p class="small-text admin-panel">Add a new movie to the platform.</p>
 
                         <div class="flash-container">
-                            {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% with messages = get_flashed_messages(with_categories=true, category_filter=['success-admin', 'error-admin', 'warning-admin']) %}
                                 {% if messages %}
                                     {% for category, msg in messages %}
-                                        <div class="flash {{ category }}">{{ msg }}</div>
+                                        <div class="flash {{ category.split('-')[0] }}">{{ msg }}</div>
                                     {% endfor %}
                                 {% endif %}
                             {% endwith %}

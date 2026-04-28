@@ -141,15 +141,15 @@ def edit_user_profile(user_id):
     email = request.form.get("email", "").strip()
 
     if not name and not email:
-        flash("Please enter a name or email.", "warning")
+        flash("Please enter a name or email.", "warning-profile")
         return redirect(url_for("user_detail", user_id=user_id))
 
     if name and len(name) < 4:
-        flash("Name must be at least 4 characters.", "warning")
+        flash("Name must be at least 4 characters.", "warning-profile")
         return redirect(url_for("user_detail", user_id=user_id))
 
     if email and not is_valid_email(email):
-        flash("Please enter a valid email address.", "warning")
+        flash("Please enter a valid email address.", "warning-profile")
         return redirect(url_for("user_detail", user_id=user_id))
 
     with db_cursor(commit=True) as cur:
@@ -167,7 +167,7 @@ def edit_user_profile(user_id):
                 where id = %s;
             """, (email, user_id))
 
-    flash("Your profile has been updated.", "success")
+    flash("Your profile has been updated.", "success-profile")
     return redirect(url_for("user.user_detail", user_id=user_id))
 
 def can_manage_relationship(target_user_id):
@@ -254,11 +254,11 @@ def add_movie():
     rel_date = request.form.get("rel_date", "").strip()
 
     if not title or not director or not genre or not rel_date:
-        flash("All fields are required.", "warning")
+        flash("All fields are required.", "warning-admin")
         return redirect(url_for("user.user_detail", user_id=session["user_id"]))
 
     if genre not in ALLOWED_GENRES:
-        flash("Please select a valid genre.", "warning")
+        flash("Please select a valid genre.", "warning-admin")
         return redirect(url_for("user.user_detail", user_id=session["user_id"]))
 
     try:
@@ -270,12 +270,12 @@ def add_movie():
             """, (title, director, genre, rel_date))
 
             if cur.rowcount == 0:
-                flash("Movie already exists.", "warning")
+                flash("Movie already exists.", "warning-admin")
             else:
-                flash("Movie added successfully.", "success")
+                flash("Movie added successfully.", "success-admin")
 
     except Exception as err:
-        flash(f"Failed to add movie: {err}", "error")
+        flash(f"Failed to add movie: {err}", "error-admin")
 
     return redirect(url_for("user.user_detail", user_id=session["user_id"]))
 
@@ -288,5 +288,5 @@ def delete_review(movie_id):
             where mid = %s and uid = %s;
         """,(movie_id, session["user_id"]))
 
-    flash("Review deleted.", "success")
-    return redirect(url_for("user_detail", user_id=session["user_id"]))
+    flash("Review deleted.", "success-delete")
+    return redirect(url_for("user.user_detail", user_id=session["user_id"]))

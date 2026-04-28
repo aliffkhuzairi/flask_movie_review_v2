@@ -12,10 +12,10 @@
              <h1>Create Account</h1>
 
              <div class="flash-container">
-                 {% with messages = get_flashed_messages(with_categories=true) %}
+                 {% with messages = get_flashed_messages(with_categories=true, category_filter=['success-auth', 'error-auth', 'warning-auth']) %}
                     {% if messages %}
                         {% for category, msg in messages %}
-                            <div class="flash {{ category }}">{{ msg }}</div>
+                            <div class="flash {{ category.split('-')[0] }}">{{ msg }}</div>
                         {% endfor %}
                     {% endif %}
                  {% endwith %}
