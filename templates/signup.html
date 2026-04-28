@@ -21,7 +21,7 @@
                  {% endwith %}
              </div>
 
-             <form action="{{ url_for('signup') }}" method="POST" class="form-grid">
+             <form action="{{ url_for('auth.signup') }}" method="POST" class="form-grid">
 
                 <label for="id">ID:</label>
                 <input id="id" type="text" name="user_id" required>
@@ -37,7 +37,7 @@
 
              <p class="small-text">
                 Already have an account?
-                <a href="{{ url_for('index') }}" class="auth-option">Sign in</a>
+                <a href="{{ url_for('auth.index') }}" class="auth-option">Sign in</a>
              </p>
          </div>
     </div>

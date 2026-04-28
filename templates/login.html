@@ -23,7 +23,7 @@
                  {% endwith %}
              </div>
 
-             <form action="{{ url_for('auth') }}" method="POST" class="form-grid auth-form">
+             <form action="{{ url_for('auth.auth') }}" method="POST" class="form-grid auth-form">
                  <label for="id">ID:</label>
                  <input id="id" type="text" name="user_id" required>
 
@@ -37,7 +37,7 @@
 
             <p class="small-text">
                 Don't have an account?
-                <a href="{{ url_for('signup_page') }}" class="auth-option">Sign Up</a>
+                <a href="{{ url_for('auth.signup_page') }}" class="auth-option">Sign Up</a>
             </p>
          </div>
     </div>
