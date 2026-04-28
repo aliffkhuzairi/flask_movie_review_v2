@@ -13,7 +13,7 @@
      <!-- HEADER -->
     <header class="header">
         <div class="header-wrap">
-            <a href="{{ url_for('home') }}" class="brand">
+            <a href="{{ url_for('movie.home') }}" class="brand">
                 <span>MovieReview</span>
             </a>
 
@@ -22,9 +22,9 @@
             </button>
 
             <div class="nav-actions" id="navMenu">
-                <a class="button-link nav" href="{{ url_for('movie_list') }}">Movies</a>
-                <a class="button-link nav" href="{{ url_for('user_detail', user_id=user_id) }}">Profile</a>
-                <a class="button-link logout" href="{{ url_for('logout') }}">Logout</a>
+                <a class="button-link nav" href="{{ url_for('movie.movie_list') }}">Movies</a>
+                <a class="button-link nav" href="{{ url_for('user.user_detail', user_id=user_id) }}">Profile</a>
+                <a class="button-link logout" href="{{ url_for('auth.logout') }}">Logout</a>
             </div>
         </div>
     </header>
@@ -129,7 +129,7 @@
                                 <div class="review-card">
                                     <div class="review-card-top">
                                         <div class="title-year">
-                                            <a class="review-user" href="{{ url_for('user_detail', user_id=review[1]) }}">
+                                            <a class="review-user" href="{{ url_for('user.user_detail', user_id=review[1]) }}">
                                                 {{ review[1] }}
                                             </a>
                                             <p class="review-time">

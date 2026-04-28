@@ -35,7 +35,7 @@ def auth():
         return redirect(url_for("movie.home"))
 
     flash("ID or password are invalid.", "error")
-    return redirect(url_for("index"))
+    return redirect(url_for("auth.index"))
 
 @auth_bp.route("/signup")
 def signup_page():
@@ -48,11 +48,11 @@ def signup():
 
     if not user_id or not password:
         flash("Please enter both ID and password", "warning")
-        return redirect(url_for("signup_page"))
+        return redirect(url_for("auth.signup_page"))
 
     if len(password) < 8:
         flash("Password must be at least 8 characters", "warning")
-        return redirect(url_for("signup_page"))
+        return redirect(url_for("auth.signup_page"))
 
     hashed_password = generate_password_hash(password)
 
@@ -69,13 +69,13 @@ def signup():
             """,(user_id,))
 
         flash("Account created successfully. Please sign in.", "success")
-        return redirect(url_for("index"))
+        return redirect(url_for("auth.index"))
 
     except Exception:
         flash("Sign up failed, ID may already exist.", "error")
-        return redirect(url_for("signup_page"))
+        return redirect(url_for("auth.signup_page"))
 
 @auth_bp.route("/logout")
 def logout():
     session.clear()
-    return redirect(url_for("index"))
+    return redirect(url_for("auth.index"))

@@ -11,7 +11,7 @@
      <!-- HEADER -->
     <header class="header">
         <div class="header-wrap">
-            <a href="{{ url_for('home') }}" class="brand">
+            <a href="{{ url_for('movie.home') }}" class="brand">
                 <span>MovieReview</span>
             </a>
 
@@ -20,9 +20,9 @@
             </button>
 
             <div class="button-row nav-actions" id="navMenu">
-                <a class="button-link nav" href="{{ url_for('movie_list') }}">Movies</a>
-                <a class="button-link nav" href="{{ url_for('user_detail', user_id=user_id) }}">Profile</a>
-                <a class="button-link logout" href="{{ url_for('logout') }}">Logout</a>
+                <a class="button-link nav" href="{{ url_for('movie.movie_list') }}">Movies</a>
+                <a class="button-link nav" href="{{ url_for('user.user_detail', user_id=user_id) }}">Profile</a>
+                <a class="button-link logout" href="{{ url_for('auth.logout') }}">Logout</a>
             </div>
         </div>
     </header>
@@ -54,26 +54,26 @@
                 </p>
 
                 {% if relationship == 'follow' %}
-                    <form action="{{ url_for('unfollow_user', target_user_id=user_info[0]) }}" method="POST">
+                    <form action="{{ url_for('user.unfollow_user', target_user_id=user_info[0]) }}" method="POST">
                         <button type="submit" class="button-link btn-unfollow">Unfollow</button>
                     </form>
-                    <form action="{{ url_for('mute_user', target_user_id=user_info[0]) }}" method="POST">
+                    <form action="{{ url_for('user.mute_user', target_user_id=user_info[0]) }}" method="POST">
                         <button type="submit" class="button-link btn-mute">Mute</button>
                     </form>
 
                 {% elif relationship == 'mute' %}
-                    <form action="{{ url_for('follow_user', target_user_id=user_info[0]) }}" method="POST">
+                    <form action="{{ url_for('user.follow_user', target_user_id=user_info[0]) }}" method="POST">
                         <button type="submit" class="button-link btn-follow">Follow</button>
                     </form>
-                    <form action="{{ url_for('unmute_user', target_user_id=user_info[0]) }}" method="POST">
+                    <form action="{{ url_for('user.unmute_user', target_user_id=user_info[0]) }}" method="POST">
                         <button type="submit" class="button-link btn-unmute">Unmute</button>
                     </form>
 
                 {% else %}
-                    <form action="{{ url_for('follow_user', target_user_id=user_info[0]) }}" method="POST">
+                    <form action="{{ url_for('user.follow_user', target_user_id=user_info[0]) }}" method="POST">
                         <button type="submit" class="button-link btn-follow">Follow</button>
                     </form>
-                    <form action="{{ url_for('mute_user', target_user_id=user_info[0]) }}" method="POST">
+                    <form action="{{ url_for('user.mute_user', target_user_id=user_info[0]) }}" method="POST">
                         <button type="submit" class="button-link btn-mute">Mute</button>
                     </form>
                 {% endif %}
@@ -144,7 +144,7 @@
                         {% endwith %}
                      </div>
 
-                    <form action="{{ url_for('edit_user_profile', user_id=user_info[0]) }}" method="POST" class="form-grid">
+                    <form action="{{ url_for('user.edit_user_profile', user_id=user_info[0]) }}" method="POST" class="form-grid">
 
                         <label>Name</label>
                         <input name="name" type="text"
@@ -178,7 +178,7 @@
                                 {% for followed in followed_users[:5] %}
                                 <li class="relation-item">
                                     <div class="relation-user">
-                                        <a href="{{ url_for('user_detail', user_id=followed[0]) }}" class="id-user">
+                                        <a href="{{ url_for('user.user_detail', user_id=followed[0]) }}" class="id-user">
                                             {{ followed[0] }}
                                         </a>
                                         {% if followed[1] %}
@@ -186,7 +186,7 @@
                                         {% endif %}
                                     </div>
                                     {% if is_self %}
-                                        <form action="{{ url_for('unfollow_user', target_user_id=followed[0]) }}"
+                                        <form action="{{ url_for('user.unfollow_user', target_user_id=followed[0]) }}"
                                               method="POST"
                                               onsubmit="return confirm('Unfollow this user?');">
                                             <button type="submit" class="button-link btn-unfollow">Unfollow</button>
@@ -215,7 +215,7 @@
                                 {% for muted in muted_users[:5] %}
                                     <li class="relation-item">
                                         <div class="relation-user">
-                                            <a href="{{ url_for('user_detail', user_id=muted[0]) }}" class="id-user">
+                                            <a href="{{ url_for('user.user_detail', user_id=muted[0]) }}" class="id-user">
                                                 {{ muted[0] }}
                                             </a>
                                             {% if muted[1] %}
@@ -223,7 +223,7 @@
                                             {% endif %}
                                         </div>
 
-                                        <form action="{{ url_for('unmute_user', target_user_id=muted[0]) }}"
+                                        <form action="{{ url_for('user.unmute_user', target_user_id=muted[0]) }}"
                                               method="POST"
                                               onsubmit="return confirm('Unmute this user?');">
                                             <button type="submit" class="button-link btn-unmute">Unmute</button>
@@ -241,11 +241,23 @@
 
                 <!-- IF CURRENT USER IS ADMIN -->
                 {% if is_self and is_current_user_admin %}
+
                     <div class="card admin-card">
                         <h2>Admin Panel</h2>
                         <p class="small-text admin-panel">Add a new movie to the platform.</p>
 
-                        <form action="{{ url_for('add_movie') }}" method="POST" class="form-grid">
+                        <div class="flash-container">
+                            {% with messages = get_flashed_messages(with_categories=true) %}
+                                {% if messages %}
+                                    {% for category, msg in messages %}
+                                        <div class="flash {{ category }}">{{ msg }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endwith %}
+                        </div>
+
+
+                        <form action="{{ url_for('user.add_movie') }}" method="POST" class="form-grid">
 
                             <label for="movie_title">Title</label>
                             <input id="movie_title" name="movie_title" type="text" required>
@@ -285,17 +297,17 @@
                         <h2>Your Reviews</h2>
                         <div class="button-row">
                             <a class="button-link {{ 'primary' if review_sort == 'latest' else 'secondary' }}"
-                               href="{{ url_for('user_detail', user_id=user_info[0], review_sort='latest') }}">
+                               href="{{ url_for('user.user_detail', user_id=user_info[0], review_sort='latest') }}">
                                 Latest
                             </a>
 
                             <a class="button-link {{ 'primary' if review_sort == 'highest' else 'secondary' }}"
-                               href="{{ url_for('user_detail', user_id=user_info[0], review_sort='highest') }}">
+                               href="{{ url_for('user.user_detail', user_id=user_info[0], review_sort='highest') }}">
                                 Highest
                             </a>
 
                             <a class="button-link {{ 'primary' if review_sort == 'lowest' else 'secondary' }}"
-                               href="{{ url_for('user_detail', user_id=user_info[0], review_sort='lowest') }}">
+                               href="{{ url_for('user.user_detail', user_id=user_info[0], review_sort='lowest') }}">
                                 Lowest
                             </a>
                         </div>
@@ -308,7 +320,7 @@
                             <div class="review-card">
                                 <div class="title-genre">
                                     <div class="title-year">
-                                        <a class="review-title" href="{{ url_for('movie_detail', movie_id=review[0]) }}">
+                                        <a class="review-title" href="{{ url_for('movie.movie_detail', movie_id=review[0]) }}">
                                             {{ review[1] }}
                                         </a>
                                         <span class="tag year-tag">{{ review[5].strftime('%Y') if review[5] else '' }}</span>
@@ -327,7 +339,7 @@
                                 </div>
 
                                 {% if is_self %}
-                                <form action="{{ url_for('delete_review', movie_id=review[0]) }}" method="POST"
+                                <form action="{{ url_for('user.delete_review', movie_id=review[0]) }}" method="POST"
                                       onsubmit="return confirm('This action cannot be undone. Delete review?');" class="delete">
                                     <button type="submit" class="button-link logout">Delete</button>
                                 </form>
@@ -344,7 +356,7 @@
                     <div class="pagination">
                         {% if page > 1 %}
                             <a class="button-link secondary"
-                               href="{{ url_for('user_detail', user_id=user_info[0], page=page-1) }}">
+                               href="{{ url_for('user.user_detail', user_id=user_info[0], page=page-1) }}">
                                 Previous
                             </a>
                         {% endif %}
@@ -355,7 +367,7 @@
 
                         {% if page < total_pages %}
                             <a class="button-link secondary"
-                               href="{{ url_for('user_detail', user_id=user_info[0], page=page+1) }}" >
+                               href="{{ url_for('user.user_detail', user_id=user_info[0], page=page+1) }}" >
                                 Next
                             </a>
                         {% endif %}

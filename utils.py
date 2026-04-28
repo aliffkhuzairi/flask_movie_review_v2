@@ -74,3 +74,4 @@ def time_ago(value):
         return f"{months}mo"
     else:
         return f"{years}y"
+

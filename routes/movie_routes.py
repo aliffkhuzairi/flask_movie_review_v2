@@ -6,8 +6,6 @@ movie_bp = Blueprint("movie", __name__)
 
 ALLOWED_SORTS = {"latest", "title", "genre"}
 ALLOWED_SORT_DIRS = {"asc", "desc"}
-ALLOWED_GENRES = {"action", "comedy", "drama", "fantasy", "romance", "thriller", "western"}
-
 @movie_bp.route("/home")
 @login_required
 def home():
@@ -126,7 +124,7 @@ def movie_detail(movie_id):
 
                 flash("Review added!", "success")
 
-        return redirect(url_for("movie_detail", movie_id=movie_id))
+        return redirect(url_for("movie.movie_detail", movie_id=movie_id))
 
     with db_cursor() as cur:
         cur.execute("""

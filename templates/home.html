@@ -22,7 +22,7 @@
 
             <div class="button-row nav-actions" id="navMenu">
                 <a class="button-link nav" href="{{ url_for('movie.movie_list') }}">Movies</a>
-                <a class="button-link nav" href="#">Profile</a>
+                <a class="button-link nav" href="{{ url_for('user.user_detail', user_id=user_id) }}">Profile</a>
                 <a class="button-link logout" href="{{ url_for('auth.logout') }}">Logout</a>
             </div>
         </div>
@@ -107,7 +107,7 @@
 
                         <div class="title-genre">
                             <p class="small-text">Watched by
-                                <a class="review-user" href="#">
+                                <a class="review-user" href="{{ url_for('user.user_detail', user_id=review[1]) }}">
                                     {{ review[1] }}
                                 </a>
                             </p>
