@@ -266,7 +266,7 @@ def add_movie():
             cur.execute("""
                 insert into movies(title, director, genre, rel_date)
                 values(%s, %s, %s, %s)
-                on conflict (title, director, genre, rel_date) do nothing;
+                on conflict (title, rel_date) do nothing;
             """, (title, director, genre, rel_date))
 
             if cur.rowcount == 0:
