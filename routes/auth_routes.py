@@ -32,7 +32,7 @@ def auth():
         session.clear()
         session["user_id"] = user[0]
         session["user_role"] = user[2]
-        return redirect(url_for("home"))
+        return redirect(url_for("movie.home"))
 
     flash("ID or password are invalid.", "error")
     return redirect(url_for("index"))

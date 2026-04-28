@@ -12,7 +12,7 @@
     <!-- HEADER -->
     <header class="header">
         <div class="header-wrap">
-            <a href="{{ url_for('home') }}" class="brand">
+            <a href="{{ url_for('movie.home') }}" class="brand">
                 <span>MovieReview</span>
             </a>
 
@@ -21,9 +21,9 @@
             </button>
 
             <div class="button-row nav-actions" id="navMenu">
-                <a class="button-link nav" href="{{ url_for('movie_list') }}">Movies</a>
-                <a class="button-link nav" href="{{ url_for('user_detail', user_id=user_id) }}">Profile</a>
-                <a class="button-link logout" href="{{ url_for('logout') }}">Logout</a>
+                <a class="button-link nav" href="{{ url_for('movie.movie_list') }}">Movies</a>
+                <a class="button-link nav" href="#">Profile</a>
+                <a class="button-link logout" href="{{ url_for('auth.logout') }}">Logout</a>
             </div>
         </div>
     </header>
@@ -39,7 +39,7 @@
                     <p class="small-text">Recently added movies</p>
                 </div>
                 <div class="view-more-link">
-                    <a class="view-more" href="{{ url_for('movie_list') }}">
+                    <a class="view-more" href="{{ url_for('movie.movie_list') }}">
                         View More...
                     </a>
                 </div>
@@ -48,7 +48,7 @@
             <!-- MOVIE LIST -->
             <div class="movie-list">
                 {% for movie in movies %}
-                <a href="{{ url_for('movie_detail', movie_id=movie[0]) }}" class="movie-card">
+                <a href="{{ url_for('movie.movie_detail', movie_id=movie[0]) }}" class="movie-card">
 
                     <div class="movie-card-top fake-poster">
                         <span class="poster-genre">{{ movie[3] }}</span>
@@ -92,7 +92,7 @@
 
                         <div class="title-genre">
                             <div class="title-year">
-                                <a href="{{ url_for('movie_detail', movie_id=review[6]) }}" class="review-title">
+                                <a href="{{ url_for('movie.movie_detail', movie_id=review[6]) }}" class="review-title">
                                     {{ review[2] }}
                                 </a>
                                 <span class="tag year-tag">{{ review[5].strftime('%Y') if review[5] else '' }}</span>
@@ -107,7 +107,7 @@
 
                         <div class="title-genre">
                             <p class="small-text">Watched by
-                                <a class="review-user" href="{{ url_for('user_detail', user_id=review[1]) }}">
+                                <a class="review-user" href="#">
                                     {{ review[1] }}
                                 </a>
                             </p>

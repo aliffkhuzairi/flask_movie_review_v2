@@ -12,7 +12,7 @@
      <!-- HEADER -->
     <header class="header">
         <div class="header-wrap">
-            <a href="{{ url_for('home') }}" class="brand">
+            <a href="{{ url_for('movie.home') }}" class="brand">
                 <span>MovieReview</span>
             </a>
 
@@ -21,9 +21,9 @@
             </button>
 
             <div class="button-row nav-actions" id="navMenu">
-                <a class="button-link nav" href="{{ url_for('movie_list') }}">Movies</a>
-                <a class="button-link nav" href="{{ url_for('user_detail', user_id=user_id) }}">Profile</a>
-                <a class="button-link logout" href="{{ url_for('logout') }}">Logout</a>
+                <a class="button-link nav" href="{{ url_for('movie.movie_list') }}">Movies</a>
+                <a class="button-link nav" href="#">Profile</a>
+                <a class="button-link logout" href="{{ url_for('auth.logout') }}">Logout</a>
             </div>
         </div>
     </header>
@@ -32,7 +32,7 @@
 
         <!-- SEARCH BAR -->
         <section class="search-section">
-            <form action="{{ url_for('movie_list') }}" method="GET" class="search-form">
+            <form action="{{ url_for('movie.movie_list') }}" method="GET" class="search-form">
                 <input
                     type="text"
                     name="search"
@@ -47,7 +47,7 @@
                 <button type="submit" class="button-link primary">Search</button>
 
                 {% if search %}
-                    <a class="button-link secondary" href="{{ url_for('movie_list') }}">Clear</a>
+                    <a class="button-link secondary" href="{{ url_for('movie.movie_list') }}">Clear</a>
                 {% endif %}
             </form>
 
@@ -63,7 +63,7 @@
             <div class="button-row">
                 <a class="button-link {{ 'primary' if movie_sort == 'latest' else 'secondary' }}"
                    href="{{ url_for(
-                        'movie_list',
+                        'movie.movie_list',
                         movie_sort='latest',
                         movie_sort_dir='asc' if movie_sort == 'latest' and movie_sort_dir == 'desc' else 'desc',
                         search=search
@@ -76,7 +76,7 @@
 
                 <a class="button-link {{ 'primary' if movie_sort == 'title' else 'secondary' }}"
                    href="{{ url_for(
-                        'movie_list',
+                        'movie.movie_list',
                         movie_sort='title',
                         movie_sort_dir='asc' if movie_sort == 'title' and movie_sort_dir == 'desc' else 'desc',
                         search=search
@@ -89,7 +89,7 @@
 
                 <a class="button-link {{ 'primary' if movie_sort == 'genre' else 'secondary' }}"
                    href="{{ url_for(
-                        'movie_list',
+                        'movie.movie_list',
                         movie_sort='genre',
                         movie_sort_dir='asc' if movie_sort == 'genre' and movie_sort_dir == 'desc' else 'desc',
                         search=search
@@ -109,7 +109,7 @@
             <div class="movie-list">
 
                 {% for movie in movies %}
-                <a href="{{ url_for('movie_detail', movie_id=movie[0]) }}" class="movie-card">
+                <a href="{{ url_for('movie.movie_detail', movie_id=movie[0]) }}" class="movie-card">
                     <div class="movie-card-top fake-poster">
                         <span class="poster-genre">{{ movie[3] }}</span>
                         <h3>{{ movie[1] }}</h3>
