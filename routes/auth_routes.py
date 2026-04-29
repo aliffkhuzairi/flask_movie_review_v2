@@ -68,7 +68,7 @@ def signup():
                 values(%s, now());
             """,(user_id,))
 
-        flash("Account created successfully. Please sign in.", "success-auth")
+        flash("Account created. Please sign in.", "success-auth")
         return redirect(url_for("auth.index"))
 
     except Exception:

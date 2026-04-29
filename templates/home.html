@@ -50,7 +50,7 @@
                 {% for movie in movies %}
                 <a href="{{ url_for('movie.movie_detail', movie_id=movie[0]) }}" class="movie-card">
 
-                    <div class="movie-card-top fake-poster">
+                    <div class="movie-card-top">
                         <span class="genre-tag">{{ movie[3] }}</span>
                         <h3>{{ movie[1] }}</h3>
                     </div>
@@ -59,12 +59,12 @@
 
                         <div class="movie-info">
                             <p><strong>Director</strong></p>
-                            <p class="small-text">{{ movie[2] }}</p>
+                            <p class="movie-info-value">{{ movie[2] }}</p>
                         </div>
 
                         <div class="movie-info">
                             <p><strong>Release</strong></p>
-                            <p class="small-text">
+                            <p class="movie-info-value">
                                 {{ movie[4].strftime('%d %b %Y') if movie[4] else ''}}
                             </p>
                         </div>

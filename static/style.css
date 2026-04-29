@@ -51,6 +51,7 @@ html {
 /* BODY */
 body {
     font-family: 'Lexend', Helvetica, sans-serif;
+    font-size: 16px;
     background: var(--bg-main);
     color: var(--text-main);
 }
@@ -141,10 +142,6 @@ select option {
     color: var(--text-main);
 }
 
-.auth-form {
-    margin-top: 40px;
-}
-
 .auth-option {
     text-decoration: none;
     color: var(--secondary);
@@ -199,6 +196,7 @@ select option {
     display: inline-block;
     color: var(--text-main);
     padding: 10px 12px;
+    min-width: 80px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -206,6 +204,7 @@ select option {
     font-weight: 600;
     text-decoration: none;
     transition: background 0.11s ease-in-out;
+    text-align: center;
 }
 
 .form-grid button,
@@ -219,7 +218,7 @@ select option {
     top: 0;
     left: 0;
     width: 100%;
-    padding: 12px;
+    padding: 12px 20px;
     gap: 12px;
     background: var(--bg-header);
     border: none;
@@ -228,12 +227,12 @@ select option {
 }
 
 .header-wrap {
-    max-width: 1200px;
+    max-width: 1300px;
     margin: 0 auto;
+    padding: 0 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 10px;
 }
 .brand {
     font-size: 1.5rem;
@@ -344,11 +343,21 @@ header.sticky .brand:hover{
 
 .section-head {
     width: 100%;
+    padding: 20px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 16px;
     flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.detail-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    margin-bottom: 0;
 }
 
 .view-more-link {
@@ -370,7 +379,7 @@ header.sticky .brand:hover{
     display: flex;
     gap: 20px;
     flex-wrap: wrap;
-    margin-top: 20px ;
+    padding: 0 20px;
 }
 
 .movie-card {
@@ -394,27 +403,6 @@ header.sticky .brand:hover{
 }
 
 .movie-card-top {
-    min-height: 72px;
-    padding: 14px 12px;
-    background: var(--primary);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.movie-card-top h3 {
-    font-size: 1.1rem;
-    color: var(--text-main);
-    text-align: center;
-    line-height: 1.25;
-
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.fake-poster {
     min-height: 150px;
     padding: 16px;
     background:
@@ -426,14 +414,20 @@ header.sticky .brand:hover{
     align-items: flex-start;
 }
 
-.fake-poster h3 {
+.movie-card-top h3 {
+    color: var(--text-main);
     text-align: left;
     font-size: 1.35rem;
     line-height: 1.2;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .genre-tag {
-    padding: 4px 9px;
+    padding: 6px 10px;
     border-radius: 999px;
     background: rgb(220 194 155 / 0.18);
     color: var(--secondary);
@@ -454,6 +448,13 @@ header.sticky .brand:hover{
     margin-top: auto;
 }
 
+.small-text,
+.movie-info-value{
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin: 5px 0;
+}
+
 /* REVIEW CARDS SECTION */
 .home-review-feed .review-card {
     flex: 1 1 calc(50% - 20px);
@@ -465,7 +466,7 @@ header.sticky .brand:hover{
     position: relative;
     overflow: hidden;
     border-bottom: 1px solid var(--text-muted);
-    padding: 24px 8px;
+    padding: 0 20px;
     margin-bottom: 16px;
     background: none;
     cursor: pointer;
@@ -537,7 +538,7 @@ header.sticky .brand:hover{
 .tooltip::after {
     content: attr(data-title);
     position: absolute;
-    bottom: 120%;
+    bottom: 95%;
     left: 0;
     background: #111;
     color: #fff;
@@ -574,6 +575,7 @@ header.sticky .brand:hover{
 
 .homepage {
     max-width: 350px;
+    margin-bottom: 25px;
 }
 
 .review-time {
@@ -591,15 +593,9 @@ header.sticky .brand:hover{
     align-items: center;
 }
 
-.small-text {
-    font-size: 0.88rem;
-    color: var(--text-muted);
-    margin: 5px 0;
-}
-
 .review-user {
     font-weight: 500;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     padding-left: 3px;
     color: #66eaea;
     text-decoration: none;
@@ -700,28 +696,15 @@ header.sticky .brand:hover{
 
 
 /* MOVIE PAGE */
-
-.top-action {
-    display: flex;
-    justify-content: flex-end;
-}
-
 .movie-hero {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 24px;
-
 }
 
 .movie-hero-main {
     flex: 1;
-}
-
-.movie-meta {
-    color: #6b7280;
-    font-size: 0.95rem;
-    margin-bottom: 6px;
 }
 
 .movie-title {
@@ -732,6 +715,7 @@ header.sticky .brand:hover{
 
 .movie-tags {
     display: flex;
+    align-items: center;
     flex-wrap: wrap;
     gap: 20px;
 }
@@ -740,9 +724,17 @@ header.sticky .brand:hover{
     padding-left: 3px;
 }
 
+.movie-tag-director {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
 .muted {
     background: none;
     color: var(--text-muted);
+    text-align: center;
 }
 
 .director {
@@ -782,6 +774,7 @@ header.sticky .brand:hover{
     display: flex;
     flex-direction: column;
     gap: 24px;
+    min-width: 0;
 }
 
 /* MOVIE LEFT COLUMN */
@@ -792,8 +785,21 @@ header.sticky .brand:hover{
 
 .info-card h2,
 .review-form-card h2,
-.reviews-card h2 {
+.reviews-card h2,
+.profile-card h2,
+.list-card h2,
+.add-update-header {
     margin-bottom: 16px;
+    font-size: 1.5rem;
+}
+
+.admin-card h2 {
+    margin-bottom: 8px;
+    font-size: 1.5rem;
+}
+
+.admin-panel {
+    margin-bottom: 10px;
 }
 
 .info-list {
@@ -805,10 +811,12 @@ header.sticky .brand:hover{
 .info-item {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     gap: 16px;
     padding-bottom: 10px;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--text-muted);
 }
+
 
 .info-item:last-child {
     border-bottom: none;
@@ -823,6 +831,8 @@ header.sticky .brand:hover{
 .info-value {
     color: var(--text-main);
     text-align: right;
+    width: fit-content;
+    overflow-wrap: anywhere;
 }
 
 .review-form-card .flash-container {
@@ -833,7 +843,11 @@ header.sticky .brand:hover{
 .reviews-list {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+}
+
+.reviews-list .review-card {
+    padding: 20px 12px;
+    margin-bottom: 0;
 }
 
 .detail-page{
@@ -854,10 +868,8 @@ header.sticky .brand:hover{
     margin: 10px 0;
 }
 
-.profile-tags {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+.profile-id {
+    margin-bottom: 14px;
 }
 
 .pagination {
@@ -890,8 +902,6 @@ header.sticky .brand:hover{
 
 .hero-actions {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
     gap: 10px;
 }
 
@@ -913,13 +923,6 @@ header.sticky .brand:hover{
     margin-top: 10px;
 }
 
-
-.profile-card h2,
-.list-card h2,
-.action-card h2 {
-    margin-bottom: 12px;
-}
-
 .action-card {
     display: flex;
     flex-direction: column;
@@ -933,7 +936,7 @@ header.sticky .brand:hover{
 }
 
 .admin-card .form-grid {
-    margin-top: 16px;
+    margin-top: 18px;
 }
 
 .list-card {
@@ -943,6 +946,8 @@ header.sticky .brand:hover{
 .btn-follow {
     background: #2563eb;
     color: white;
+    padding: 6px 8px;
+    font-size: 0.85rem;
 }
 
 .btn-follow:hover {
@@ -952,6 +957,8 @@ header.sticky .brand:hover{
 .btn-unfollow {
     background: #dc2626;
     color: white;
+    padding: 6px 8px;
+    font-size: 0.85rem;
 }
 
 .btn-unfollow:hover {
@@ -961,6 +968,8 @@ header.sticky .brand:hover{
 .btn-mute {
     background: #6b7280;
     color: white;
+    padding: 6px 8px;
+    font-size: 0.85rem;
 }
 
 .btn-mute:hover {
@@ -970,6 +979,8 @@ header.sticky .brand:hover{
 .btn-unmute {
     background: #374151;
     color: white;
+    padding: 6px 8px;
+    font-size: 0.85rem;
 }
 
 .btn-unmute:hover {
@@ -979,18 +990,17 @@ header.sticky .brand:hover{
 .relation-list {
     list-style: none;
     padding: 0;
+    max-width: 380px;
     margin: 10px 0 0;
     display: flex;
     flex-direction: column;
-    gap: 12px;
 }
 
 .relation-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 14px;
-    padding: 16px 0;
+    padding: 10px 0;
     border-bottom: 1px solid var(--text-main);
 }
 
@@ -1001,13 +1011,17 @@ header.sticky .brand:hover{
 .relation-user {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
 }
 
 .id-user {
-    font-size: 1.2rem;
+    font-size: 1rem;
     text-decoration: none;
     color: var(--text-main);
+}
+
+.user-name {
+    color: var(--text-muted);
 }
 
 .id-user:hover {
@@ -1023,9 +1037,11 @@ header.sticky .brand:hover{
     padding: 8px 12px;
 }
 
-@media (max-width: 1300px) {
+@media (max-width: 1200px) {
+
     .movie-list {
         justify-content: center;
+        padding: 0 20px;
     }
 
     .movie-card {
@@ -1036,34 +1052,35 @@ header.sticky .brand:hover{
 }
 
 @media (max-width: 992px) {
+    body {
+        font-size: 15px;
+    }
+
     .movie-card {
         flex: 1 1 calc(33.333% - 16px);
         max-width: calc(33.333% - 16px);
     }
 
-    .movie-info {
-        font-size: 0.9rem;
+    .detail-head {
+        padding: 0;
+        flex-direction: column;
     }
 
     .review-card-top {
         display: block;
     }
 
-    .title-year {
-        margin-bottom: 10px;
-    }
-
     .review-rating {
-        margin: 10px 0;
+        margin: 16px 0 8px;
         padding: 0;
     }
-
     .watch {
-        margin: 5px 0 8px;
+        margin: 5px 0 12px;
     }
 }
 
 @media (max-width: 768px) {
+
     .header-wrap {
         padding: 10px 16px;
     }
@@ -1116,6 +1133,24 @@ header.sticky .brand:hover{
         padding: 20px 0 12px;
     }
 
+    .section-head {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .section-head h1, .section-head p {
+        text-align: center;
+    }
+
+    .detail-head {
+        flex-direction: column;
+    }
+
+    .movie-card {
+        flex: 1 1 calc(50% - 10px);
+        max-width: calc(50% - 10px);
+    }
+
     .review-feed {
         flex-wrap: wrap;
         padding: 0 12px;
@@ -1123,11 +1158,6 @@ header.sticky .brand:hover{
 
     .review-card-top {
         display: flex;
-    }
-
-    .section-head {
-        flex-direction: column;
-        gap: 8px;
     }
 
     .home-review-feed .review-card {
@@ -1140,18 +1170,13 @@ header.sticky .brand:hover{
         gap: 10px;
     }
 
-    .movie-card {
-        flex: 1 1 calc(50% - 10px);
-        max-width: calc(50% - 10px);
-    }
-
-    .small-text {
-        text-align: center;
-    }
-
     .watch {
         text-align: unset;
         margin: 5px 0 8px;
+    }
+
+    .movie-title {
+        text-align: center;
     }
 
     .admin-panel {
@@ -1160,32 +1185,49 @@ header.sticky .brand:hover{
 
     .two-cols-layout {
         grid-template-columns: 1fr;
+        padding: 0 20px;
     }
 
-    .movie-info,
-    .tag {
-        text-align: center;
+    .movie-hero {
+        flex-direction: column;
     }
 
-    .movie-info {
-        font-size: 0.85rem;
+    .movie-tags {
+        justify-content: center;
     }
+
+    .movie-rating-box {
+        display: none;
+    }
+
+    .reviews-list .review-card {
+        padding: 24px 0;
+    }
+
+    .profile-main {
+        padding-left: 20px;
+    }
+
 
 }
 
-@media (max-width: 480px) {
-
-    .page-container {
-        margin: 60px 20px 20px;
-    }
-
+@media (max-width: 658px) {
     .review-card-top {
         display: block;
     }
+}
 
-    .section-head {
+@media (max-width: 480px) {
+    .auth-card {
+        height: 100vh;
+        display: flex;
         flex-direction: column;
-        gap: 8px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .auth-card .form-grid {
+        width: 100%;
     }
 
     .search-form {
@@ -1193,13 +1235,14 @@ header.sticky .brand:hover{
         gap: 14px;
     }
 
-
     .nav-actions.open {
         width: 100%;
     }
 
     .movie-card {
-        flex: 1 1 calc(100% - 16px);
-        max-width: calc(100% - 16px);
+        flex: 1 1 calc(90% - 16px);
+        max-width: calc(90% - 16px);
     }
+
 }
+

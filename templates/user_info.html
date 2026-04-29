@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, intitial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>{{ user_info[0] }}</title>
@@ -33,53 +33,49 @@
         <!-- PROFILE HERO -->
         <section class="profile-hero card">
             <div class="profile-main">
+
+                <!-- PROFILE DIV -->
                 <p class="profile-meta">Profile</p>
 
                 <h1 class="profile-title">
                     {{ user_info[2] or user_info[0] }}
                 </h1>
 
-                <div class="profile-tags">
-                    <span class="tag info-page">{{ user_info[0] }}</span>
-                    <span class="tag muted">
-                        Joined {{ user_info[4].strftime('%d %b %Y') if user_info[4] else '' }}
-                    </span>
+                <div class="profile-id">
+                    <span>{{ user_info[0] }}</span>
                 </div>
-            </div>
 
-            <!-- RELATIONSHIP DIV -->
-            {% if not is_self and not is_admin_profile and not is_current_user_admin %}
-            <div class="hero-actions">
-                <p class="small-text">
-                    {{ relationship if relationship else 'none' }}
-                </p>
+                <!-- RELATIONSHIP DIV -->
+                {% if not is_self and not is_admin_profile and not is_current_user_admin %}
+                <div class="hero-actions">
 
-                {% if relationship == 'follow' %}
-                    <form action="{{ url_for('user.unfollow_user', target_user_id=user_info[0]) }}" method="POST">
-                        <button type="submit" class="button-link btn-unfollow">Unfollow</button>
-                    </form>
-                    <form action="{{ url_for('user.mute_user', target_user_id=user_info[0]) }}" method="POST">
-                        <button type="submit" class="button-link btn-mute">Mute</button>
-                    </form>
+                    {% if relationship == 'follow' %}
+                        <form action="{{ url_for('user.unfollow_user', target_user_id=user_info[0]) }}" method="POST">
+                            <button type="submit" class="button-link btn-unfollow">Unfollow</button>
+                        </form>
+                        <form action="{{ url_for('user.mute_user', target_user_id=user_info[0]) }}" method="POST">
+                            <button type="submit" class="button-link btn-mute">Mute</button>
+                        </form>
 
-                {% elif relationship == 'mute' %}
-                    <form action="{{ url_for('user.follow_user', target_user_id=user_info[0]) }}" method="POST">
-                        <button type="submit" class="button-link btn-follow">Follow</button>
-                    </form>
-                    <form action="{{ url_for('user.unmute_user', target_user_id=user_info[0]) }}" method="POST">
-                        <button type="submit" class="button-link btn-unmute">Unmute</button>
-                    </form>
+                    {% elif relationship == 'mute' %}
+                        <form action="{{ url_for('user.follow_user', target_user_id=user_info[0]) }}" method="POST">
+                            <button type="submit" class="button-link btn-follow">Follow</button>
+                        </form>
+                        <form action="{{ url_for('user.unmute_user', target_user_id=user_info[0]) }}" method="POST">
+                            <button type="submit" class="button-link btn-unmute">Unmute</button>
+                        </form>
 
-                {% else %}
-                    <form action="{{ url_for('user.follow_user', target_user_id=user_info[0]) }}" method="POST">
-                        <button type="submit" class="button-link btn-follow">Follow</button>
-                    </form>
-                    <form action="{{ url_for('user.mute_user', target_user_id=user_info[0]) }}" method="POST">
-                        <button type="submit" class="button-link btn-mute">Mute</button>
-                    </form>
+                    {% else %}
+                        <form action="{{ url_for('user.follow_user', target_user_id=user_info[0]) }}" method="POST">
+                            <button type="submit" class="button-link btn-follow">Follow</button>
+                        </form>
+                        <form action="{{ url_for('user.mute_user', target_user_id=user_info[0]) }}" method="POST">
+                            <button type="submit" class="button-link btn-mute">Mute</button>
+                        </form>
+                    {% endif %}
+                </div>
                 {% endif %}
             </div>
-            {% endif %}
         </section>
 
         <section class="two-cols-layout">
@@ -90,7 +86,6 @@
                 <!-- ACCOUNT INFO -->
                 <div class="card info-card">
                     <h2>Account Info</h2>
-
                     <div class="info-list">
                         <div class="info-item">
                             <span class="info-label">ID</span>
@@ -183,7 +178,7 @@
                                             {{ followed[0] }}
                                         </a>
                                         {% if followed[1] %}
-                                            <span class="small-text">{{ followed[1] }}</span>
+                                            <span class="user-name">{{ followed[1] }}</span>
                                         {% endif %}
                                     </div>
                                     {% if is_self %}
@@ -220,7 +215,7 @@
                                                 {{ muted[0] }}
                                             </a>
                                             {% if muted[1] %}
-                                                <span class="small-text">{{ muted[1] }}</span>
+                                                <span class="user-name">{{ muted[1] }}</span>
                                             {% endif %}
                                         </div>
 
@@ -294,7 +289,7 @@
 
                 <!-- USER'S REVIEWS -->
                 <div class="card reviews-card">
-                    <div class="section-head">
+                    <div class="detail-head">
                         <h2>Your Reviews</h2>
                         <div class="button-row">
                             <a class="button-link {{ 'primary' if review_sort == 'latest' else 'secondary' }}"

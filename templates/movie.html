@@ -21,7 +21,7 @@
                 <i class="fa-solid fa-bars"></i>
             </button>
 
-            <div class="nav-actions" id="navMenu">
+            <div class="button-row nav-actions" id="navMenu">
                 <a class="button-link nav" href="{{ url_for('movie.movie_list') }}">Movies</a>
                 <a class="button-link nav" href="{{ url_for('user.user_detail', user_id=user_id) }}">Profile</a>
                 <a class="button-link logout" href="{{ url_for('auth.logout') }}">Logout</a>
@@ -38,7 +38,11 @@
 
                 <div class="movie-tags">
                     <span class="genre-tag">{{ movie[3] }}</span>
-                    <span class="muted">Directed by <span class="director">{{ movie[2] }}</span></span>
+                    <div class="movie-tag-director">
+                        <span class="muted">Directed by </span>
+                        <span class="director">{{ movie[2] }}</span>
+                    </div>
+
                     <span class="muted">{{ movie[4].strftime('%d %b %Y') if movie[4] else '' }}</span>
                 </div>
             </div>

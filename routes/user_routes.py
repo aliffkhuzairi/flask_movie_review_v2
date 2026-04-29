@@ -194,7 +194,7 @@ def can_manage_relationship(target_user_id):
 def follow_user(target_user_id):
 
     if not can_manage_relationship(target_user_id):
-        return redirect(url_for("user_detail", user_id=target_user_id))
+        return redirect(url_for("user.user_detail", user_id=target_user_id))
 
     with db_cursor(commit=True) as cur:
         cur.execute("""
@@ -204,7 +204,7 @@ def follow_user(target_user_id):
             set tie = 'follow';
         """,(session["user_id"], target_user_id))
 
-    return redirect(url_for("user_detail", user_id=target_user_id))
+    return redirect(url_for("user.user_detail", user_id=target_user_id))
 
 @user_bp.route("/unfollow/<target_user_id>", methods=["POST"])
 @login_required
@@ -215,13 +215,13 @@ def unfollow_user(target_user_id):
             where id = %s and opid = %s and tie = 'follow';
         """, (session["user_id"], target_user_id))
 
-    return redirect(url_for("user_detail", user_id=session["user_id"]))
+    return redirect(url_for("user.user_detail", user_id=session["user_id"]))
 
 @user_bp.route("/mute/<target_user_id>", methods=["POST"])
 @login_required
 def mute_user(target_user_id):
     if not can_manage_relationship(target_user_id):
-        return redirect(url_for("user_detail", user_id=target_user_id))
+        return redirect(url_for("user.user_detail", user_id=target_user_id))
 
     with db_cursor(commit=True) as cur:
         cur.execute("""
@@ -231,7 +231,7 @@ def mute_user(target_user_id):
             set tie = 'mute';
         """, (session["user_id"], target_user_id))
 
-    return redirect(url_for("user_detail", user_id=session["user_id"]))
+    return redirect(url_for("user.user_detail", user_id=session["user_id"]))
 
 @user_bp.route("/unmute/<target_user_id>", methods=["POST"])
 @login_required
@@ -243,7 +243,7 @@ def unmute_user(target_user_id):
             where id = %s and opid = %s and tie = 'mute';
                     """, (session["user_id"], target_user_id))
 
-    return redirect(url_for("user_detail", user_id=target_user_id))
+    return redirect(url_for("user.user_detail", user_id=target_user_id))
 
 @user_bp.route("/add-movie", methods=["POST"])
 @login_required
