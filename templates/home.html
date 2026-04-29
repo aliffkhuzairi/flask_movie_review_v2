@@ -91,9 +91,12 @@
                     <div class="review-card">
                         <div class="review-card-top">
                             <div class="review-title-meta">
-                                <a class="review-title" href="{{ url_for('movie.movie_detail', movie_id=review[0]) }}">
-                                    {{ review[1] }}
-                                </a>
+                                 <span class="tooltip" data-title="{{ review[1] }}">
+                                     <a class="review-title tooltip"
+                                       href="{{ url_for('movie.movie_detail', movie_id=review[0]) }}">
+                                         {{ review[1] }}
+                                     </a>
+                                 </span>
                                 <span class="year-tag">
                                     {{ review[2].strftime('%Y') if review[2] else '' }}
                                 </span>

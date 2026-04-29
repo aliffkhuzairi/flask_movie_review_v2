@@ -37,9 +37,9 @@
                 <h1 class="movie-title">{{ movie[1] }}</h1>
 
                 <div class="movie-tags">
-                    <span class="tag info-page">{{ movie[3] }}</span>
-                    <span class="tag muted">Directed by {{ movie[2] }}</span>
-                    <span class="tag muted">{{ movie[4].strftime('%d %b %Y') if movie[4] else '' }}</span>
+                    <span class="genre-tag">{{ movie[3] }}</span>
+                    <span class="muted">Directed by <span class="director">{{ movie[2] }}</span></span>
+                    <span class="muted">{{ movie[4].strftime('%d %b %Y') if movie[4] else '' }}</span>
                 </div>
             </div>
 

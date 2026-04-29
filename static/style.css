@@ -516,7 +516,7 @@ header.sticky .brand:hover{
     color: var(--text-main);
     line-height: 1.2;
     font-size: 1.7rem;
-    max-width: 300px;   /* adjust based on your layout */
+    max-width: 300px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -526,6 +526,35 @@ header.sticky .brand:hover{
 
 .review-title:hover {
     color: var(--secondary-hover);
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    max-width: 300px;
+}
+
+.tooltip::after {
+    content: attr(data-title);
+    position: absolute;
+    bottom: 120%;
+    left: 0;
+    background: #111;
+    color: #fff;
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(4px);
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.tooltip:hover::after {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .year-tag {
@@ -704,16 +733,20 @@ header.sticky .brand:hover{
 .movie-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 20px;
 }
 
-.tag.info-page {
+.info-page {
     padding-left: 3px;
 }
 
-.tag.muted {
+.muted {
     background: none;
     color: var(--text-muted);
+}
+
+.director {
+    color: var(--text-main);
 }
 
 .movie-rating-box {
