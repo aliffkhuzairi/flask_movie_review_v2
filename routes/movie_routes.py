@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, session, flash, request
 from db import db_cursor
 from utils import login_required, is_valid_rating
+import math
 
 movie_bp = Blueprint("movie", __name__)
 
@@ -97,7 +98,7 @@ def movie_detail(movie_id):
 
         if not review or not is_valid_rating(rating):
             flash("Please enter a review and a rating from 0-5.")
-            return redirect(url_for("movie_detail", movie_id=movie_id))
+            return redirect(url_for("movie.movie_detail", movie_id=movie_id))
 
         with db_cursor(commit=True) as cur:
             cur.execute("""
@@ -153,6 +154,34 @@ def movie_detail(movie_id):
         if movie is None:
             return "Movie not found", 404
 
+        # REVIEWS PAGINATION
+        page = request.args.get("page", 1, type=int)
+        per_page = 5
+
+        if page < 1:
+            page = 1
+
+        offset = (page - 1) * per_page
+
+        # GET TOTAL REVIEWS
+        cur.execute("""
+            select count(*)
+            from reviews r 
+            where r.mid = %s
+            and not exists (
+                select 1 from ties t
+                where t.id = %s and t.opid = r.uid and t.tie = 'mute'
+            );
+        """,(movie_id, session["user_id"]))
+
+        total_reviews = cur.fetchone()[0]
+        total_pages = math.ceil(total_reviews + per_page - 1) // per_page
+
+        if total_pages > 0 and page > total_pages:
+            page = total_pages
+            offset = (page - 1) * per_page
+
+        # GET PAGINATED REVIEWS
         cur.execute(f"""
             select r.uid, r.review, r.rev_time, r.ratings
             from reviews r 
@@ -161,10 +190,23 @@ def movie_detail(movie_id):
                 select 1 from ties t
                 where t.id = %s and t.opid = r.uid and t.tie = 'mute'
             )
-            order by {order_by};
-        """, (movie_id, session["user_id"],))
+            order by {order_by}
+            limit %s offset %s;
+        """, (movie_id, session["user_id"], per_page, offset))
 
         reviews = cur.fetchall()
+
+        pages = []
+
+        if total_pages < 5:
+            pages = list(range(1, total_pages + 1))
+        else:
+            if page <= 3:
+                pages = [1, 2, 3, '...', total_pages]
+            elif page >= total_pages - 2:
+                pages = [1, "...", total_pages - 2, total_pages - 1, total_pages]
+            else:
+                pages = [1, "...", page - 1, page, page + 1, "...", total_pages]
 
         cur.execute("""
             select trunc(avg(r.ratings), 2)
@@ -190,6 +232,9 @@ def movie_detail(movie_id):
                            movie=movie,
                            reviews=reviews,
                            review_sort=review_sort,
+                           page=page,
+                           total_pages=total_pages,
+                           pages=pages,
                            avg_rating=avg_rating,
                            user_review=user_review,
                            user_id=session["user_id"])
