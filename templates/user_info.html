@@ -287,21 +287,21 @@
 
                 <!-- USER'S REVIEWS -->
                 <div class="card reviews-card">
-                    <div class="detail-head">
+                    <div class="detail-head" id="reviews">
                         <h2>Your Reviews</h2>
                         <div class="button-row">
                             <a class="button-link {{ 'primary' if review_sort == 'latest' else 'secondary' }}"
-                               href="{{ url_for('user.user_detail', user_id=user_info[0], review_sort='latest') }}">
+                               href="{{ url_for('user.user_detail', user_id=user_info[0], review_sort='latest') }}#reviews">
                                 Latest
                             </a>
 
                             <a class="button-link {{ 'primary' if review_sort == 'highest' else 'secondary' }}"
-                               href="{{ url_for('user.user_detail', user_id=user_info[0], review_sort='highest') }}">
+                               href="{{ url_for('user.user_detail', user_id=user_info[0], review_sort='highest') }}#reviews">
                                 Highest
                             </a>
 
                             <a class="button-link {{ 'primary' if review_sort == 'lowest' else 'secondary' }}"
-                               href="{{ url_for('user.user_detail', user_id=user_info[0], review_sort='lowest') }}">
+                               href="{{ url_for('user.user_detail', user_id=user_info[0], review_sort='lowest') }}#reviews">
                                 Lowest
                             </a>
                         </div>
