@@ -126,6 +126,21 @@ def movie_detail(movie_id):
 
         return redirect(url_for("movie.movie_detail", movie_id=movie_id))
 
+    review_sort = request.args.get("review_sort", "latest").strip()
+
+    sort_review = ["latest", "highest", "lowest"]
+
+    if review_sort not in sort_review:
+        review_sort = "latest"
+
+    # REVIEW SORT SQL COMMAND
+    if review_sort == "highest":
+        order_by = "r.ratings desc, r.rev_time desc"
+    elif review_sort == "lowest":
+        order_by = "r.ratings asc, r.rev_time desc"
+    else:
+        order_by = "r.rev_time desc"
+
     with db_cursor() as cur:
         cur.execute("""
             select id, title, director, genre, rel_date
@@ -138,7 +153,7 @@ def movie_detail(movie_id):
         if movie is None:
             return "Movie not found", 404
 
-        cur.execute("""
+        cur.execute(f"""
             select r.uid, r.review, r.rev_time, r.ratings
             from reviews r 
             where r.mid = %s
@@ -146,7 +161,7 @@ def movie_detail(movie_id):
                 select 1 from ties t
                 where t.id = %s and t.opid = r.uid and t.tie = 'mute'
             )
-            order by r.rev_time desc;
+            order by {order_by};
         """, (movie_id, session["user_id"],))
 
         reviews = cur.fetchall()
@@ -174,6 +189,7 @@ def movie_detail(movie_id):
     return render_template("movie.html",
                            movie=movie,
                            reviews=reviews,
+                           review_sort=review_sort,
                            avg_rating=avg_rating,
                            user_review=user_review,
                            user_id=session["user_id"])

@@ -125,7 +125,25 @@
             <!-- REVIEWS COLUMN -->
             <div class="movie-right-column">
                 <div class="card reviews-card">
-                    <h2>Reviews</h2>
+                    <div class="detail-head">
+                        <h2>Reviews</h2>
+                        <div class="button-row">
+                            <a class="button-link {{ 'primary' if review_sort == 'latest' else 'secondary' }}"
+                               href="{{ url_for('movie.movie_detail', movie_id=movie[0], review_sort='latest') }}">
+                                Latest
+                            </a>
+
+                            <a class="button-link {{ 'primary' if review_sort == 'highest' else 'secondary' }}"
+                               href="{{ url_for('movie.movie_detail', movie_id=movie[0], review_sort='highest') }}">
+                                Highest
+                            </a>
+
+                            <a class="button-link {{ 'primary' if review_sort == 'lowest' else 'secondary' }}"
+                               href="{{ url_for('movie.movie_detail', movie_id=movie[0], review_sort='lowest') }}">
+                                Lowest
+                            </a>
+                        </div>
+                    </div>
 
                     {% if reviews %}
                         <div class="reviews-list">
