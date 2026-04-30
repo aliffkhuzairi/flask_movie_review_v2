@@ -97,12 +97,15 @@
                                          {{ review[1] }}
                                      </a>
                                  </span>
-                                <span class="year-tag">
-                                    {{ review[2].strftime('%Y') if review[2] else '' }}
-                                </span>
-                                <p class="review-time">
-                                    {{ review[5] | time_ago }}
-                                </p>
+                                <div class="year-time">
+                                    <span class="year-tag">
+                                        {{ review[2].strftime('%Y') if review[2] else '' }}
+                                    </span>
+                                    <p class="review-time">
+                                        {{ review[5] | time_ago }}
+                                    </p>
+                                </div>
+
                             </div>
                             <span class="review-rating">
                                 {{ render_stars(review[6]) }}
@@ -110,8 +113,8 @@
 
                         </div>
 
-                        <div class="review-card-top">
-                            <p class="small-text watch">Watched by
+                        <div class="review-watch-row">
+                            <p class="watch">Watched by
                                 <a class="review-user" href="{{ url_for('user.user_detail', user_id=review[3]) }}">
                                     {{ review[3] }}
                                 </a>

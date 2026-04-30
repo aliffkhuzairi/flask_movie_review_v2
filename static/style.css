@@ -466,7 +466,7 @@ header.sticky .brand:hover{
     position: relative;
     overflow: hidden;
     border-bottom: 1px solid var(--text-muted);
-    padding: 0 20px;
+    padding: 14px 20px 0;
     margin-bottom: 16px;
     background: none;
     cursor: pointer;
@@ -502,14 +502,22 @@ header.sticky .brand:hover{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 16px;
     margin: 5px 0;
 }
 
 .review-title-meta {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 12px;
     min-width: 0;
+}
+
+.year-time {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .review-title {
@@ -517,7 +525,7 @@ header.sticky .brand:hover{
     color: var(--text-main);
     line-height: 1.2;
     font-size: 1.7rem;
-    max-width: 300px;
+    max-width: min(300px, 100%);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -532,7 +540,7 @@ header.sticky .brand:hover{
 .tooltip {
     position: relative;
     display: inline-block;
-    max-width: 300px;
+    max-width: min(300px, 100%);
 }
 
 .tooltip::after {
@@ -568,6 +576,18 @@ header.sticky .brand:hover{
     color: var(--tag-text);
 }
 
+.review-rating {
+    display: inline-block;
+    padding: 4px 10px;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.review-watch-row {
+    margin: 5px 0 10px;
+    color: var(--text-muted);
+}
+
 .review-text-block {
     line-height: 1.45;
     word-break: break-word;
@@ -581,11 +601,6 @@ header.sticky .brand:hover{
 .review-time {
     font-size: 0.88rem;
     color: var(--text-muted);
-}
-
-.review-rating {
-    display: inline-block;
-    padding: 4px 10px;
 }
 
 .stars {
@@ -1116,9 +1131,6 @@ header.sticky .brand:hover{
         margin: 16px 0 8px;
         padding: 0;
     }
-    .watch {
-        margin: 5px 0 12px;
-    }
 }
 
 @media (max-width: 768px) {
@@ -1212,11 +1224,6 @@ header.sticky .brand:hover{
         gap: 10px;
     }
 
-    .watch {
-        text-align: unset;
-        margin: 5px 0 8px;
-    }
-
     .movie-title {
         text-align: center;
     }
@@ -1254,10 +1261,21 @@ header.sticky .brand:hover{
 }
 
 @media (max-width: 658px) {
-    .review-card-top {
+     .reviews-list .review-card-top {
         display: block;
     }
+
+    .home-review-feed .review-card-top {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .home-review-feed .review-rating {
+        width: 100%;
+        margin-top: 6px;
+    }
 }
+
 
 @media (max-width: 480px) {
     .auth-card {

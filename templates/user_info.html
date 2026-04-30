@@ -322,11 +322,14 @@
                                                 {{ review[1] }}
                                             </a>
                                         </span>
-
-                                        <span class="year-tag">{{ review[5].strftime('%Y') if review[5] else '' }}</span>
-                                        <p class="review-time">
-                                            {{ review[4] | time_ago }}
-                                        </p>
+                                        <div class="year-time">
+                                            <span class="year-tag">
+                                                {{ review[5].strftime('%Y') if review[5] else '' }}
+                                            </span>
+                                            <p class="review-time">
+                                                {{ review[4] | time_ago }}
+                                            </p>
+                                        </div>
                                     </div>
                                     <div>
                                         <span class="review-rating">{{ render_stars(review[2]) }}</span>
