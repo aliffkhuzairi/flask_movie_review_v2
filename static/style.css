@@ -1,3 +1,4 @@
+/* =============== IMPORTS AND VARIABLES =============== */
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Megrim&display=swap');
 :root {
     /* Background */
@@ -38,6 +39,7 @@
     --shadow: 0 6px 20px #ffffff66;
 }
 
+/* =============== RESET AND BASE =============== */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -48,7 +50,6 @@ html {
     min-height: 100vh;
 }
 
-/* BODY */
 body {
     font-family: 'Lexend', Helvetica, sans-serif;
     font-size: 16px;
@@ -56,34 +57,141 @@ body {
     color: var(--text-main);
 }
 
-/* CENTER LOGIN PAGE */
-.auth-shell {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* =============== TYPOGRAPHY =============== */
+.small-text,
+.movie-info-value {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin: 5px 0;
 }
 
-/* LOGIN CARD */
-.auth-card {
-    background: var(--bg-surface);
-    color: var(--text-main);
-    height: 70vh;
-    padding: 30px 60px;
-    border-radius: 10px;
-    width: 467px;
-    box-shadow: var(--shadow);
+.empty-state {
+    color: var(--text-muted);
 }
 
-.auth-card h1 {
+.muted {
+    background: none;
+    color: var(--text-muted);
     text-align: center;
-    margin-bottom: 20px;
 }
 
-.auth-card .flash-container {
-    min-height: 60px;
+.info-card h2,
+.review-form-card h2,
+.reviews-card h2,
+.profile-edit-card h2,
+.user-list-card h2,
+.add-update-header h2{
+    margin-bottom: 16px;
+    font-size: 1.5rem;
 }
 
+/* =============== FLASH MESSAGES =============== */
+.flash-container {
+    max-height: 60px;
+}
+
+.flash {
+    text-align: center;
+    padding: 12px 14px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.flash.success {
+    background: var(--success-bg);
+    color: var(--success-text);
+}
+
+.flash.error {
+    background: var(--bg-error);
+    color: var(--bg-error-text);
+}
+
+.flash.warning {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+/* =============== BUTTONS AND LINKS =============== */
+.button-row {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 10px 0;
+}
+
+.button-link {
+    display: inline-block;
+    color: var(--text-main);
+    padding: 10px 12px;
+    min-width: 80px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.11s ease-in-out;
+    text-align: center;
+}
+
+.auth-option {
+    text-decoration: none;
+    color: var(--secondary);
+    transition: color 0.13s ease-in-out;
+}
+
+.auth-option:hover {
+    color: var(--secondary-hover);
+}
+
+.logout {
+    background: var(--danger);
+}
+
+.logout:hover {
+    background: var(--danger-hover);
+}
+
+.primary {
+    background: var(--primary);
+    color: var(--text-main);
+    transition: background 0.13s ease-in-out;
+}
+
+.button-link.primary:hover {
+    background: var(--primary-hover);
+    text-decoration: none;
+}
+
+.button-link.secondary {
+    background: var(--secondary);
+    color: var(--text-dark);
+    transition: background 0.13s ease-in-out;
+}
+
+.button-link.secondary:hover {
+    background: var(--secondary-hover);
+}
+
+.view-more-link {
+    margin-top: auto;
+}
+
+.view-more {
+    text-decoration: none;
+    color: var(--text-muted);
+    transition: color 0.13s ease-in-out;
+}
+
+.view-more:hover {
+    text-decoration: none;
+    color: var(--secondary);
+}
+
+/* =============== FORMS =============== */
 .form-grid {
     display: flex;
     flex-direction: column;
@@ -142,77 +250,18 @@ select option {
     color: var(--text-main);
 }
 
-.auth-option {
-    text-decoration: none;
-    color: var(--secondary);
-    transition: color 0.13s ease-in-out;
-}
-
-.auth-option:hover {
-    color: var(--secondary-hover);
-}
-
-/* FLASH MESSAGES */
-.flash-container {
-    max-height: 60px;
-}
-
-.flash {
-    text-align: center;
-    padding: 12px 14px;
-    border-radius: 5px;
-    margin-bottom: 10px;
-}
-
-.flash.success {
-    background: var(--success-bg);
-    color: var(--success-text);
-}
-
-.flash.error {
-    background: var(--bg-error);
-    color: var(--bg-error-text);
-}
-
-.flash.warning {
-    background: #fef3c7;
-    color: #92400e;
-}
-
-.login {
-    color: #eff6ff;
-}
-
-.button-row {
-    display: flex;
-    align-items: end;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: 10px 0;
-}
-
-.button-link {
-    display: inline-block;
-    color: var(--text-main);
-    padding: 10px 12px;
-    min-width: 80px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.95rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition: background 0.11s ease-in-out;
-    text-align: center;
-}
-
 .form-grid button,
 .auth-card button {
     width: 100%;
 }
 
-/* HEADER */
+.hero-actions form,
+.relation-item form,
+.admin-card form {
+    margin: 0;
+}
+
+/* =============== HEADER AND NAVIGATIONS =============== */
 .header {
     position: fixed;
     top: 0;
@@ -234,6 +283,7 @@ select option {
     justify-content: space-between;
     align-items: center;
 }
+
 .brand {
     font-size: 1.5rem;
     font-family: 'Megrim', 'Lexend', sans-serif;
@@ -307,15 +357,7 @@ header.sticky .brand:hover{
     transition: all 0.3s ease-in-out;
 }
 
-.logout {
-    background: var(--danger);
-}
-
-.logout:hover {
-    background: var(--danger-hover);
-}
-
-/* MAIN SECTION */
+/* =============== LAYOUT HELPERS =============== */
 .page-container {
     max-width: 1300px;
     margin: 60px auto 20px;
@@ -333,14 +375,6 @@ header.sticky .brand:hover{
     scroll-margin-top: 90px;
 }
 
-.movie-container {
-    margin: 24px 0 40px;
-}
-
-.review-container {
-    margin-top: 100px;
-}
-
 .section-head {
     width: 100%;
     padding: 20px 24px;
@@ -355,24 +389,83 @@ header.sticky .brand:hover{
 .detail-head {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 8px 12px;
+    padding: 0 12px;
     margin-bottom: 0;
 }
 
-.view-more-link {
-    margin-top: auto;
+.two-cols-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 24px;
 }
 
-.view-more {
-    text-decoration: none;
-    color: var(--text-muted);
-    transition: color 0.13s ease-in-out;
+.movie-left-column,
+.movie-right-column,
+.profile-left-column,
+.profile-right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-width: 0;
 }
 
-.view-more:hover {
-    text-decoration: none;
-    color: var(--secondary);
+/* =============== AUTH PAGES =============== */
+.auth-shell {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-card {
+    background: var(--bg-surface);
+    color: var(--text-main);
+    height: 70vh;
+    padding: 30px 60px;
+    border-radius: 10px;
+    width: 467px;
+    box-shadow: var(--shadow);
+}
+
+.auth-card h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.auth-card .flash-container {
+    min-height: 60px;
+}
+
+/* =============== SEARCH SECTION ===============*/
+.search-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100px;
+    margin-bottom: 20px;
+}
+
+.search-form {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+}
+
+.search-form input {
+    flex: 1;
+    min-width: 300px;
+}
+
+.search-form button {
+    width: auto;
+    padding: 8px 10px;
+}
+
+
+/* =============== MOVIE LIST AND MOVIE CARDS ===============*/
+.movie-container {
+    margin: 24px 0 40px;
 }
 
 .movie-list {
@@ -448,18 +541,22 @@ header.sticky .brand:hover{
     margin-top: auto;
 }
 
-.small-text,
-.movie-info-value{
-    font-size: 0.88rem;
-    color: var(--text-muted);
-    margin: 5px 0;
+.movie-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    color: var(--text-main);
 }
 
-/* REVIEW CARDS SECTION */
-.home-review-feed .review-card {
-    flex: 1 1 calc(50% - 20px);
-    max-width: calc(50% - 20px);
-    min-height: 200px;
+/* =============== REVIEW LIST AND REVIEW CARDS =============== */
+.review-container {
+    margin-top: 100px;
+}
+
+.review-feed {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
 }
 
 .review-card {
@@ -492,10 +589,20 @@ header.sticky .brand:hover{
     border-bottom: 1px solid transparent;
 }
 
-.review-feed {
+.home-review-feed .review-card {
+    flex: 1 1 calc(50% - 20px);
+    max-width: calc(50% - 20px);
+    min-height: 200px;
+}
+
+.reviews-list {
     display: flex;
-    flex-wrap: wrap;
-    gap: 32px;
+    flex-direction: column;
+}
+
+.reviews-list .review-card {
+    padding: 20px 12px;
+    margin-bottom: 0;
 }
 
 .review-card-top {
@@ -576,6 +683,11 @@ header.sticky .brand:hover{
     color: var(--tag-text);
 }
 
+.review-time {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+}
+
 .review-rating {
     display: inline-block;
     padding: 4px 10px;
@@ -583,9 +695,22 @@ header.sticky .brand:hover{
     white-space: nowrap;
 }
 
+.stars {
+    display: inline-flex;
+    align-items: center;
+}
+
 .review-watch-row {
     margin: 5px 0 10px;
     color: var(--text-muted);
+}
+
+.review-user {
+    font-weight: 500;
+    font-size: 1.1rem;
+    padding-left: 3px;
+    color: #66eaea;
+    text-decoration: none;
 }
 
 .review-text-block {
@@ -598,22 +723,9 @@ header.sticky .brand:hover{
     margin-bottom: 25px;
 }
 
-.review-time {
-    font-size: 0.88rem;
-    color: var(--text-muted);
-}
-
-.stars {
-    display: inline-flex;
-    align-items: center;
-}
-
-.review-user {
-    font-weight: 500;
-    font-size: 1.1rem;
-    padding-left: 3px;
-    color: #66eaea;
-    text-decoration: none;
+.detail-page {
+    max-width: 450px;
+    margin-top: 12px;
 }
 
 .review-text {
@@ -652,65 +764,7 @@ header.sticky .brand:hover{
     background: none;
 }
 
-.empty-state {
-    color: var(--text-muted);
-}
-
-.movie-info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    color: var(--text-main);
-}
-
-.search-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100px;
-    margin-bottom: 20px;
-}
-
-.search-form {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin: 16px 0;
-}
-
-.search-form input {
-    flex: 1;
-    min-width: 300px;
-}
-
-.search-form button {
-    width: auto;
-    padding: 8px 10px;
-}
-
-.primary {
-    background: var(--primary);
-    color: var(--text-main);
-    transition: background 0.13s ease-in-out;
-}
-
-.button-link.primary:hover {
-    background: var(--primary-hover);
-    text-decoration: none;
-}
-
-.button-link.secondary {
-    background: var(--secondary);
-    color: var(--text-dark);
-    transition: background 0.13s ease-in-out;
-}
-
-.button-link.secondary:hover {
-    background: var(--secondary-hover);
-}
-
-
-/* MOVIE PAGE */
+/* =============== MOVIE DETAIL PAGE =============== */
 .movie-hero {
     display: flex;
     justify-content: space-between;
@@ -735,21 +789,11 @@ header.sticky .brand:hover{
     gap: 20px;
 }
 
-.info-page {
-    padding-left: 3px;
-}
-
 .movie-tag-director {
     display: flex;
     justify-content: center;
     gap: 6px;
     flex-wrap: wrap;
-}
-
-.muted {
-    background: none;
-    color: var(--text-muted);
-    text-align: center;
 }
 
 .director {
@@ -776,45 +820,10 @@ header.sticky .brand:hover{
     font-weight: 600;
 }
 
-.two-cols-layout {
-    display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    gap: 24px;
-}
-
-.movie-left-column,
-.movie-right-column,
-.profile-left-column,
-.profile-right-column {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    min-width: 0;
-}
-
-/* MOVIE LEFT COLUMN */
-.info-card {
+.info-card,
+.reviews-card {
     margin: 0;
     box-shadow: none;
-}
-
-.info-card h2,
-.review-form-card h2,
-.reviews-card h2,
-.profile-card h2,
-.list-card h2,
-.add-update-header {
-    margin-bottom: 16px;
-    font-size: 1.5rem;
-}
-
-.admin-card h2 {
-    margin-bottom: 8px;
-    font-size: 1.5rem;
-}
-
-.admin-panel {
-    margin-bottom: 10px;
 }
 
 .info-list {
@@ -854,23 +863,7 @@ header.sticky .brand:hover{
     min-height: 0;
 }
 
-/* MOVIE RIGHT COLUMN */
-.reviews-list {
-    display: flex;
-    flex-direction: column;
-}
-
-.reviews-list .review-card {
-    padding: 20px 12px;
-    margin-bottom: 0;
-}
-
-.detail-page{
-    max-width: 450px;
-    margin-top: 12px;
-}
-
-/* USER PROFILE */
+/* =============== USER PROFILE PAGE =============== */
 .profile-hero {
     display: flex;
     align-items: center;
@@ -887,6 +880,143 @@ header.sticky .brand:hover{
     margin-bottom: 14px;
 }
 
+.hero-actions {
+    display: flex;
+    gap: 10px;
+    width: auto;
+}
+
+.profile-edit-card {
+    margin-bottom: 0;
+}
+
+.profile-edit-card button,
+.admin-card button{
+    margin-top: 10px;
+}
+
+.admin-card .form-grid {
+    margin-top: 18px;
+}
+
+.user-list-card {
+    margin-bottom: 0;
+}
+
+.relation-list {
+    list-style: none;
+    padding: 0;
+    max-width: 380px;
+    margin: 10px 0 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.relation-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--text-main);
+}
+
+.relation-item:last-child {
+    border-bottom: none;
+}
+
+.relation-user {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.id-user {
+    font-size: 1rem;
+    text-decoration: none;
+    color: var(--text-main);
+}
+
+.id-user:hover {
+    color: var(--secondary-hover);
+}
+
+.user-name {
+    color: var(--text-muted);
+}
+
+.relation-item form {
+    margin: 0;
+}
+
+.btn-follow {
+    background: #2563eb;
+    color: white;
+    padding: 6px 8px;
+    font-size: 0.85rem;
+}
+
+.btn-follow:hover {
+    background: #1d4ed8;
+}
+
+.btn-unfollow {
+    background: #dc2626;
+    color: white;
+    padding: 6px 8px;
+    font-size: 0.85rem;
+}
+
+.btn-unfollow:hover {
+    background: #b91c1c;
+}
+
+.btn-mute {
+    background: #6b7280;
+    color: white;
+    padding: 6px 8px;
+    font-size: 0.85rem;
+}
+
+.btn-mute:hover {
+    background: #4b5563;
+}
+
+.btn-unmute {
+    background: #374151;
+    color: white;
+    padding: 6px 8px;
+    font-size: 0.85rem;
+}
+
+.btn-unmute:hover {
+    background: #1f2937;
+}
+
+.admin-card h2 {
+    margin-bottom: 8px;
+    font-size: 1.5rem;
+}
+
+.admin-panel {
+    margin-bottom: 10px;
+}
+
+.delete {
+    margin-top: 14px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.delete button {
+    width: auto;
+    background: var(--danger);
+}
+
+.delete button:hover {
+    background: var(--danger-hover);
+}
+
+/* =============== PAGINATION =============== */
 .pagination {
     display: flex;
     align-items: center;
@@ -937,163 +1067,7 @@ header.sticky .brand:hover{
     color: var(--text-muted);
 }
 
-.delete {
-    margin-top: 14px;
-    display: flex;
-    justify-content: flex-end;
-}
-
-.delete button {
-    width: auto;
-    background: var(--danger);
-}
-
-.delete button:hover {
-    background: var(--danger-hover);
-}
-
-.action-card .button-row form,
-.admin-card form {
-    margin: 0;
-}
-
-.hero-actions {
-    display: flex;
-    gap: 10px;
-}
-
-.hero-actions form {
-    margin: 0;
-}
-
-.hero-actions .button-row,
-.hero-actions {
-    width: auto;
-}
-
-.profile-card {
-    margin-bottom: 0;
-}
-
-.profile-card button,
-.admin-card button{
-    margin-top: 10px;
-}
-
-.action-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 0;
-}
-
-.action-card .button-row {
-    margin-top: 12px;
-}
-
-.admin-card .form-grid {
-    margin-top: 18px;
-}
-
-.list-card {
-    margin-bottom: 0;
-}
-
-.btn-follow {
-    background: #2563eb;
-    color: white;
-    padding: 6px 8px;
-    font-size: 0.85rem;
-}
-
-.btn-follow:hover {
-    background: #1d4ed8;
-}
-
-.btn-unfollow {
-    background: #dc2626;
-    color: white;
-    padding: 6px 8px;
-    font-size: 0.85rem;
-}
-
-.btn-unfollow:hover {
-    background: #b91c1c;
-}
-
-.btn-mute {
-    background: #6b7280;
-    color: white;
-    padding: 6px 8px;
-    font-size: 0.85rem;
-}
-
-.btn-mute:hover {
-    background: #4b5563;
-}
-
-.btn-unmute {
-    background: #374151;
-    color: white;
-    padding: 6px 8px;
-    font-size: 0.85rem;
-}
-
-.btn-unmute:hover {
-    background: #1f2937;
-}
-
-.relation-list {
-    list-style: none;
-    padding: 0;
-    max-width: 380px;
-    margin: 10px 0 0;
-    display: flex;
-    flex-direction: column;
-}
-
-.relation-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--text-main);
-}
-
-.relation-item:last-child {
-    border-bottom: none;
-}
-
-.relation-user {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.id-user {
-    font-size: 1rem;
-    text-decoration: none;
-    color: var(--text-main);
-}
-
-.user-name {
-    color: var(--text-muted);
-}
-
-.id-user:hover {
-    color: var(--secondary-hover);
-}
-
-.relation-item form {
-    margin: 0;
-}
-
-.relation-item button {
-    width: auto;
-    padding: 8px 12px;
-}
-
+/* =============== MEDIA QUERIES =============== */
 @media (max-width: 1200px) {
 
     .movie-list {
@@ -1123,13 +1097,17 @@ header.sticky .brand:hover{
         flex-direction: column;
     }
 
-    .review-card-top {
+    .reviews-list .review-card-top {
         display: block;
     }
 
-    .review-rating {
+    .reviews-list .review-rating {
         margin: 16px 0 8px;
         padding: 0;
+    }
+
+    .reviews-card .button-row {
+        justify-content: flex-start;
     }
 }
 
@@ -1210,13 +1188,17 @@ header.sticky .brand:hover{
         padding: 0 12px;
     }
 
-    .review-card-top {
-        display: flex;
-    }
-
     .home-review-feed .review-card {
         flex: 1 1 100%;
         max-width: 100%;
+    }
+
+    .home-review-feed .review-card-top {
+        display: flex;
+    }
+
+    .home-review-feed .review-rating {
+        display: flex;
     }
 
     .movie-list {
@@ -1272,7 +1254,8 @@ header.sticky .brand:hover{
 
     .home-review-feed .review-rating {
         width: 100%;
-        margin-top: 6px;
+        margin: 8px 0;
+        padding: 0;
     }
 }
 

@@ -48,7 +48,7 @@
             <!-- MOVIE LIST -->
             <div class="movie-list">
                 {% for movie in movies %}
-                <a href="{{ url_for('movie.movie_detail', movie_id=movie[0]) }}" class="movie-card">
+                <a class="movie-card" href="{{ url_for('movie.movie_detail', movie_id=movie[0]) }}" >
 
                     <div class="movie-card-top">
                         <span class="genre-tag">{{ movie[3] }}</span>
@@ -56,7 +56,6 @@
                     </div>
 
                     <div class="movie-card-body">
-
                         <div class="movie-info">
                             <p><strong>Director</strong></p>
                             <p class="movie-info-value">{{ movie[2] }}</p>
@@ -114,7 +113,7 @@
                         </div>
 
                         <div class="review-watch-row">
-                            <p class="watch">Watched by
+                            <p>Watched by
                                 <a class="review-user" href="{{ url_for('user.user_detail', user_id=review[3]) }}">
                                     {{ review[3] }}
                                 </a>

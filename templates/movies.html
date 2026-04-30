@@ -32,7 +32,7 @@
 
         <!-- SEARCH BAR -->
         <section class="search-section">
-            <form action="{{ url_for('movie.movie_list') }}" method="GET" class="search-form">
+            <form class="search-form" action="{{ url_for('movie.movie_list') }}" method="GET">
                 <input
                     type="text"
                     name="search"
@@ -53,56 +53,57 @@
 
         </section>
 
-        <!-- MOVIES META AND SORT BUTTONS -->
-        <div class="section-head">
-            <div>
-                <h1>All Movies</h1>
-                <p class="small-text">Browse all full movie list</p>
+        <section id="movies" class="movie-container">
+
+            <!-- MOVIES META AND SORT BUTTONS -->
+            <div class="section-head">
+                <div>
+                    <h1>All Movies</h1>
+                    <p class="small-text">Browse all full movie list</p>
+                </div>
+
+                <div class="button-row">
+                    <a class="button-link {{ 'primary' if movie_sort == 'latest' else 'secondary' }}"
+                       href="{{ url_for(
+                            'movie.movie_list',
+                            movie_sort='latest',
+                            movie_sort_dir='asc' if movie_sort == 'latest' and movie_sort_dir == 'desc' else 'desc',
+                            search=search
+                       ) }}">
+                        Latest
+                        {% if movie_sort == 'latest' %}
+                            {{ '↓' if movie_sort_dir == 'desc' else '↑' }}
+                        {% endif %}
+                    </a>
+
+                    <a class="button-link {{ 'primary' if movie_sort == 'title' else 'secondary' }}"
+                       href="{{ url_for(
+                            'movie.movie_list',
+                            movie_sort='title',
+                            movie_sort_dir='asc' if movie_sort == 'title' and movie_sort_dir == 'desc' else 'desc',
+                            search=search
+                       ) }}">
+                        Title
+                        {% if movie_sort == 'title' %}
+                            {{ '↓' if movie_sort_dir == 'desc' else '↑' }}
+                        {% endif %}
+                    </a>
+
+                    <a class="button-link {{ 'primary' if movie_sort == 'genre' else 'secondary' }}"
+                       href="{{ url_for(
+                            'movie.movie_list',
+                            movie_sort='genre',
+                            movie_sort_dir='asc' if movie_sort == 'genre' and movie_sort_dir == 'desc' else 'desc',
+                            search=search
+                       ) }}">
+                        Genre
+                        {% if movie_sort == 'genre' %}
+                            {{ '↓' if movie_sort_dir == 'desc' else '↑' }}
+                        {% endif %}
+                    </a>
+                </div>
             </div>
 
-            <div class="button-row">
-                <a class="button-link {{ 'primary' if movie_sort == 'latest' else 'secondary' }}"
-                   href="{{ url_for(
-                        'movie.movie_list',
-                        movie_sort='latest',
-                        movie_sort_dir='asc' if movie_sort == 'latest' and movie_sort_dir == 'desc' else 'desc',
-                        search=search
-                   ) }}">
-                    Latest
-                    {% if movie_sort == 'latest' %}
-                        {{ '↓' if movie_sort_dir == 'desc' else '↑' }}
-                    {% endif %}
-                </a>
-
-                <a class="button-link {{ 'primary' if movie_sort == 'title' else 'secondary' }}"
-                   href="{{ url_for(
-                        'movie.movie_list',
-                        movie_sort='title',
-                        movie_sort_dir='asc' if movie_sort == 'title' and movie_sort_dir == 'desc' else 'desc',
-                        search=search
-                   ) }}">
-                    Title
-                    {% if movie_sort == 'title' %}
-                        {{ '↓' if movie_sort_dir == 'desc' else '↑' }}
-                    {% endif %}
-                </a>
-
-                <a class="button-link {{ 'primary' if movie_sort == 'genre' else 'secondary' }}"
-                   href="{{ url_for(
-                        'movie.movie_list',
-                        movie_sort='genre',
-                        movie_sort_dir='asc' if movie_sort == 'genre' and movie_sort_dir == 'desc' else 'desc',
-                        search=search
-                   ) }}">
-                    Genre
-                    {% if movie_sort == 'genre' %}
-                        {{ '↓' if movie_sort_dir == 'desc' else '↑' }}
-                    {% endif %}
-                </a>
-            </div>
-        </div>
-
-        <section id="movies" class="movies-page">
 
             <!-- MOVIES LIST -->
             {% if movies %}

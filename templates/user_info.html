@@ -110,7 +110,6 @@
 
                         {% if session['user_role'] == 'admin' %}
                         <div class="info-item">
-
                             <span class="info-label">Role</span>
                             <span class="info-value">{{ user_info[1] }}</span>
                         </div>
@@ -127,7 +126,7 @@
 
                 <!-- EDIT PROFILE (SELF ONLY) -->
                 {% if is_self %}
-                <div class="card profile-card">
+                <div class="card profile-edit-card">
                     <h2>Edit Profile</h2>
 
                      <div class="flash-container">
@@ -140,14 +139,14 @@
                          {% endwith %}
                      </div>
 
-                    <form action="{{ url_for('user.edit_user_profile', user_id=user_info[0]) }}" method="POST" class="form-grid">
+                    <form class="form-grid" action="{{ url_for('user.edit_user_profile', user_id=user_info[0]) }}" method="POST">
 
-                        <label>Name</label>
-                        <input name="name" type="text"
+                        <label for="name">Name</label>
+                        <input id="name" name="name" type="text"
                                value="{{ '' if clear_form else (user_info[2] or '') }}">
 
-                        <label>Email</label>
-                        <input name="email" type="email"
+                        <label for="email">Email</label>
+                        <input id="email" name="email" type="email"
                                value="{{ '' if clear_form else (user_info[3] or '') }}">
 
                         <button type="submit" class="button-link primary">Update Profile</button>
@@ -158,13 +157,12 @@
 
                 <!--  FOLLOWED AND MUTED USERS  -->
                 {% if is_self and not is_current_user_admin %}
-                    <div class="card list-card">
 
-
-                        <!--  FOLLOWED USERS  -->
+                    <!--  FOLLOWED USERS  -->
+                    <div class="card user-list-card">
                         <h2>Followed Users
                             {% if followed_count > 0 %}
-                            <span class="count-badge">({{ followed_count }})</span>
+                            <span>({{ followed_count }})</span>
                             {% endif %}
                         </h2>
 
@@ -174,7 +172,7 @@
                                 {% for followed in followed_users[:5] %}
                                 <li class="relation-item">
                                     <div class="relation-user">
-                                        <a href="{{ url_for('user.user_detail', user_id=followed[0]) }}" class="id-user">
+                                        <a class="id-user" href="{{ url_for('user.user_detail', user_id=followed[0]) }}">
                                             {{ followed[0] }}
                                         </a>
                                         {% if followed[1] %}
@@ -202,7 +200,7 @@
                     <div class="card list-card">
                         <h2>Muted Users
                             {% if muted_count > 0 %}
-                            <span class="count-badge">({{ muted_count }})</span>
+                            <span>({{ muted_count }})</span>
                             {% endif %}
                         </h2>
 
@@ -253,7 +251,7 @@
                         </div>
 
 
-                        <form action="{{ url_for('user.add_movie') }}" method="POST" class="form-grid">
+                        <form class="form-grid" action="{{ url_for('user.add_movie') }}" method="POST">
 
                             <label for="movie_title">Title</label>
                             <input id="movie_title" name="movie_title" type="text" required>
@@ -309,7 +307,6 @@
                         </div>
                     </div>
 
-
                     {% if user_reviews %}
                     <div class="reviews-list">
                         {% for review in user_reviews %}
@@ -342,8 +339,8 @@
                                 </div>
 
                                 {% if is_self %}
-                                <form action="{{ url_for('user.delete_review', movie_id=review[0]) }}" method="POST"
-                                      onsubmit="return confirm('This action cannot be undone. Delete review?');" class="delete">
+                                <form class="delete" action="{{ url_for('user.delete_review', movie_id=review[0]) }}" method="POST"
+                                      onsubmit="return confirm('This action cannot be undone. Delete review?');">
                                     <button type="submit" class="button-link logout">Delete</button>
                                 </form>
                                 {% endif %}
@@ -386,15 +383,7 @@
                         </span>
                     </div>
                     {% endif %}
-
-                    <div class="page-number">
-
-                    </div>
-
                 </div>
-
-
-
             </div>
         </section>
     </main>
