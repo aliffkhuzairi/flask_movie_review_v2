@@ -63,7 +63,18 @@ def user_detail(user_id):
         """, (user_id,))
 
         total_reviews = cur.fetchone()[0]
-        total_pages = (total_reviews + per_page - 1) //  per_page
+        total_pages = (total_reviews + per_page - 1) // per_page
+        pages = []
+
+        if total_pages < 5:
+            pages = list(range(1, total_pages + 1))
+        else:
+            if page <= 3:
+                pages = [1, 2, 3, '...', total_pages]
+            elif page >= total_pages - 2:
+                pages = [1, "...", total_pages - 2, total_pages - 1, total_pages]
+            else:
+                pages = [1, "...", page - 1, page, page + 1, "...", total_pages]
 
         # ROLE DIFFERENTIATION
         is_self = user_id == session["user_id"]
@@ -121,6 +132,7 @@ def user_detail(user_id):
                            page=page,
                            review_sort=review_sort,
                            total_pages=total_pages,
+                           pages=pages,
                            is_self=is_self,
                            is_admin_profile=is_admin_profile,
                            is_current_user_admin=is_current_user_admin,

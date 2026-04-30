@@ -876,8 +876,50 @@ header.sticky .brand:hover{
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    margin-top: 18px;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.page-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 4px;
+    transition: color 0.15s;
+}
+
+.page-nav:hover {
+    color: var(--secondary);
+}
+
+.page-nav i {
+    font-size: 1rem;
+}
+
+.page-num {
+    color: var(--text-main);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 2px 4px;
+    transition: color 0.15s;
+}
+
+.page-num:hover {
+    color: var(--secondary);
+}
+
+.page-num.active {
+    font-weight: 700;
+    color: var(--secondary-hover);
+
+}
+
+.ellipsis {
+    color: var(--text-muted);
 }
 
 .delete {

@@ -355,26 +355,43 @@
                     {% if total_pages > 1 %}
                     <div class="pagination">
                         {% if page > 1 %}
-                            <a class="button-link secondary"
+                            <a class="page-nav"
                                href="{{ url_for('user.user_detail', user_id=user_info[0], page=page-1) }}">
-                                Previous
+                                <i class="fa-solid fa-chevron-left"></i>
                             </a>
                         {% endif %}
 
+                        {% for p in pages %}
+                            {% if p == "..." %}
+                                <p class="ellipsis">...</p>
+                            {% else %}
+                                <a class="page-num {% if p == page %}active{% endif %}"
+                                   href="{{ url_for('user.user_detail', user_id=user_info[0], page=p) }}">
+                                    {{ p }}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if page < total_pages %}
+                            <a class="page-nav"
+                               href="{{ url_for('user.user_detail', user_id=user_info[0], page=page+1) }}" >
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </a>
+                        {% endif %}
                         <span class="small-text">
                             Page {{ page }} of {{ total_pages }}
                         </span>
-
-                        {% if page < total_pages %}
-                            <a class="button-link secondary"
-                               href="{{ url_for('user.user_detail', user_id=user_info[0], page=page+1) }}" >
-                                Next
-                            </a>
-                        {% endif %}
-
                     </div>
                     {% endif %}
+
+                    <div class="page-number">
+
+                    </div>
+
                 </div>
+
+
+
             </div>
         </section>
     </main>
