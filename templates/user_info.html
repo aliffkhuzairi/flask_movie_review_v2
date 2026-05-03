@@ -309,6 +309,16 @@
 
                     {% if user_reviews %}
                     <div class="reviews-list">
+                        {% if total_reviews > 0 %}
+                            <p class="small-text">
+                                Showing {{ start_reviews }} – {{ end_reviews }} of {{ total_reviews }}
+                                review{{ '' if total_reviews == 1 else 's' }}
+                            </p>
+                        {% else %}
+                            <p class="small-text">
+                                No reviews found.
+                            </p>
+                        {% endif %}
                         {% for review in user_reviews %}
                             <div class="review-card">
                                 <div class="review-card-top">

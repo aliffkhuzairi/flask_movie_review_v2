@@ -87,6 +87,9 @@ def movie_list():
             page = total_pages
             offset = (page - 1) * per_page
 
+        start_movie = offset + 1 if total_movies > 0 else 0
+        end_movie = min(offset + per_page, total_movies)
+
         # FETCH MOVIE FROM CURENT PAGE
         if movie_sort == "genre":
             cur.execute(f"""
@@ -120,6 +123,7 @@ def movie_list():
             else:
                 pages = [1, "...", page - 1, page, page + 1, "...", total_pages]
 
+
     return render_template("movies.html",
                            movies=movies,
                            movie_sort=movie_sort,
@@ -128,6 +132,9 @@ def movie_list():
                            page=page,
                            pages=pages,
                            total_pages=total_pages,
+                           start_movie=start_movie,
+                           end_movie=end_movie,
+                           total_movies=total_movies,
                            user_id=session["user_id"])
 
 @movie_bp.route("/movies/<int:movie_id>", methods=["GET", "POST"])
@@ -168,7 +175,15 @@ def movie_detail(movie_id):
 
         return redirect(url_for("movie.movie_detail", movie_id=movie_id))
 
+    # REVIEWS PAGINATION
     review_sort = request.args.get("review_sort", "latest").strip()
+    page = request.args.get("page", 1, type=int)
+    per_page = 5
+
+    if page < 1:
+        page = 1
+
+    offset = (page - 1) * per_page
 
     sort_review = ["latest", "highest", "lowest"]
 
@@ -195,15 +210,6 @@ def movie_detail(movie_id):
         if movie is None:
             return "Movie not found", 404
 
-        # REVIEWS PAGINATION
-        page = request.args.get("page", 1, type=int)
-        per_page = 5
-
-        if page < 1:
-            page = 1
-
-        offset = (page - 1) * per_page
-
         # GET TOTAL REVIEWS
         cur.execute("""
             select count(*)
@@ -221,6 +227,9 @@ def movie_detail(movie_id):
         if total_pages > 0 and page > total_pages:
             page = total_pages
             offset = (page - 1) * per_page
+
+        start_reviews = offset + 1 if total_reviews > 0 else 0
+        end_reviews = min(offset + per_page, total_reviews)
 
         # GET PAGINATED REVIEWS
         cur.execute(f"""
@@ -276,6 +285,9 @@ def movie_detail(movie_id):
                            page=page,
                            total_pages=total_pages,
                            pages=pages,
+                           total_reviews=total_reviews,
+                           start_reviews=start_reviews,
+                           end_reviews=end_reviews,
                            avg_rating=avg_rating,
                            user_review=user_review,
                            user_id=session["user_id"])

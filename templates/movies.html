@@ -61,6 +61,17 @@
                 <div>
                     <h1>All Movies</h1>
                     <p class="small-text">Browse all full movie list</p>
+                    {% if total_movies > 0 %}
+                        <p class="small-text">
+                            Showing {{ start_movie }} – {{ end_movie }} of {{ total_movies }}
+                            movie{{ '' if total_movies == 1 else 's' }}
+                            {% if search %} for "{{ search }}"{% endif %}
+                        </p>
+                    {% else %}
+                        <p class="small-text">
+                            No movies found{% if search %} for "{{ search }}"{% endif %}.
+                        </p>
+                    {% endif %}
                 </div>
 
                 <div class="button-row">

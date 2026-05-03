@@ -64,6 +64,9 @@ def user_detail(user_id):
 
         total_reviews = cur.fetchone()[0]
         total_pages = (total_reviews + per_page - 1) // per_page
+        start_reviews = offset + 1 if total_reviews > 0 else 0
+        end_reviews = min(offset + per_page, total_reviews)
+
         pages = []
 
         if total_pages < 5:
@@ -132,6 +135,9 @@ def user_detail(user_id):
                            page=page,
                            review_sort=review_sort,
                            total_pages=total_pages,
+                           total_reviews=total_reviews,
+                           start_reviews=start_reviews,
+                           end_reviews=end_reviews,
                            pages=pages,
                            is_self=is_self,
                            is_admin_profile=is_admin_profile,
