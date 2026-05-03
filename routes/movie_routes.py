@@ -61,32 +61,73 @@ def movie_list():
 
     search_pattern = f"%{search}%"
 
+    # MOVIE PAGINATION
+    page = request.args.get("page", 1, type=int)
+    per_page = 15
+
+    if page < 1:
+        page = 1
+
+    offset = (page - 1) * per_page
+
     with db_cursor() as cur:
+        # COUNT TOTAL MOVIES AFTER SEARCH
+        cur.execute("""
+            select count(*)
+            from movies
+            where title ilike %s
+            or director ilike %s
+            or genre ilike %s;
+        """, (search_pattern, search_pattern, search_pattern))
+
+        total_movies = cur.fetchone()[0]
+        total_pages = (total_movies + per_page - 1) // per_page
+
+        if total_pages > 0 and page > total_pages:
+            page = total_pages
+            offset = (page - 1) * per_page
+
+        # FETCH MOVIE FROM CURENT PAGE
         if movie_sort == "genre":
             cur.execute(f"""
-                select id, title, director, genre, rel_date
-                from movies
-                where title ilike %s
-                or director ilike %s or genre ilike %s
-                order by {order_column} {movie_sort_dir}, title asc;
-            """, (search_pattern, search_pattern, search_pattern))
+               select id, title, director, genre, rel_date
+               from movies
+               where title ilike %s
+               or director ilike %s or genre ilike %s
+               order by {order_column} {movie_sort_dir}, title asc
+               limit %s offset %s;
+           """, (search_pattern, search_pattern, search_pattern, per_page, offset))
 
         else:
             cur.execute(f"""
-                select id, title, director, genre, rel_date
-                from movies
-                where title ilike %s
-                or director ilike %s or genre ilike %s
-                order by {order_column} {movie_sort_dir};
-            """,(search_pattern, search_pattern, search_pattern))
+               select id, title, director, genre, rel_date
+               from movies
+               where title ilike %s
+               or director ilike %s or genre ilike %s
+               order by {order_column} {movie_sort_dir}
+               limit %s offset %s;
+           """,(search_pattern, search_pattern, search_pattern, per_page, offset))
 
         movies = cur.fetchall()
+
+        if total_pages <= 5:
+            pages = list(range(1, total_pages + 1))
+        else:
+            if page <= 3:
+                pages = [1, 2, 3, "...", total_pages]
+            elif page >= total_pages - 2:
+                pages = [1, "...", total_pages - 2, total_pages - 1, total_pages]
+            else:
+                pages = [1, "...", page - 1, page, page + 1, "...", total_pages]
 
     return render_template("movies.html",
                            movies=movies,
                            movie_sort=movie_sort,
                            movie_sort_dir=movie_sort_dir,
                            search=search,
+                           page=page,
+                           pages=pages,
+                           total_pages=total_pages,
                            user_id=session["user_id"])
 
 @movie_bp.route("/movies/<int:movie_id>", methods=["GET", "POST"])

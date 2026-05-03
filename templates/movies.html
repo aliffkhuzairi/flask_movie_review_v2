@@ -43,6 +43,7 @@
 
                 <input type="hidden" name="movie_sort" value="{{ movie_sort }}">
                 <input type="hidden" name="movie_sort_dir" value="{{ movie_sort_dir }}">
+                <input type="hidden" name="page" value="1">
 
                 <button type="submit" class="button-link primary">Search</button>
 
@@ -68,7 +69,8 @@
                             'movie.movie_list',
                             movie_sort='latest',
                             movie_sort_dir='asc' if movie_sort == 'latest' and movie_sort_dir == 'desc' else 'desc',
-                            search=search
+                            search=search,
+                            page=1
                        ) }}">
                         Latest
                         {% if movie_sort == 'latest' %}
@@ -81,7 +83,8 @@
                             'movie.movie_list',
                             movie_sort='title',
                             movie_sort_dir='asc' if movie_sort == 'title' and movie_sort_dir == 'desc' else 'desc',
-                            search=search
+                            search=search,
+                            page=1
                        ) }}">
                         Title
                         {% if movie_sort == 'title' %}
@@ -94,7 +97,8 @@
                             'movie.movie_list',
                             movie_sort='genre',
                             movie_sort_dir='asc' if movie_sort == 'genre' and movie_sort_dir == 'desc' else 'desc',
-                            search=search
+                            search=search,
+                            page=1
                        ) }}">
                         Genre
                         {% if movie_sort == 'genre' %}
@@ -133,9 +137,62 @@
                 {% endfor %}
             </div>
 
+            {% if total_pages > 1 %}
+            <div class="pagination">
+                {% if page > 1 %}
+                    <a class="page-nav"
+                       href="{{ url_for(
+                            'movie.movie_list',
+                            page=page-1,
+                            movie_sort=movie_sort,
+                            movie_sort_dir=movie_sort_dir,
+                            search=search
+                       ) }}">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </a>
+                {% endif %}
+
+                {% for p in pages %}
+                    {% if p == "..." %}
+                        <p class="ellipsis">...</p>
+                    {% else %}
+                        <a class="page-num {% if p == page %}active{% endif %}"
+                           href="{{ url_for(
+                                'movie.movie_list',
+                                page=p,
+                                movie_sort=movie_sort,
+                                movie_sort_dir=movie_sort_dir,
+                                search=search
+                           ) }}">
+                            {{ p }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page < total_pages %}
+                    <a class="page-nav"
+                       href="{{ url_for(
+                            'movie.movie_list',
+                            page=page+1,
+                            movie_sort=movie_sort,
+                            movie_sort_dir=movie_sort_dir,
+                            search=search
+                       ) }}">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+                {% endif %}
+
+                <span class="small-text">
+                    Page {{ page }} of {{ total_pages }}
+                </span>
+            </div>
+            {% endif %}
+
             {% else %}
                 <p class="empty-state">No movies available.</p>
             {% endif %}
+
+
 
         </section>
     </main>
