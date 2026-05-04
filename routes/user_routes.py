@@ -1,5 +1,5 @@
 from flask import render_template, request, redirect, url_for, flash, session, Blueprint
-from utils import login_required, is_valid_email
+from utils import login_required, is_valid_email, get_page, build_pagination
 from db import db_cursor
 
 ALLOWED_GENRES = {"action", "comedy", "drama", "fantasy", "romance", "thriller", "western"}
@@ -40,15 +40,6 @@ def user_detail(user_id):
         if user_info is None:
             return "User not found", 404
 
-        # REVIEWS PAGINATION
-        page = request.args.get("page", 1, type=int)
-        per_page = 5
-
-        if page < 1:
-            page = 1
-
-        offset = (page - 1) * per_page
-
         # GET TOTAL REVIEWS
         cur.execute("""
             select count(*)
@@ -57,14 +48,13 @@ def user_detail(user_id):
         """,(user_id,))
 
         total_reviews = cur.fetchone()[0]
-        total_pages = (total_reviews + per_page - 1) // per_page
 
-        if total_pages > 0 and page > total_pages:
-            page = total_pages
-            offset = (page - 1) * per_page
-
-        start_reviews = offset + 1 if total_reviews > 0 else 0
-        end_reviews = min(offset + per_page, total_reviews)
+        # USER REVIEWS PAGINATION
+        page = get_page(request)
+        per_page = 5
+        pagination = build_pagination(total_reviews, page, per_page)
+        page = pagination["page"]
+        offset = pagination["offset"]
 
         # FETCH PAGINATED REVIEWS
         cur.execute(f"""
@@ -77,17 +67,6 @@ def user_detail(user_id):
         """,(user_id, per_page, offset))
 
         user_reviews = cur.fetchall()
-        pages = []
-        
-        if total_pages < 5:
-            pages = list(range(1, total_pages + 1))
-        else:
-            if page <= 3:
-                pages = [1, 2, 3, '...', total_pages]
-            elif page >= total_pages - 2:
-                pages = [1, "...", total_pages - 2, total_pages - 1, total_pages]
-            else:
-                pages = [1, "...", page - 1, page, page + 1, "...", total_pages]
 
         # ROLE DIFFERENTIATION
         is_self = user_id == session["user_id"]
@@ -109,7 +88,6 @@ def user_detail(user_id):
         """, (user_id,))
 
         followed_users = cur.fetchall()
-
 
         if is_self:
 
@@ -142,13 +120,13 @@ def user_detail(user_id):
                            user_info=user_info,
                            user_reviews=user_reviews,
                            user_id=session["user_id"],
-                           page=page,
                            review_sort=review_sort,
-                           total_pages=total_pages,
                            total_reviews=total_reviews,
-                           start_reviews=start_reviews,
-                           end_reviews=end_reviews,
-                           pages=pages,
+                           pages=pagination["pages"],
+                           page=pagination["page"],
+                           total_pages=pagination["total_pages"],
+                           start_reviews=pagination["start_item"],
+                           end_reviews=pagination["end_item"],
                            is_self=is_self,
                            is_admin_profile=is_admin_profile,
                            is_current_user_admin=is_current_user_admin,

@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, session, flash, request
 from db import db_cursor
-from utils import login_required, is_valid_rating
+from utils import login_required, is_valid_rating, get_page, build_pagination
 import math
 
 movie_bp = Blueprint("movie", __name__)
@@ -61,15 +61,6 @@ def movie_list():
 
     search_pattern = f"%{search}%"
 
-    # MOVIE PAGINATION
-    page = request.args.get("page", 1, type=int)
-    per_page = 15
-
-    if page < 1:
-        page = 1
-
-    offset = (page - 1) * per_page
-
     with db_cursor() as cur:
         # COUNT TOTAL MOVIES AFTER SEARCH
         cur.execute("""
@@ -81,14 +72,13 @@ def movie_list():
         """, (search_pattern, search_pattern, search_pattern))
 
         total_movies = cur.fetchone()[0]
-        total_pages = (total_movies + per_page - 1) // per_page
 
-        if total_pages > 0 and page > total_pages:
-            page = total_pages
-            offset = (page - 1) * per_page
-
-        start_movie = offset + 1 if total_movies > 0 else 0
-        end_movie = min(offset + per_page, total_movies)
+        # MOVIE PAGINATION
+        page = get_page(request)
+        per_page = 15
+        pagination = build_pagination(total_movies, page, per_page)
+        page = pagination["page"]
+        offset = pagination["offset"]
 
         # FETCH MOVIE FROM CURENT PAGE
         if movie_sort == "genre":
@@ -113,27 +103,16 @@ def movie_list():
 
         movies = cur.fetchall()
 
-        if total_pages <= 5:
-            pages = list(range(1, total_pages + 1))
-        else:
-            if page <= 3:
-                pages = [1, 2, 3, "...", total_pages]
-            elif page >= total_pages - 2:
-                pages = [1, "...", total_pages - 2, total_pages - 1, total_pages]
-            else:
-                pages = [1, "...", page - 1, page, page + 1, "...", total_pages]
-
-
     return render_template("movies.html",
                            movies=movies,
                            movie_sort=movie_sort,
                            movie_sort_dir=movie_sort_dir,
                            search=search,
-                           page=page,
-                           pages=pages,
-                           total_pages=total_pages,
-                           start_movie=start_movie,
-                           end_movie=end_movie,
+                           page=pagination["page"],
+                           pages=pagination["pages"],
+                           total_pages=pagination["total_pages"],
+                           start_movie=pagination["start_item"],
+                           end_movie=pagination["end_item"],
                            total_movies=total_movies,
                            user_id=session["user_id"])
 
@@ -175,15 +154,7 @@ def movie_detail(movie_id):
 
         return redirect(url_for("movie.movie_detail", movie_id=movie_id))
 
-    # REVIEWS PAGINATION
     review_sort = request.args.get("review_sort", "latest").strip()
-    page = request.args.get("page", 1, type=int)
-    per_page = 5
-
-    if page < 1:
-        page = 1
-
-    offset = (page - 1) * per_page
 
     sort_review = ["latest", "highest", "lowest"]
 
@@ -222,14 +193,13 @@ def movie_detail(movie_id):
         """,(movie_id, session["user_id"]))
 
         total_reviews = cur.fetchone()[0]
-        total_pages = math.ceil(total_reviews + per_page - 1) // per_page
 
-        if total_pages > 0 and page > total_pages:
-            page = total_pages
-            offset = (page - 1) * per_page
-
-        start_reviews = offset + 1 if total_reviews > 0 else 0
-        end_reviews = min(offset + per_page, total_reviews)
+        # MOVIE REVIEWS PAGINATION
+        page = get_page(request)
+        per_page = 5
+        pagination = build_pagination(total_reviews, page, per_page)
+        page = pagination["page"]
+        offset = pagination["offset"]
 
         # GET PAGINATED REVIEWS
         cur.execute(f"""
@@ -245,18 +215,6 @@ def movie_detail(movie_id):
         """, (movie_id, session["user_id"], per_page, offset))
 
         reviews = cur.fetchall()
-
-        pages = []
-
-        if total_pages < 5:
-            pages = list(range(1, total_pages + 1))
-        else:
-            if page <= 3:
-                pages = [1, 2, 3, '...', total_pages]
-            elif page >= total_pages - 2:
-                pages = [1, "...", total_pages - 2, total_pages - 1, total_pages]
-            else:
-                pages = [1, "...", page - 1, page, page + 1, "...", total_pages]
 
         cur.execute("""
             select trunc(avg(r.ratings), 2)
@@ -283,11 +241,11 @@ def movie_detail(movie_id):
                            reviews=reviews,
                            review_sort=review_sort,
                            page=page,
-                           total_pages=total_pages,
-                           pages=pages,
                            total_reviews=total_reviews,
-                           start_reviews=start_reviews,
-                           end_reviews=end_reviews,
+                           total_pages=pagination["total_pages"],
+                           pages=pagination["pages"],
+                           start_reviews=pagination["start_item"],
+                           end_reviews=pagination["end_item"],
                            avg_rating=avg_rating,
                            user_review=user_review,
                            user_id=session["user_id"])
