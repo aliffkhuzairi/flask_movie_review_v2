@@ -32,26 +32,32 @@ The project focuses on backend CRUD, PostgreSQL relationships, authentication, r
 - User sign up and login
 - Password hashing for new accounts
 - Session-based authentication
+- Protected route for logged-in users
 - Role-based admin access
 
 ### Movies
 - Browse all movies
-- Search by title, director, or genre
-- Sort by latest, title, and genre
+- Search movies by title, director, or genre
+- Sort movies by latest, title, and genre
+- Paginated movie list
+- Result summary such as `Showing 1 – 15 of 21 movies`
 - Admin can add new movies
 - Duplicate movie handling
 
 ### Reviews
 - Add, update, and delete reviews
 - Rating validation from 0 to 5
-- Relative time display such as `5m`, `1h`, and `23y`
-- Review sorting by latest, highest, and lowest rating
-- Review pagination on profile pages
+- Relative time display such as `5m`, `1h`, and `2d`
+- Sort reviews by latest, highest rating, and lowest rating
+- Paginated reviews on user profile pages
+- Paginated reviews on movie detail pages
+- Review count summary such as `Showing 1 – 5 of 12 reviews`
 
 ### User Profiles
 - View user information
 - Edit name and email
 - View review history
+- Sort user reviews
 - View followed users
 - Muted users are private to the current user
 
@@ -60,13 +66,20 @@ The project focuses on backend CRUD, PostgreSQL relationships, authentication, r
 - Mute users to hide their reviews
 - Prevent users from following or muting themselves
 - Prevent follow/mute actions on admin profiles
+- Hide reviews from muted users on home and movie detail pages
+
+## Admin Features
+- Add new movies
+- Admin-only role checks
+- Admin profile protection from follow/mute actions
 
 ### UI/UX
 - Dark theme
-- Responsive layout
+- Responsive layout for desktop, tablet, and mobile
 - Mobile navigation toggle
 - Font Awesome icons
 - Card-based movie and review layout
+- Anchor navigation for review sorting on smaller screens
 
 ---
 
@@ -99,6 +112,7 @@ The app uses PostgreSQL with relational tables for:
 Key relationships:
 - A user can review a movie once.
 - A user can follow or mute another user.
+- Muted users’ reviews are hidden from the current user.
 - Movies use auto-generated integer IDs.
 
 ---
@@ -227,8 +241,10 @@ http://127.0.0.1:5000
 
 - Database credentials are loaded from environment variables.
 - Passwords are hashed for new users.
-- SQL queries use parameterized statements.
+- SQL queries use parameterized values.
+- Dynamic sort values are restricted through allowlists.
 - Admin-only features are protected by role checks.
+- User actions are guarded with session checks.
 
 ---
 
@@ -245,11 +261,13 @@ http://127.0.0.1:5000
 
 ## Future Improvements
 
+- Add admin movie edit and delete features
 - Add movie posters using an external API
 - Add star-based rating UI
-- Add movie detail editing for admins
+- Add movie detail statistics such as review count and rating distribution
 - Add deployment support
 - Split routes into blueprints
+- Add admin movie edit and delete features
 
 ---
 
