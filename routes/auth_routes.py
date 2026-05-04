@@ -17,7 +17,7 @@ def auth():
 
     if not user_id or not password:
         flash("Please enter both ID and password", "warning-auth")
-        return redirect(url_for("index"))
+        return redirect(url_for("movie.index"))
 
     with db_cursor() as cur:
         cur.execute("""
