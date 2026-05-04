@@ -8,7 +8,7 @@ def login_required(function):
     @wraps(function)
     def wrapper(*args, **kwargs):
         if "user_id" not in session:
-            return redirect(url_for("index"))
+            return redirect(url_for("auth.index"))
 
         return function(*args, **kwargs)
 
@@ -18,10 +18,10 @@ def admin_required(function):
     @wraps(function)
     def wrapper(*args, **kwargs):
         if "user_id" not in session:
-            return redirect(url_for("index"))
+            return redirect(url_for("auth.index"))
 
         if session.get("user_role") != "admin":
-            return redirect(url_for("home"))
+            return redirect(url_for("movie.home"))
 
         return function(*args, **kwargs)
 
@@ -91,7 +91,7 @@ def build_pagination(total_items, page, per_page):
 
     offset = (page - 1) * per_page
 
-    start_item = offset + 1 if total_items > offset else 0
+    start_item = offset + 1 if total_items > 0 else 0
     end_item =  min(offset + per_page, total_items)
 
     pages = []

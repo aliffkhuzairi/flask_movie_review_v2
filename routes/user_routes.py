@@ -141,7 +141,7 @@ def user_detail(user_id):
 @login_required
 def edit_user_profile(user_id):
     if session["user_id"] != user_id:
-        return redirect(url_for("user_detail", user_id=user_id))
+        return redirect(url_for("user.user_detail", user_id=user_id))
 
     name = request.form.get("name", "").strip()
     email = request.form.get("email", "").strip()

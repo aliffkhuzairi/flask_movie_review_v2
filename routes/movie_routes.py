@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, session, flash, request
 from db import db_cursor
 from utils import login_required, is_valid_rating, get_page, build_pagination
-import math
 
 movie_bp = Blueprint("movie", __name__)
 
