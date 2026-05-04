@@ -43,32 +43,42 @@ def user_detail(user_id):
         # REVIEWS PAGINATION
         page = request.args.get("page", 1, type=int)
         per_page = 5
+
+        if page < 1:
+            page = 1
+
         offset = (page - 1) * per_page
 
-        cur.execute(f"""
-            select m.id, m.title, r.ratings, r.review, r.rev_time, m.rel_date
-            from reviews r 
-            join movies m on r.mid = m.id
-            where r.uid = %s
-            order by {order_by}
-            limit %s offset %s;
-        """, (user_id, per_page, offset))
-
-        user_reviews = cur.fetchall()
-
+        # GET TOTAL REVIEWS
         cur.execute("""
             select count(*)
             from reviews
             where uid = %s;
-        """, (user_id,))
+        """,(user_id,))
 
         total_reviews = cur.fetchone()[0]
         total_pages = (total_reviews + per_page - 1) // per_page
+
+        if total_pages > 0 and page > total_pages:
+            page = total_pages
+            offset = (page - 1) * per_page
+
         start_reviews = offset + 1 if total_reviews > 0 else 0
         end_reviews = min(offset + per_page, total_reviews)
 
-        pages = []
+        # FETCH PAGINATED REVIEWS
+        cur.execute(f"""
+            select m.id, m.title, r.ratings, r.review, r.rev_time, m.rel_date
+            from reviews r
+            join movies m on r.mid = m.id
+            where uid = %s
+            order by {order_by}
+            limit %s offset %s;
+        """,(user_id, per_page, offset))
 
+        user_reviews = cur.fetchall()
+        pages = []
+        
         if total_pages < 5:
             pages = list(range(1, total_pages + 1))
         else:
