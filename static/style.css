@@ -75,6 +75,11 @@ body {
     text-align: center;
 }
 
+.result-summary {
+    padding: 8px 24px;
+    text-align: right;
+}
+
 .info-card h2,
 .review-form-card h2,
 .reviews-card h2,
@@ -120,6 +125,11 @@ body {
     flex-wrap: wrap;
     gap: 8px;
     margin: 10px 0;
+}
+
+.sort {
+    margin: 0;
+    justify-content: center;
 }
 
 .button-link {
@@ -453,8 +463,7 @@ header.sticky .brand:hover{
 }
 
 .search-form input {
-    flex: 1;
-    min-width: 300px;
+    width: 300px;
 }
 
 .search-form button {
@@ -466,6 +475,12 @@ header.sticky .brand:hover{
 /* =============== MOVIE LIST AND MOVIE CARDS ===============*/
 .movie-container {
     margin: 24px 0 40px;
+}
+
+.movies-head {
+    padding: 0 24px;
+    margin: 0 0 24px;
+    align-items: unset;
 }
 
 .movie-list {
@@ -1097,6 +1112,10 @@ header.sticky .brand:hover{
         flex-direction: column;
     }
 
+    .detail-head .sort{
+        justify-content: flex-start;
+    }
+
     .reviews-list .review-card-top {
         display: block;
     }
@@ -1106,8 +1125,9 @@ header.sticky .brand:hover{
         padding: 0;
     }
 
-    .reviews-card .button-row {
-        justify-content: flex-start;
+    .reviews-list .result-summary {
+        text-align: left;
+        padding: 5px 0;
     }
 }
 
@@ -1170,12 +1190,16 @@ header.sticky .brand:hover{
         gap: 8px;
     }
 
-    .section-head h1, .section-head p {
+    .section-head h1,
+    .section-head p,
+    .result-summary,
+    .reviews-list .result-summary,
+    .detail-head h2 {
         text-align: center;
     }
 
     .detail-head {
-        flex-direction: column;
+        justify-content: center;
     }
 
     .movie-card {
@@ -1235,6 +1259,10 @@ header.sticky .brand:hover{
         padding: 24px 0;
     }
 
+    .reviews-card .button-row {
+        justify-content: center;
+    }
+
     .profile-main {
         padding-left: 20px;
     }
@@ -1276,6 +1304,10 @@ header.sticky .brand:hover{
     .search-form {
         flex-direction: column;
         gap: 14px;
+    }
+
+    .search-form input {
+        width: 100%;
     }
 
     .nav-actions.open {

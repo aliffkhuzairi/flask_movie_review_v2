@@ -289,7 +289,7 @@
                 <div class="card reviews-card">
                     <div class="detail-head" id="reviews">
                         <h2>Your Reviews</h2>
-                        <div class="button-row">
+                        <div class="button-row sort">
                             <a class="button-link {{ 'primary' if review_sort == 'latest' else 'secondary' }}"
                                href="{{ url_for('user.user_detail', user_id=user_info[0], review_sort='latest') }}#reviews">
                                 Latest
@@ -310,7 +310,7 @@
                     {% if user_reviews %}
                     <div class="reviews-list">
                         {% if total_reviews > 0 %}
-                            <p class="small-text">
+                            <p class="small-text result-summary">
                                 Showing {{ start_reviews }} – {{ end_reviews }} of {{ total_reviews }}
                                 review{{ '' if total_reviews == 1 else 's' }}
                             </p>
