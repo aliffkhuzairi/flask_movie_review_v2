@@ -349,9 +349,11 @@
                                 </div>
 
                                 {% if is_self %}
-                                <form class="delete" action="{{ url_for('user.delete_review', movie_id=review[0]) }}" method="POST"
+                                <form class="delete"
+                                      action="{{ url_for('user.delete_review', movie_id=review[0]) }}"
+                                      method="POST"
                                       onsubmit="return confirm('This action cannot be undone. Delete review?');">
-                                    <button type="submit" class="button-link logout">Delete</button>
+                                    <button type="submit" class="button-link logout">Delete Review</button>
                                 </form>
                                 {% endif %}
 

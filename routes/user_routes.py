@@ -276,12 +276,12 @@ def add_movie():
             """, (title, director, genre, rel_date))
 
             if cur.rowcount == 0:
-                flash("Movie already exists.", "warning-admin")
+                flash("Movie already exists!", "warning-admin")
             else:
-                flash("Movie added successfully.", "success-admin")
+                flash("Movie added successfully!", "success-admin")
 
     except Exception as err:
-        flash(f"Failed to add movie: {err}", "error-admin")
+        flash(f"Failed to add movie!: {err}", "error-admin")
 
     return redirect(url_for("user.user_detail", user_id=session["user_id"]))
 
@@ -294,5 +294,5 @@ def delete_review(movie_id):
             where mid = %s and uid = %s;
         """,(movie_id, session["user_id"]))
 
-    flash("Review deleted.", "success-delete")
+    flash("Review deleted!", "success-delete")
     return redirect(url_for("user.user_detail", user_id=session["user_id"]))

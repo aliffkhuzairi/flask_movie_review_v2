@@ -841,6 +841,10 @@ header.sticky .brand:hover{
     box-shadow: none;
 }
 
+.reviews-card .empty-state {
+    padding: 0 12px;
+}
+
 .info-list {
     display: flex;
     flex-direction: column;
@@ -872,6 +876,15 @@ header.sticky .brand:hover{
     text-align: right;
     width: fit-content;
     overflow-wrap: anywhere;
+}
+
+.delete-movie {
+    margin-top: 8px;
+}
+
+.delete-movie button {
+    width: 100%;
+    padding: 10px 12px;
 }
 
 /* =============== USER PROFILE PAGE =============== */

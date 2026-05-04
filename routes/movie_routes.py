@@ -125,7 +125,7 @@ def movie_detail(movie_id):
         rating = request.form.get("rating", "").strip()
 
         if not review or not is_valid_rating(rating):
-            flash("Please enter a review and a rating from 0-5.")
+            flash("Please enter a review and a rating from 0-5.", "warning-movie")
             return redirect(url_for("movie.movie_detail", movie_id=movie_id))
 
         with db_cursor(commit=True) as cur:
@@ -143,7 +143,7 @@ def movie_detail(movie_id):
                     where mid = %s and uid = %s;
                 """,(rating, review, movie_id, session["user_id"]))
 
-                flash("Review updated!", "success")
+                flash("Review updated!", "success-movie")
 
             else:
                 cur.execute("""
@@ -151,7 +151,7 @@ def movie_detail(movie_id):
                     values(%s, %s, %s, %s, now());
                 """,(movie_id, session["user_id"], rating, review))
 
-                flash("Review added!", "success")
+                flash("Review added!", "success-movie")
 
         return redirect(url_for("movie.movie_detail", movie_id=movie_id))
 
@@ -261,11 +261,11 @@ def movie_edit(movie_id):
     rel_date = request.form.get("rel_date").strip()
 
     if not title or not director or not genre or not rel_date:
-        flash("All movie fields are required!", "warning-movie")
+        flash("All movie fields are required!", "warning-edit")
         return redirect(url_for("movie.movie_detail", movie_id=movie_id))
 
     if genre not in ALLOWED_GENRES:
-        flash("Please select a valid genre.", "warning-movie")
+        flash("Please select a valid genre.", "warning-edit")
         return redirect(url_for("movie.movie_detail", movie_id=movie_id))
 
     try:
@@ -277,11 +277,40 @@ def movie_edit(movie_id):
             """, (title, director, genre, rel_date, movie_id))
 
             if cur.rowcount == 0:
-                flash("Movie not found!", "error-movie")
+                flash("Movie not found!", "error-edit")
             else:
-                flash("Movie successfully updated!", "success-movie")
+                flash("Movie updated!", "success-edit")
 
     except Exception as err:
-        flash(f"Failed to update movie!: {err}", "error-movie")
+        flash(f"Failed to update movie!: {err}", "error-edit")
 
     return redirect(url_for("movie.movie_detail", movie_id=movie_id))
+
+@movie_bp.route("/movies/<int:movie_id>/delete", methods=["POST"])
+@login_required
+@admin_required
+def movie_delete(movie_id):
+    try:
+        with db_cursor(commit=True) as cur:
+            cur.execute("""
+                delete from reviews
+                where mid = %s;
+            """,(movie_id,))
+
+            cur.execute("""
+                delete from movies
+                where id = %s;
+            """,(movie_id,))
+
+            if cur.rowcount == 0:
+                flash("Movie not found!", "error-edit")
+                return redirect(url_for("movie.movie_list"))
+
+            flash("Movie deleted!", "success-edit")
+
+    except Exception as err:
+        flash(f"Failed to delete movie!: {err}", "error-edit")
+
+    return redirect(url_for("movie.movie_list"))
+
+
