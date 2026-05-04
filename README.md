@@ -7,22 +7,23 @@ The project focuses on backend CRUD, PostgreSQL relationships, authentication, r
 ---
 
 ### Home Page
-![Home Page](screenshots/home.png)
-![Home Page](screenshots/home2.png)
+![Home Page](screenshots/homepage.png)
+![Home Page](screenshots/homepage2.png)
+
+### All Movies Page
+![All Movies Page](screenshots/movie_list_page.png)
 
 ### Movie Details Page
 ![Movie Details Page](screenshots/movie_detail.png)
 
 ### User Profile Page
-![User Profile Page](screenshots/user_profile.png)
-![User Profile Page](screenshots/user_profile2.png)
+![User Profile Page](screenshots/user_profile_page.png)
+![User Profile Page](screenshots/user_profile_page2.png)
 ![User Profile Page](screenshots/visit_user.png)
-
-### All Movies Page
-![All Movies Page](screenshots/movies.png)
 
 ### Admin Panel
 ![Admin Panel](screenshots/admin_panel.png)
+![Admin Panel](screenshots/admin_panel2.png)
 
 ---
 
@@ -42,6 +43,8 @@ The project focuses on backend CRUD, PostgreSQL relationships, authentication, r
 - Paginated movie list
 - Result summary such as `Showing 1 – 15 of 21 movies`
 - Admin can add new movies
+- Admin can update movie details
+- Admin can delete movies
 - Duplicate movie handling
 
 ### Reviews
@@ -70,6 +73,8 @@ The project focuses on backend CRUD, PostgreSQL relationships, authentication, r
 
 ## Admin Features
 - Add new movies
+- Update existing movies
+- Delete movies and related reviews
 - Admin-only role checks
 - Admin profile protection from follow/mute actions
 
@@ -80,6 +85,7 @@ The project focuses on backend CRUD, PostgreSQL relationships, authentication, r
 - Font Awesome icons
 - Card-based movie and review layout
 - Anchor navigation for review sorting on smaller screens
+- Reusable pagination styling
 
 ---
 
@@ -234,6 +240,7 @@ http://127.0.0.1:5000
 - Tablet → 2-column layout
 - Mobile → stacked layout
 - Navigation menu with toggle icon
+- Review and movie cards resize across screen widths
 
 ---
 
@@ -245,29 +252,34 @@ http://127.0.0.1:5000
 - Dynamic sort values are restricted through allowlists.
 - Admin-only features are protected by role checks.
 - User actions are guarded with session checks.
+- Delete actions use POST requests instead of GET links.
 
 ---
 
 ## What I Learned
 
-- Building Flask routes for authentication, profiles, movies, and reviews
+- Building Flask routes with blueprints
+- Registering route modules through routes/__init__.py
+- Handling authentication and user sessions
 - Designing PostgreSQL relationships and constraints
-- Handling user sessions and role-based access
-- Writing safer SQL queries with parameters
-- Improving UI with responsive layouts and reusable CSS
-- Managing feature growth through refactoring
+- Writing SQL queries with joins, filters, sorting, pagination, and NOT EXISTS
+- Implementing role-based access for admin features
+- Building reusable Jinja macros
+- Refactoring pagination logic into helper functions
+- Improving mobile layout with responsive CSS
+- Managing UI growth through CSS restructuring
 
 ---
 
 ## Future Improvements
 
-- Add admin movie edit and delete features
 - Add movie posters using an external API
 - Add star-based rating UI
 - Add movie detail statistics such as review count and rating distribution
+- Add user search
 - Add deployment support
-- Split routes into blueprints
-- Add admin movie edit and delete features
+- Add automated tests
+- Add CSRF protection for forms
 
 ---
 
