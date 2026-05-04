@@ -31,7 +31,7 @@
     <main class="page-container">
 
         <!-- PROFILE HERO -->
-        <section class="profile-hero card">
+        <section class="profile-hero">
             <div class="profile-main">
 
                 <!-- PROFILE DIV -->
@@ -84,7 +84,7 @@
             <div class="profile-left-column">
 
                 <!-- ACCOUNT INFO -->
-                <div class="card info-card">
+                <div class="section-card info-card">
                     <h2>Account Info</h2>
                     <div class="info-list">
                         <div class="info-item">
@@ -126,7 +126,7 @@
 
                 <!-- EDIT PROFILE (SELF ONLY) -->
                 {% if is_self %}
-                <div class="card profile-edit-card">
+                <div class="section-card profile-edit-card">
                     <h2>Edit Profile</h2>
 
                      <div class="flash-container">
@@ -159,7 +159,7 @@
                 {% if is_self and not is_current_user_admin %}
 
                     <!--  FOLLOWED USERS  -->
-                    <div class="card user-list-card">
+                    <div class="section-card user-list-card">
                         <h2>Followed Users
                             {% if followed_count > 0 %}
                             <span>({{ followed_count }})</span>
@@ -197,7 +197,7 @@
 
                     <!--  MUTED USERS  -->
                     {% if is_self %}
-                    <div class="card list-card">
+                    <div class="section-card user-list-card">
                         <h2>Muted Users
                             {% if muted_count > 0 %}
                             <span>({{ muted_count }})</span>
@@ -236,7 +236,7 @@
                 <!-- IF CURRENT USER IS ADMIN -->
                 {% if is_self and is_current_user_admin %}
 
-                    <div class="card admin-card">
+                    <div class="section-card admin-card">
                         <h2>Admin Panel</h2>
                         <p class="small-text admin-panel">Add a new movie to the platform.</p>
 
@@ -286,7 +286,7 @@
             <div class="profile-right-column">
 
                 <!-- USER'S REVIEWS -->
-                <div class="card reviews-card">
+                <div class="section-card reviews-card">
                     <div class="detail-head" id="reviews">
                         <h2>Your Reviews</h2>
                         <div class="button-row sort">
@@ -366,7 +366,7 @@
                     <div class="pagination">
                         {% if page > 1 %}
                             <a class="page-nav"
-                               href="{{ url_for('user.user_detail', user_id=user_info[0], page=page-1) }}">
+                               href="{{ url_for('user.user_detail', user_id=user_info[0], page=page-1) }}#reviews">
                                 <i class="fa-solid fa-chevron-left"></i>
                             </a>
                         {% endif %}
@@ -376,7 +376,7 @@
                                 <p class="ellipsis">...</p>
                             {% else %}
                                 <a class="page-num {% if p == page %}active{% endif %}"
-                                   href="{{ url_for('user.user_detail', user_id=user_info[0], page=p) }}">
+                                   href="{{ url_for('user.user_detail', user_id=user_info[0], page=p) }}#reviews">
                                     {{ p }}
                                 </a>
                             {% endif %}
@@ -384,7 +384,7 @@
 
                         {% if page < total_pages %}
                             <a class="page-nav"
-                               href="{{ url_for('user.user_detail', user_id=user_info[0], page=page+1) }}" >
+                               href="{{ url_for('user.user_detail', user_id=user_info[0], page=page+1) }}#reviews" >
                                 <i class="fa-solid fa-chevron-right"></i>
                             </a>
                         {% endif %}

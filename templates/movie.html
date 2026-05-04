@@ -32,7 +32,7 @@
     <main class="page-container">
 
         <!-- MOVIE HERO -->
-        <section class="movie-hero card">
+        <section class="section-card movie-hero">
             <div class="movie-hero-main">
                 <h1 class="movie-title">{{ movie[1] }}</h1>
 
@@ -62,7 +62,7 @@
             <div class="movie-left-column">
 
                 <!-- MOVIE INFO -->
-                <div class="card info-card">
+                <div class="section-card">
                     <h2>About this movie</h2>
                     <div class="info-list">
                         <div class="info-item">
@@ -85,7 +85,7 @@
                 </div>
 
                 <!-- ADD/UPDATE REVIEW FORM -->
-                <div class="card review-form-card">
+                <div class="section-card review-form-card">
                     <div class="add-update-header">
                         {% if user_review %}
                             <h2>Update Your Review</h2>
@@ -120,11 +120,65 @@
                     </form>
                 </div>
 
+                {% if session["user_role"] == "admin" %}
+                <div class="section-card admin-card">
+                    <div class="add-update-header">
+                        <h2>Edit Movie</h2>
+
+                         <div class="flash-container">
+                            {% with messages = get_flashed_messages(with_categories=true, category_filter=['success-movie', 'error-movie', 'warning-movie']) %}
+                                {% if messages %}
+                                    {% for category, msg in messages %}
+                                        <div class="flash {{ category.split('-')[0] }}">{{ msg }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endwith %}
+                        </div>
+
+                        <form method="POST" class="form-grid" action="{{ url_for('movie.movie_edit', movie_id=movie[0]) }}">
+                            <label for="title">Title</label>
+                            <input id="title"
+                                   name="title"
+                                   type="text"
+                                   value="{{ movie[1] }}"
+                                   required>
+
+                            <label for="director">Director</label>
+                            <input id="director"
+                                   name="director"
+                                   type="text"
+                                   value="{{ movie[2] }}"
+                                   required>
+
+                            <label for="genre">Genre</label>
+
+                            <select id="genre" name="genre" required>
+                                <option value="action" {{ 'selected' if movie[3] == 'action' else '' }}>action</option>
+                                <option value="comedy" {{ 'selected' if movie[3] == 'comedy' else '' }}>comedy</option>
+                                <option value="drama" {{ 'selected' if movie[3] == 'drama' else '' }}>drama</option>
+                                <option value="fantasy" {{ 'selected' if movie[3] == 'fantasy' else '' }}>fantasy</option>
+                                <option value="romance" {{ 'selected' if movie[3] == 'romance' else '' }}>romance</option>
+                                <option value="thriller" {{ 'selected' if movie[3] == 'thriller' else '' }}>thriller</option>
+                                <option value="western" {{ 'selected' if movie[3] == 'western' else '' }}>western</option>
+                            </select>
+
+                            <label for="rel_date">Release Date</label>
+                            <input id="rel_date"
+                                   name="rel_date"
+                                   type="date"
+                                   value="{{ movie[4].strftime('%Y-%m-%d') if movie[4] else '' }}"
+                                   required>
+
+                            <button type="submit" class="button-link primary">Update Movie</button>
+                        </form>
+                    </div>
+                </div>
             </div>
+            {% endif %}
 
             <!-- REVIEWS COLUMN -->
             <div class="movie-right-column">
-                <div class="card reviews-card">
+                <div class="section-card reviews-card">
                     <div class="detail-head" id="reviews">
                         <h2>Reviews</h2>
                         <div class="button-row sort">

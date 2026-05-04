@@ -80,14 +80,13 @@ body {
     text-align: right;
 }
 
-.info-card h2,
-.review-form-card h2,
-.reviews-card h2,
-.profile-edit-card h2,
-.user-list-card h2,
-.add-update-header h2{
-    margin-bottom: 16px;
-    font-size: 1.5rem;
+.section-card h2 {
+    margin-bottom: 24px;
+    font-size: 1.6rem;
+}
+
+.admin-card h2 {
+    margin-bottom: 5px;
 }
 
 /* =============== FLASH MESSAGES =============== */
@@ -201,6 +200,9 @@ body {
     color: var(--secondary);
 }
 
+.section-card form button {
+    margin-top: 8px;
+}
 /* =============== FORMS =============== */
 .form-grid {
     display: flex;
@@ -267,7 +269,7 @@ select option {
 
 .hero-actions form,
 .relation-item form,
-.admin-card form {
+.form-card form {
     margin: 0;
 }
 
@@ -374,10 +376,8 @@ header.sticky .brand:hover{
     padding: 24px 16px 40px;
 }
 
-.card {
-    border-radius: 14px;
+.section-card {
     padding: 20px;
-    margin-bottom: 24px;
 }
 
 #movies,
@@ -874,15 +874,12 @@ header.sticky .brand:hover{
     overflow-wrap: anywhere;
 }
 
-.review-form-card .flash-container {
-    min-height: 0;
-}
-
 /* =============== USER PROFILE PAGE =============== */
 .profile-hero {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 20px;
     margin-bottom: 24px;
 }
 
@@ -899,23 +896,6 @@ header.sticky .brand:hover{
     display: flex;
     gap: 10px;
     width: auto;
-}
-
-.profile-edit-card {
-    margin-bottom: 0;
-}
-
-.profile-edit-card button,
-.admin-card button{
-    margin-top: 10px;
-}
-
-.admin-card .form-grid {
-    margin-top: 18px;
-}
-
-.user-list-card {
-    margin-bottom: 0;
 }
 
 .relation-list {
@@ -1007,13 +987,8 @@ header.sticky .brand:hover{
     background: #1f2937;
 }
 
-.admin-card h2 {
-    margin-bottom: 8px;
-    font-size: 1.5rem;
-}
-
 .admin-panel {
-    margin-bottom: 10px;
+    margin-bottom: 24px;
 }
 
 .delete {
@@ -1190,16 +1165,25 @@ header.sticky .brand:hover{
         gap: 8px;
     }
 
+    .profile-hero {
+        justify-content: center;
+    }
+
+    .profile-hero,
     .section-head h1,
     .section-head p,
     .result-summary,
     .reviews-list .result-summary,
-    .detail-head h2 {
+    .section-card h2,
+    .movie-title,
+    .admin-panel {
         text-align: center;
     }
 
-    .detail-head {
-        justify-content: center;
+    .detail-head,
+    .home-review-feed .review-card-top,
+    .home-review-feed .review-rating {
+        display: flex;
     }
 
     .movie-card {
@@ -1217,25 +1201,9 @@ header.sticky .brand:hover{
         max-width: 100%;
     }
 
-    .home-review-feed .review-card-top {
-        display: flex;
-    }
-
-    .home-review-feed .review-rating {
-        display: flex;
-    }
-
     .movie-list {
         justify-content: center;
         gap: 10px;
-    }
-
-    .movie-title {
-        text-align: center;
-    }
-
-    .admin-panel {
-        text-align: unset;
     }
 
     .two-cols-layout {
@@ -1297,21 +1265,15 @@ header.sticky .brand:hover{
         align-items: center;
     }
 
-    .auth-card .form-grid {
+    .auth-card .form-grid,
+    .nav-actions.open,
+    .search-form input {
         width: 100%;
     }
 
     .search-form {
         flex-direction: column;
         gap: 14px;
-    }
-
-    .search-form input {
-        width: 100%;
-    }
-
-    .nav-actions.open {
-        width: 100%;
     }
 
     .movie-card {

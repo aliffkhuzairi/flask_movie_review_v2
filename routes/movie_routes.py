@@ -1,11 +1,13 @@
 from flask import Blueprint, render_template, redirect, url_for, session, flash, request
 from db import db_cursor
-from utils import login_required, is_valid_rating, get_page, build_pagination
+from utils import login_required, admin_required, is_valid_rating, get_page, build_pagination
 
 movie_bp = Blueprint("movie", __name__)
 
 ALLOWED_SORTS = {"latest", "title", "genre"}
 ALLOWED_SORT_DIRS = {"asc", "desc"}
+ALLOWED_GENRES = {"action", "comedy", "drama", "fantasy", "romance", "thriller", "western"}
+
 @movie_bp.route("/home")
 @login_required
 def home():
@@ -248,3 +250,38 @@ def movie_detail(movie_id):
                            avg_rating=avg_rating,
                            user_review=user_review,
                            user_id=session["user_id"])
+
+@movie_bp.route("/movies/<int:movie_id>/edit", methods=["GET", "POST"])
+@login_required
+@admin_required
+def movie_edit(movie_id):
+    title = request.form.get("title").strip()
+    director = request.form.get("director").strip()
+    genre = request.form.get("genre").strip()
+    rel_date = request.form.get("rel_date").strip()
+
+    if not title or not director or not genre or not rel_date:
+        flash("All movie fields are required!", "warning-movie")
+        return redirect(url_for("movie.movie_detail", movie_id=movie_id))
+
+    if genre not in ALLOWED_GENRES:
+        flash("Please select a valid genre.", "warning-movie")
+        return redirect(url_for("movie.movie_detail", movie_id=movie_id))
+
+    try:
+        with db_cursor(commit=True) as cur:
+            cur.execute("""
+                update movies
+                set title = %s, director = %s, genre = %s, rel_date = %s
+                where id = %s;
+            """, (title, director, genre, rel_date, movie_id))
+
+            if cur.rowcount == 0:
+                flash("Movie not found!", "error-movie")
+            else:
+                flash("Movie successfully updated!", "success-movie")
+
+    except Exception as err:
+        flash(f"Failed to update movie!: {err}", "error-movie")
+
+    return redirect(url_for("movie.movie_detail", movie_id=movie_id))
