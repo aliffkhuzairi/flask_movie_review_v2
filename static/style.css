@@ -267,6 +267,10 @@ select option {
     width: 100%;
 }
 
+.form-grid .star-btn {
+    width: auto;
+}
+
 .hero-actions form,
 .relation-item form,
 .form-card form {
@@ -830,9 +834,39 @@ header.sticky .brand:hover{
     font-weight: 600;
 }
 
-.rating-value {
-    font-size: 2rem;
-    font-weight: 600;
+.star-rating-input {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 12px 0;
+}
+
+.star-btn {
+    width: auto;
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--secondary);
+    cursor: pointer;
+    font-size: 1.35rem;
+    line-height: 1;
+    transition: transform 0.12s ease, color 0.12s ease;
+}
+
+.star-btn:hover {
+    transform: scale(1.12);
+    background: none;
+}
+
+.star-btn i {
+    pointer-events: none;
+}
+
+.rating-text {
+    margin-left: 8px;
+    font-size: 0.88rem;
+    color: var(--text-muted);
 }
 
 .info-card,

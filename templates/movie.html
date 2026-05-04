@@ -105,9 +105,37 @@
                     </div>
 
                     <form method="POST" class="form-grid">
+
                         <label for="rating">Rating</label>
-                        <input id="rating" name="rating" type="number" min="0" max="5" step="1"
-                               value="{{ user_review[0] if user_review else '' }}" required>
+                        <div class="star-rating-input" data-current-rating="{{ user_review[0] if user_review else 0 }}">
+                            <input id="rating" name="rating" type="hidden"
+                                   value="{{ user_review[0] if user_review else '' }}"
+                                   required>
+
+                            <button type="button" class="star-btn" data-rating="1" aria-label="Rate 1 star">
+                                <i class="fa-regular fa-star"></i>
+                            </button>
+
+                            <button type="button" class="star-btn" data-rating="2" aria-label="Rate 2 stars">
+                                <i class="fa-regular fa-star"></i>
+                            </button>
+
+                            <button type="button" class="star-btn" data-rating="3" aria-label="Rate 3 stars">
+                                <i class="fa-regular fa-star"></i>
+                            </button>
+
+                            <button type="button" class="star-btn" data-rating="4" aria-label="Rate 4 stars">
+                                <i class="fa-regular fa-star"></i>
+                            </button>
+
+                            <button type="button" class="star-btn" data-rating="5" aria-label="Rate 5 stars">
+                                <i class="fa-regular fa-star"></i>
+                            </button>
+
+                            <span class="rating-text">
+                                {{ user_review[0] ~ '/5' if user_review else 'Select rating' }}
+                            </span>
+                        </div>
 
                         <label for="review">Review</label>
                         <textarea id="review" name="review" rows="5" required>{{ user_review[1] if user_review else '' }}</textarea>
