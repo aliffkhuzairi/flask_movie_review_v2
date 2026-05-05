@@ -32,11 +32,15 @@
 
             <form class="search-form" action="{{ url_for('search.global_search') }}" method="GET">
                 <input type="text" name="q" placeholder="Search movies or users" value="{{ query or '' }}"/>
-                <button type="submit" class="button-link primary">Search</button>
 
-                {% if query %}
-                    <a class="secondary" href="{{ url_for('search.global_search') }}">Clear</a>
-                {% endif %}
+                <div>
+                    <button type="submit" class="button-link primary">Search</button>
+
+                    {% if query %}
+                        <a class="clear-link" href="{{ url_for('search.global_search') }}">Clear</a>
+                    {% endif %}
+                </div>
+
             </form>
 
             <div class="section-head">
@@ -54,17 +58,25 @@
 
                 <!-- MOVIES RESULT -->
                 <div class="section-card">
-                    <h2>Movies</h2>
+                    <h2>Movies{% if query %} ({{ movies|length }}){% endif %}</h2>
 
                     {% if movies %}
                     <div class="search-result-list">
                         {% for movie in movies %}
-                            <a class="search-result-item" href="{{ url_for('movie.movie_detail', movie_id=movie[0]) }}">
-                                <div>
-                                    <h3>{{ movie[1] }}</h3>
+                            <a class="search-result-item movie-search-item"
+                               href="{{ url_for('movie.movie_detail', movie_id=movie[0]) }}">
 
-                                    <p class="small-text">
-                                        {{ movie[2] }} - {{ movie[3] }} - {{ movie[4] }}
+                                <div class="search-result-main">
+                                    <div class="search-result-title-row">
+                                        <h3 class="search-result-title">{{ movie[1] }}</h3>
+                                        <span class="genre-tag search-genre">{{ movie[3] }}</span>
+                                    </div>
+
+                                    <p class="small-text search-result-meta">
+                                        {{ movie[2] }}
+                                    </p>
+                                    <p class="small-text search-result-meta">
+                                        {{ movie[4].strftime('%d %b %Y') if movie[4] else '' }}
                                     </p>
                                 </div>
                             </a>
@@ -77,12 +89,13 @@
 
                 <!-- USERS RESULT -->
                 <div class="section-card">
-                    <h2>People</h2>
+                    <h2>People{% if query %} ({{ users|length }}){% endif %}</h2>
 
                     {% if users %}
                     <div class="search-result-list">
                         {% for user in users %}
-                            <a class="search-result-item" href="{{ url_for('user.user_detail', user_id=user[0] ) }}">
+                            <a class="search-result-item user-search-item"
+                               href="{{ url_for('user.user_detail', user_id=user[0] ) }}">
                                 <div class="user-tag">
                                     <h3>{{ user[0] }}</h3>
                                     <p class="small-text">{{ user[2] if user[2] else '' }}</p>
@@ -106,5 +119,6 @@
         </section>
 
     </main>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
