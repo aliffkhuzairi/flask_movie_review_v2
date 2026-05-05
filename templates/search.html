@@ -30,34 +30,38 @@
     <main class="page-container">
         <section class="search-result-page">
 
-            <form class="search-form" action="{{ url_for('search.global_search') }}" method="GET">
-                <input type="text" name="q" placeholder="Search movies or users" value="{{ query or '' }}"/>
+            <div class="section-head search-head">
 
-                <div class="search-action">
-                    <button type="submit" class="button-link primary">Search</button>
-
-                    {% if query %}
-                        <a class="clear-link" href="{{ url_for('search.global_search') }}">Clear</a>
-                    {% endif %}
-                </div>
-
-            </form>
-
-            <div class="section-head">
-                <div>
-                    {% if query %}
+                {% if query %}
+                    <div class="button-row search-tabs">
+                        <a class="button-link {{ 'primary' if result_type == 'all' else 'secondary' }}"
+                           href="{{ url_for('search.global_search', q=query, type='all') }}">
+                            All
+                        </a>
+                        <a class="button-link {{ 'primary' if result_type == 'movies' else 'secondary' }}"
+                           href="{{ url_for('search.global_search', q=query, type='movies') }}">
+                            Movies
+                        </a>
+                        <a class="button-link {{ 'primary' if result_type == 'people' else 'secondary' }}"
+                           href="{{ url_for('search.global_search', q=query, type='people') }}">
+                            People
+                        </a>
+                    </div>
+                {% endif %}
+                
+                {% if query %}
                     <p class="small-text">Results for "{{ query }}"</p>
-                    {% else %}
+                {% else %}
                     <p class="small-text">Search movies or users</p>
-                    {% endif %}
-                </div>
+                {% endif %}
             </div>
 
             {% if query %}
-            <div class="search-result-grid">
+            <div class="search-result-grid {{ 'single-result-grid' if result_type != 'all' else '' }}">
 
+                {% if query and result_type in ['all','movies'] %}
                 <!-- MOVIES RESULT -->
-                <div class="section-card">
+                <div class="section-card search-result-card">
                     <h2>Movies{% if query %} ({{ movies|length }}){% endif %}</h2>
 
                     {% if movies %}
@@ -86,9 +90,11 @@
                         <p class="small-text">No movies found.</p>
                     {% endif %}
                 </div>
+                {% endif %}
 
+                {% if query and result_type in ['all','people'] %}
                 <!-- USERS RESULT -->
-                <div class="section-card">
+                <div class="section-card search-result-card">
                     <h2>People{% if query %} ({{ users|length }}){% endif %}</h2>
 
                     {% if users %}
@@ -111,10 +117,8 @@
                         <p class="small-text">No users found.</p>
                     {% endif %}
                 </div>
-
+                {% endif %}
             </div>
-
-
             {% endif %}
         </section>
 

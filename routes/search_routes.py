@@ -8,6 +8,13 @@ search_bp = Blueprint('search', __name__)
 @login_required
 def global_search():
     query = request.args.get('q', "").strip()
+    result_type = request.args.get('type', 'all').strip()
+
+    allowed_type = {"all", "movies", "people"}
+
+    if result_type not in allowed_type:
+        result_type = "all"
+
     search_pattern = f"%{query}%"
 
     movies = []
@@ -15,30 +22,33 @@ def global_search():
 
     if query:
         with db_cursor() as cur:
-            cur.execute("""
-                select id, title, director, genre, rel_date
-                from movies
-                where title ilike %s or director ilike %s or genre ilike %s
-                order by title asc
-                limit 10;
-            """, (search_pattern, search_pattern, search_pattern))
+            if result_type in {"all", "movies"}:
+                cur.execute("""
+                    select id, title, director, genre, rel_date
+                    from movies
+                    where title ilike %s or director ilike %s or genre ilike %s
+                    order by title asc
+                        limit 10;
+                """, (search_pattern, search_pattern, search_pattern))
 
-            movies = cur.fetchall()
+                movies = cur.fetchall()
 
-            cur.execute("""
-                select u.id, u.role, ui.name
-                from users u
-                join user_info ui on u.id = ui.id
-                where u.id ilike %s or ui.name ilike %s
-                order by u.id asc
-                limit 10;
-            """,(search_pattern, search_pattern))
+            if result_type in {"all", "people"}:
+                cur.execute("""
+                    select u.id, u.role, ui.name
+                    from users u
+                    join user_info ui on u.id = ui.id
+                    where u.id ilike %s or ui.name ilike %s
+                    order by u.id asc
+                    limit 10;
+                """,(search_pattern, search_pattern))
 
-            users = cur.fetchall()
+                users = cur.fetchall()
 
 
     return render_template('search.html',
                            query=query,
+                           result_type=result_type,
                            movies=movies,
                            users=users,
                            user_id=session.get('user_id'))
