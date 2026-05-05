@@ -49,7 +49,8 @@ The project focuses on backend CRUD, PostgreSQL relationships, authentication, r
 
 ### Reviews
 - Add, update, and delete reviews
-- Rating validation from 0 to 5
+- Star-based rating input UI
+- Rating validation from 1 to 5
 - Relative time display such as `5m`, `1h`, and `2d`
 - Sort reviews by latest, highest rating, and lowest rating
 - Paginated reviews on user profile pages
@@ -265,6 +266,7 @@ http://127.0.0.1:5000
 - Writing SQL queries with joins, filters, sorting, pagination, and NOT EXISTS
 - Implementing role-based access for admin features
 - Building reusable Jinja macros
+- Building interactive form inputs with vanilla JavaScript
 - Refactoring pagination logic into helper functions
 - Improving mobile layout with responsive CSS
 - Managing UI growth through CSS restructuring
@@ -274,7 +276,6 @@ http://127.0.0.1:5000
 ## Future Improvements
 
 - Add movie posters using an external API
-- Add star-based rating UI
 - Add movie detail statistics such as review count and rating distribution
 - Add user search
 - Add deployment support
