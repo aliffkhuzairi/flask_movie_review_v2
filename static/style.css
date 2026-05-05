@@ -295,12 +295,17 @@ select option {
 }
 
 .header-wrap {
+    width: 100%;
     max-width: 1300px;
     margin: 0 auto;
-    padding: 0 16px;
+    padding: 5px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.header-left {
+    flex: 0 0 auto;
 }
 
 .brand {
@@ -311,6 +316,54 @@ select option {
     text-decoration: none;
     color: var(--text-main);
     transition: all 0.13s ease-in-out;
+}
+
+.header-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.global-search-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    flex: 1;
+    max-width: 520px;
+}
+
+.global-search-form input {
+    width: 100%;
+    padding: 5px 10px;
+    font-size: 0.95rem;
+    border-radius: 4px;
+}
+
+.global-search-form button {
+    width: auto;
+    border: none;
+    padding: 8px 10px;
+    font-size: 1.1rem;
+    background: none;
+    color: var(--text-main);
+    cursor: pointer;
+    transition: color 0.13s ease-in-out;
+}
+
+.global-search-form button:hover {
+    color: var(--secondary);
+}
+
+.nav-actions {
+    flex: 0 0 auto;
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    transition: all 0.3s ease-in-out;
 }
 
 .nav,
@@ -343,11 +396,23 @@ select option {
     color: var(--secondary);
 }
 
-
 header.sticky {
     padding: 5px;
     background-color: #ccc;
     box-shadow: 0 0 10px #000;
+}
+
+header.sticky .brand{
+    color: var(--text-dark);
+}
+
+header.sticky .brand:hover{
+    color: var(--primary-hover);
+}
+
+header.sticky .global-search-form input,
+header.sticky .global-search-form button {
+    color: var(--text-dark);
 }
 
 header.sticky .nav {
@@ -359,22 +424,6 @@ header.sticky .nav:hover {
     color: var(--primary-hover);
 }
 
-header.sticky .brand{
-    color: var(--text-dark);
-}
-
-header.sticky .brand:hover{
-    color: var(--primary-hover);
-}
-
-.nav-actions {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    transition: all 0.3s ease-in-out;
-}
 
 /* =============== LAYOUT HELPERS =============== */
 .page-container {
@@ -472,6 +521,7 @@ header.sticky .brand:hover{
 
 .search-form input {
     width: 300px;
+    border-radius: 4px;
 }
 
 .search-form button {
