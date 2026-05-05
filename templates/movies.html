@@ -24,7 +24,7 @@
                       action="{{ url_for('search.global_search') }}"
                       method="GET">
                     <input type="text" name="q"
-                           placeholder="Search movies or users" value="{{ query|default('') }}"/>
+                           placeholder="Search movies or users" value="{{ query or '' }}"/>
                     <button type="submit" aria-label="Search">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
@@ -46,30 +46,6 @@
 
     <main class="page-container">
 
-        <!-- SEARCH BAR -->
-        <section class="search-section">
-            <form class="search-form" action="{{ url_for('movie.movie_list') }}" method="GET">
-                <input
-                    type="text"
-                    name="search"
-                    class="search-bar"
-                    placeholder="Search by title, director, or genre"
-                    value="{{ search or '' }}"
-                >
-
-                <input type="hidden" name="movie_sort" value="{{ movie_sort }}">
-                <input type="hidden" name="movie_sort_dir" value="{{ movie_sort_dir }}">
-                <input type="hidden" name="page" value="1">
-
-                <button type="submit" class="button-link primary">Search</button>
-
-                {% if search %}
-                    <a class="clear-link" href="{{ url_for('movie.movie_list') }}">Clear</a>
-                {% endif %}
-            </form>
-
-        </section>
-
         <section id="movies" class="movie-container">
 
             <!-- MOVIES META AND SORT BUTTONS -->
@@ -78,6 +54,31 @@
                     <h1>All Movies</h1>
                     <p class="small-text subheader">Browse all full movie list</p>
                 </div>
+            </div>
+
+            <!-- SEARCH BAR -->
+            <div class="search-section">
+                <form class="search-form" action="{{ url_for('movie.movie_list') }}" method="GET">
+                    <input
+                        type="text"
+                        name="search"
+                        class="search-bar"
+                        placeholder="Search by title, director, or genre"
+                        value="{{ search or '' }}"
+                    >
+
+                    <input type="hidden" name="movie_sort" value="{{ movie_sort }}">
+                    <input type="hidden" name="movie_sort_dir" value="{{ movie_sort_dir }}">
+                    <input type="hidden" name="page" value="1">
+
+                    <button type="submit" class="button-link primary">
+                        Search
+                    </button>
+
+                    {% if search %}
+                        <a class="clear-link" href="{{ url_for('movie.movie_list') }}">Clear</a>
+                    {% endif %}
+                </form>
 
                 <div class="button-row sort">
                     <a class="button-link {{ 'primary' if movie_sort == 'latest' else 'secondary' }}"
@@ -123,7 +124,6 @@
                     </a>
                 </div>
             </div>
-
             <!-- RESULT SUMMARY -->
             {% if total_movies > 0 %}
             <p class="small-text result-summary">

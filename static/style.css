@@ -77,7 +77,7 @@ body {
 
 .result-summary {
     padding: 8px 24px;
-    text-align: right;
+    text-align: left;
 }
 
 .section-card h2 {
@@ -134,7 +134,7 @@ body {
 .button-link {
     display: inline-block;
     color: var(--text-main);
-    padding: 10px 12px;
+    padding: 8px 10px;
     min-width: 80px;
     border: none;
     border-radius: 5px;
@@ -200,10 +200,6 @@ body {
     color: var(--secondary);
 }
 
-.section-card form button {
-    margin-top: 8px;
-}
-
 .clear-link {
     color: var(--text-main);
     text-decoration: none;
@@ -234,7 +230,7 @@ label {
 input,
 select,
 textarea {
-    padding: 10px 8px;
+    padding: 8px;
     border: 0;
     border-bottom: 2px solid var(--text-muted);
     font-family: inherit;
@@ -520,22 +516,21 @@ header.sticky .nav:hover {
 /* =============== SEARCH SECTION ===============*/
 .search-section {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    min-height: 100px;
-    margin-bottom: 20px;
+    padding: 0 24px;
 }
 
 .search-form {
     display: flex;
+    flex-direction: row;
     align-items: center;
     gap: 10px;
-    flex-wrap: wrap;
-    margin: 16px 0;
+    margin: 8px 0;
 }
 
 .search-form input {
-    width: 300px;
+    width: 100%;
     border-radius: 4px;
 }
 
@@ -559,12 +554,24 @@ header.sticky .nav:hover {
 
 /* =============== MOVIE LIST AND MOVIE CARDS ===============*/
 .movie-container {
-    margin: 24px 0 40px;
+    margin: 28px 0 40px;
+}
+
+.section-card form button {
+    margin-top: 8px;
+}
+
+.search-section form button {
+    padding: 10px 12px;
+}
+
+.search-section button:hover {
+    background: var(--primary-hover);
 }
 
 .movies-head {
     padding: 0 24px;
-    margin: 0 0 24px;
+    margin: 0;
     align-items: unset;
 }
 
@@ -1383,7 +1390,8 @@ header.sticky .nav:hover {
         padding: 20px 0 12px;
     }
 
-    .section-head {
+    .section-head,
+    .search-section {
         flex-direction: column;
         gap: 8px;
     }
@@ -1493,14 +1501,8 @@ header.sticky .nav:hover {
     }
 
     .auth-card .form-grid,
-    .nav-actions.open,
-    .search-form input {
+    .nav-actions.open {
         width: 100%;
-    }
-
-    .search-form {
-        flex-direction: column;
-        gap: 14px;
     }
 
     .movie-card {
