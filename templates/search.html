@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Search</title>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-wrap">
+            <a href="{{ url_for('movie.home') }}" class="brand">
+                <span>MovieReview</span>
+            </a>
+
+            <button class="menu-toggle" type="button" onclick="toggleMenu(this)">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <div class="button-row nav-actions" id="navMenu">
+                <a class="button-link nav" href="{{ url_for('search.global_search') }}">Search</a>
+                <a class="button-link nav" href="{{ url_for('movie.movie_list') }}">Movies</a>
+                <a class="button-link nav" href="{{ url_for('user.user_detail', user_id=user_id) }}">Profile</a>
+                <a class="button-link logout" href="{{ url_for('auth.logout') }}">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-container">
+        <section class="search-result-page">
+
+            <form class="search-form" action="{{ url_for('search.global_search') }}" method="GET">
+                <input type="text" name="q" placeholder="Search movies or users" value="{{ query or '' }}"/>
+                <button type="submit" class="button-link primary">Search</button>
+
+                {% if query %}
+                    <a class="secondary" href="{{ url_for('search.global_search') }}">Clear</a>
+                {% endif %}
+            </form>
+
+            <div class="section-head">
+                <div>
+                    {% if query %}
+                    <p class="small-text">Results for "{{ query }}"</p>
+                    {% else %}
+                    <p class="small-text">Search movies or users</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if query %}
+            <div class="search-result-grid">
+
+                <!-- MOVIES RESULT -->
+                <div class="section-card">
+                    <h2>Movies</h2>
+
+                    {% if movies %}
+                    <div class="search-result-list">
+                        {% for movie in movies %}
+                            <a class="search-result-item" href="{{ url_for('movie.movie_detail', movie_id=movie[0]) }}">
+                                <div>
+                                    <h3>{{ movie[1] }}</h3>
+
+                                    <p class="small-text">
+                                        {{ movie[2] }} - {{ movie[3] }} - {{ movie[4] }}
+                                    </p>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                        <p class="small-text">No movies found.</p>
+                    {% endif %}
+                </div>
+
+                <!-- USERS RESULT -->
+                <div class="section-card">
+                    <h2>People</h2>
+
+                    {% if users %}
+                    <div class="search-result-list">
+                        {% for user in users %}
+                            <a class="search-result-item" href="{{ url_for('user.user_detail', user_id=user[0] ) }}">
+                                <div class="user-tag">
+                                    <h3>{{ user[0] }}</h3>
+                                    <p class="small-text">{{ user[2] if user[2] else '' }}</p>
+                                </div>
+
+                                {% if session["user_role"] == "admin" %}
+                                    <span class="role-tag">{{ user[1] }}</span>
+                                {% endif %}
+                            </a>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                        <p class="small-text">No users found.</p>
+                    {% endif %}
+                </div>
+
+            </div>
+
+
+            {% endif %}
+        </section>
+
+    </main>
+</body>
+</html>

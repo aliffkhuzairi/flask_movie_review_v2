@@ -203,6 +203,8 @@ body {
 .section-card form button {
     margin-top: 8px;
 }
+
+
 /* =============== FORMS =============== */
 .form-grid {
     display: flex;
@@ -462,6 +464,7 @@ header.sticky .brand:hover{
 
 .search-form {
     display: flex;
+    align-items: center;
     gap: 10px;
     flex-wrap: wrap;
     margin: 16px 0;
@@ -474,6 +477,18 @@ header.sticky .brand:hover{
 .search-form button {
     width: auto;
     padding: 8px 10px;
+}
+
+.search-form a {
+    text-decoration: none;
+    color: var(--text-main);
+    padding: 8px 8px;
+    transition: color 0.13s ease-in-out, text-decoration 0.13s ease-in-out;
+}
+
+.search-form a:hover {
+    text-decoration: underline;
+    color: var(--secondary);
 }
 
 
@@ -1105,6 +1120,51 @@ header.sticky .brand:hover{
     color: var(--text-muted);
 }
 
+/* =============== SEARCH PAGE =============== */
+.search-result-page .search-form {
+    justify-content: center;
+    margin: 24px;
+}
+
+.search-result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    padding: 0 24px
+}
+
+.search-result-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.search-result-item {
+    text-decoration: none;
+    color: var(--text-main);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--text-muted);
+    transition: color 0.13s ease-in-out;
+}
+
+.search-result-item:hover {
+    color: var(--secondary);
+}
+
+.role-tag {
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+
 /* =============== MEDIA QUERIES =============== */
 @media (max-width: 1200px) {
 
@@ -1281,6 +1341,10 @@ header.sticky .brand:hover{
 
     .profile-main {
         padding-left: 20px;
+    }
+
+    .search-result-grid {
+        grid-template-columns: 1fr;
     }
 
 
