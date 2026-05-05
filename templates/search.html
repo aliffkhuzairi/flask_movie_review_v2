@@ -33,7 +33,7 @@
             <form class="search-form" action="{{ url_for('search.global_search') }}" method="GET">
                 <input type="text" name="q" placeholder="Search movies or users" value="{{ query or '' }}"/>
 
-                <div>
+                <div class="search-action">
                     <button type="submit" class="button-link primary">Search</button>
 
                     {% if query %}

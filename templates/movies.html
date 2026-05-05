@@ -24,7 +24,7 @@
                       action="{{ url_for('search.global_search') }}"
                       method="GET">
                     <input type="text" name="q"
-                           placeholder="Search movies or users" value="{{ query or '' }}"/>
+                           placeholder="Search movies or users" value="{{ query|default('') }}"/>
                     <button type="submit" aria-label="Search">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
