@@ -48,6 +48,23 @@ const closeMenu = () => {
     icon.classList.add('fa-bars');
 };
 
+const toggleHeaderSearch = (button) => {
+    const searchForm = document.getElementById('headerSearchForm');
+    const icon = button.querySelector('i');
+    const input = searchForm.querySelector('input');
+
+    searchForm.classList.toggle('open');
+
+    if (searchForm.classList.contains('open')) {
+        icon.classList.remove('fa-magnifying-glass');
+        icon.classList.add('fa-xmark');
+        input.focus();
+    } else {
+        icon.classList.remove('fa-xmark');
+        icon.classList.add('fa-magnifying-glass');
+    }
+};
+
 document.addEventListener('click', function (event) {
     const menu = document.getElementById('navMenu');
     const header = document.querySelector('.header');

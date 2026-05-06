@@ -317,10 +317,14 @@ select option {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 18px;
 }
 
-.header-left {
-    flex: 0 0 auto;
+.header-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .brand {
@@ -340,35 +344,61 @@ select option {
     justify-content: center;
 }
 
-.global-search-form {
+.header-search-form {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 4px;
-    flex: 1;
-    max-width: 520px;
+    gap: 6px;
+    width: 0;
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+
+    transition:
+        width 0.25s ease,
+        max-width 0.25s ease,
+        opacity 0.18s ease;
 }
 
-.global-search-form input {
-    width: 100%;
+.header-search-form.open {
+    width: 320px;
+    max-width: 320px;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.header-search-form input {
+    flex: 1;
+    min-width: 0;
     padding: 5px 10px;
     font-size: 0.95rem;
     border-radius: 4px;
 }
 
-.global-search-form button {
+.header-search-form button,
+.header-search-toggle {
     width: auto;
     border: none;
     padding: 5px;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     background: none;
     color: var(--text-main);
     cursor: pointer;
     transition: color 0.13s ease-in-out;
 }
 
-.global-search-form button:hover {
+.header-search-form button:hover {
     color: var(--secondary);
+}
+
+.header-search-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header.sticky .header-search-toggle {
+    color: var(--text-dark);
 }
 
 .nav-actions {
@@ -408,7 +438,7 @@ select option {
 }
 
 .menu-toggle i {
-    font-size: 1.6rem;
+    font-size: 1.15rem;
     color: var(--text-main);
 }
 
@@ -430,8 +460,8 @@ header.sticky .brand:hover{
     color: var(--primary-hover);
 }
 
-header.sticky .global-search-form input,
-header.sticky .global-search-form button {
+header.sticky .header-search-form input,
+header.sticky .header-search-form button {
     color: var(--text-dark);
 }
 
@@ -1323,6 +1353,74 @@ header.sticky .nav:hover {
         font-size: 15px;
     }
 
+    .header-wrap {
+        flex-wrap: wrap;
+    }
+
+    .header-left {
+        flex: 1;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-left: auto;
+    }
+
+    .header-search-toggle {
+        display: inline-flex;
+    }
+
+    .header-search-form {
+        position: absolute;
+        top: 77px;
+        right: 60px;
+        width: 320px;
+        max-width: 320px;
+        height: 0;
+        padding: 0 18px;
+
+        background: #0B1116C3;
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-radius: 0 0 16px 16px;
+        box-shadow: var(--shadow);
+
+        opacity: 0;
+        pointer-events: none;
+        overflow: hidden;
+
+        transition:
+            top 0.6s ease-in-out,
+            height 0.22s ease,
+            padding 0.22s ease,
+            opacity 0.18s ease;
+    }
+
+    .header-search-form.open {
+        height: 78px;
+        padding: 18px;
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .header-search-form input {
+        width: 100%;
+        flex: 1;
+        min-width: 0;
+        border-radius: 8px;
+    }
+
+    .header.sticky .header-search-form {
+        top: 71px;
+    }
+
+    .header.sticky .header-search-form button {
+        color: var(--text-main);
+    }
+
     .movie-card {
         flex: 1 1 calc(33.333% - 16px);
         max-width: calc(33.333% - 16px);
@@ -1360,6 +1458,7 @@ header.sticky .nav:hover {
 
     .menu-toggle {
         display: block;
+
         width: auto;
         z-index: 20;
     }
@@ -1382,12 +1481,11 @@ header.sticky .nav:hover {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 22px;
 
         margin: 0;
         padding: 0 18px;
         z-index: 20;
-        background: rgba(11, 17, 22, 0.9);
+        background: #0B1116C3;
         backdrop-filter: blur(15px);
         -webkit-backdrop-filter: blur(15px);
         border: 1px solid rgba(229, 231, 235, 0.12);
@@ -1407,62 +1505,57 @@ header.sticky .nav:hover {
     }
 
     .nav-actions.open {
-        height: 75vh;
+        height: 40vh;
         padding: 18px;
         opacity: 1;
         pointer-events: auto;
         transform: translateY(0);
     }
 
-    .mobile-search-form {
-        display: flex;
-        flex: 0 1 auto;
-        width: min(100%, 520px);
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 4px;
-    }
-
-    .mobile-search-form input {
-        flex: 1 1 auto;
-        min-width: 0;
-        width: 100%;
-        padding: 9px 11px;
-        line-height: 1.25;
-        border-radius: 8px;
-        background: rgba(239, 246, 255, 0.12);
-    }
-
-    .mobile-search-form button {
-        flex: 0 0 auto;
-        width: auto;
-        padding: 9px 11px;
-        border: none;
-        background: var(--primary);
-        color: var(--text-main);
-        border-radius: 8px;
-        cursor: pointer;
-    }
-
-    .mobile-search-form button:hover {
-        background: var(--primary-hover);
-    }
-
     .nav-actions a {
         width: min(100%, 320px);
         text-align: center;
         padding: 14px 0;
-        border-bottom: 1px solid rgba(229, 231, 235, 0.12);
+        border-bottom: none;
         border-radius: 0;
     }
 
-    .nav-actions a:last-child {
-        border-bottom: none;
+    .nav-actions a:first-child {
+        border-bottom: 1px solid rgba(229, 231, 235, 0.12);
     }
 
     .nav-actions .logout {
         border-radius: 8px;
         border-bottom: none;
+    }
+
+    .header-search-form {
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+
+        width: 100%;
+        max-width: none;
+
+        padding: 0 36px;
+
+        border-radius: 0 0 16px 16px;
+    }
+
+    .header-search-form.open {
+        width: 100%;
+        max-width: none;
+        padding: 14px 18px;
+    }
+
+    .header-search-form input {
+        width: 100%;
+        min-width: 0;
+    }
+
+    header.sticky .header-search-form.open {
+        top: 59px;
     }
 
     header.sticky .menu-toggle i {
