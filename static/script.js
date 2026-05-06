@@ -23,17 +23,46 @@ const toggleMenu = (button) => {
     const icon = button.querySelector('i');
 
     menu.classList.toggle('open');
+    document.body.classList.toggle('menu-open', menu.classList.contains('open'));
 
     if (menu.classList.contains('open')) {
         icon.classList.remove('fa-bars');
         icon.classList.add('fa-xmark');
-    }
-
-    else {
+    } else {
         icon.classList.remove('fa-xmark');
         icon.classList.add('fa-bars');
     }
-}
+};
+
+const closeMenu = () => {
+    const menu = document.getElementById('navMenu');
+    const toggleButton = document.querySelector('.menu-toggle');
+    const icon = toggleButton.querySelector('i');
+
+    if (!menu || !toggleButton || !icon) return;
+
+    menu.classList.remove('open');
+    document.body.classList.remove('menu-open');
+
+    icon.classList.remove('fa-xmark');
+    icon.classList.add('fa-bars');
+};
+
+document.addEventListener('click', function (event) {
+    const menu = document.getElementById('navMenu');
+    const header = document.querySelector('.header');
+
+    if (!menu || !header) return;
+
+    const menuIsOpen = menu.classList.contains('open');
+    const clickedInsideHeader = header.contains(event.target);
+
+    if (menuIsOpen && !clickedInsideHeader) {
+        event.preventDefault();
+        closeMenu();
+    }
+});
+
 
 
 document.addEventListener('DOMContentLoaded', function () {

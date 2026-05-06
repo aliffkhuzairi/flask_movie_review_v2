@@ -11,18 +11,47 @@
     <!-- HEADER -->
     <header class="header">
         <div class="header-wrap">
-            <a href="{{ url_for('movie.home') }}" class="brand">
-                <span>MovieReview</span>
-            </a>
+            <div class="header-left">
+                <a href="{{ url_for('movie.home') }}" class="brand">
+                    <span>MovieReview</span>
+                </a>
+            </div>
+
+            <div class="header-center">
+                <form class="global-search-form"
+                      action="{{ url_for('search.global_search') }}"
+                      method="GET">
+                    <input type="text" name="q"
+                           placeholder="Search movies or users" value="{{ query or '' }}"/>
+                    <button type="submit" aria-label="Search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
+            </div>
 
             <button class="menu-toggle" type="button" onclick="toggleMenu(this)">
                 <i class="fa-solid fa-bars"></i>
             </button>
 
             <div class="button-row nav-actions" id="navMenu">
+                <form class="mobile-search-form"
+                      action="{{ url_for('search.global_search') }}"
+                      method="GET">
+                    <input
+                        type="text"
+                        name="q"
+                        placeholder="Search movies or users"
+                        value="{{ query|default('') }}"
+                    >
+                    <button type="submit" aria-label="Search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
+
                 <a class="button-link nav" href="{{ url_for('movie.movie_list') }}">Movies</a>
                 <a class="button-link nav" href="{{ url_for('user.user_detail', user_id=user_id) }}">Profile</a>
                 <a class="button-link logout" href="{{ url_for('auth.logout') }}">Logout</a>
+
             </div>
         </div>
     </header>
