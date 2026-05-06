@@ -523,23 +523,29 @@ header.sticky .nav:hover {
 
 .search-form {
     display: flex;
-    flex-direction: row;
     align-items: center;
     gap: 10px;
+    flex: 1 1 320px;
+    max-width: 360px;
+    flex-wrap: nowrap;
     margin: 8px 0;
 }
 
 .search-form input {
+    flex: 1 1 auto;
+    min-width: 0;
     width: 100%;
     border-radius: 4px;
 }
 
 .search-form button {
+    flex: 0 0 auto;
     width: auto;
     padding: 8px 10px;
 }
 
 .search-form a {
+    flex: 0 0 auto;
     text-decoration: none;
     color: var(--text-main);
     padding: 8px 8px;
@@ -1390,8 +1396,7 @@ header.sticky .nav:hover {
         padding: 20px 0 12px;
     }
 
-    .section-head,
-    .search-section {
+    .section-head {
         flex-direction: column;
         gap: 8px;
     }
@@ -1470,6 +1475,36 @@ header.sticky .nav:hover {
         grid-template-columns: 1fr;
     }
 
+    .search-section {
+        flex-direction: column;
+        align-items: center;
+        gap: 18px;
+    }
+
+    .search-form {
+        flex: 0 1 auto;
+        width: 100%;
+        max-width: 420px;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: center;
+        margin: 16px 0;
+    }
+
+    .search-form input {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .search-form button {
+        flex: 0 0 auto;
+        width: auto;
+    }
+
+    .search-section .sort {
+        width: 100%;
+        justify-content: center;
+    }
 
 }
 
@@ -1522,6 +1557,10 @@ header.sticky .nav:hover {
 
     .search-genre {
         margin: 5px 0;
+    }
+
+    .search-form {
+        flex-wrap: wrap;
     }
 
 }
