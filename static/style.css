@@ -1209,6 +1209,7 @@ header.sticky .nav:hover {
 
 /* =============== SEARCH PAGE =============== */
 .search-result-page {
+    min-height: calc(100vh - 80px);
     padding: 44px 0;
 }
 
@@ -1495,6 +1496,7 @@ header.sticky .nav:hover {
     .section-head p,
     .result-summary,
     .reviews-list .result-summary,
+    .not-found,
     .section-card h2,
     .movie-title,
     .admin-panel {
