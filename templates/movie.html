@@ -31,10 +31,39 @@
                 </div>
             </div>
 
-            <div class="movie-rating-box">
-                <p class="rating-label">Average Rating</p>
-                <div class="rating-value">
-                    {{ avg_rating if avg_rating is not none else 'N/A' }}
+            <div class="rating-summary-card">
+                <div class="rating-summary-head">
+                    <h3>Ratings</h3>
+                    <span>{{ total_reviews }} review{{ '' if total_reviews == 1 else 's' }}</span>
+                </div>
+
+                <div class="rating-summary-body">
+                    <div class="rating-distribution">
+                        <span class="rating-axis-star">
+                            <i class="fa-solid fa-star"></i>
+                        </span>
+
+                        <div class="rating-bars-horizontal">
+                            {% for item in rating_breakdown|reverse %}
+                                <div class="rating-column">
+                                    <div
+                                        class="rating-column-fill"
+                                        style="height: {{ item.percentage }}%;">
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="rating-average-display">
+                        <p class="rating-average-number">
+                            {{ avg_rating if avg_rating else '0.0' }}
+                        </p>
+
+                        <div class="rating-average-stars">
+                            {{ render_stars(avg_rating if avg_rating else 0) }}
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

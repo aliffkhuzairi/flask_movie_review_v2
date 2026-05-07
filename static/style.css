@@ -952,19 +952,99 @@ header.sticky .nav:hover {
     color: var(--text-main);
 }
 
-.movie-rating-box {
-    min-width: 160px;
-    text-align: center;
+.rating-summary-card {
+    margin-top: 20px;
     padding: 18px;
-    border-radius: 12px;
-    background: var(--secondary-hover);
-    color: var(--text-dark);
+    border-radius: 14px;
+    background: rgba(239, 246, 255, 0.08);
 }
 
-.rating-label {
-    font-size: 0.9rem;
-    margin-bottom: 8px;
-    font-weight: 600;
+.rating-summary-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(229, 231, 235, 0.14);
+}
+
+.rating-summary-head h3 {
+    font-size: 1.1rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.rating-summary-head span {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.rating-summary-body {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 18px;
+    padding-top: 18px;
+}
+
+.rating-distribution {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: end;
+    gap: 10px;
+    min-width: 90px;
+}
+
+.rating-axis-star {
+    color: var(--secondary);
+    font-size: 1.4rem;
+    line-height: 1;
+}
+
+.rating-bars-horizontal {
+    height: 76px;
+    flex: 1 1 auto;
+    display: flex;
+    align-items: end;
+    gap: 5px;
+}
+
+.rating-column {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+}
+
+.rating-column-fill {
+    width: 70%;
+    min-height: 4px;
+    border-radius: 999px 999px 0 0;
+    background: rgba(239, 214, 172, 0.72);
+    transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.rating-column-fill:hover {
+    background: var(--secondary);
+    transform: scaleY(1.04);
+}
+
+.rating-average-display {
+    min-width: 120px;
+    text-align: center;
+}
+
+.rating-average-number {
+    font-size: 3rem;
+    line-height: 1;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+.rating-average-stars {
+    color: var(--secondary);
+    white-space: nowrap;
 }
 
 .star-rating-input {

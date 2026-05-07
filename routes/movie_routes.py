@@ -125,7 +125,7 @@ def movie_detail(movie_id):
         rating = request.form.get("rating", "").strip()
 
         if not review or not is_valid_rating(rating):
-            flash("Please enter a review and a rating from 0-5.", "warning-movie")
+            flash("Please enter a review and a rating from 1-5.", "warning-movie")
             return redirect(url_for("movie.movie_detail", movie_id=movie_id))
 
         with db_cursor(commit=True) as cur:
@@ -229,6 +229,37 @@ def movie_detail(movie_id):
 
         avg_rating = cur.fetchone()[0]
 
+        # GET RATING BREAKDOWN
+        cur.execute("""
+            select r.ratings, count(*)
+            from reviews r
+            where r.mid = %s
+            and not exists (
+                select 1 from ties t
+                where t.id = %s and t.opid = r.uid and t.tie = 'mute'
+            )
+            group by r.ratings
+            order by r.ratings asc;
+        """,(movie_id, session["user_id"],))
+
+        ratings_count_raw = cur.fetchall()
+
+        rating_count_map = {
+            int(row[0]): row[1] for row in ratings_count_raw
+        }
+
+        rating_breakdown = []
+
+        for rating in range(0, 6):
+            count = rating_count_map.get(rating, 0)
+            percentage = round((count / total_reviews) * 100) if total_reviews > 0 else 0
+
+            rating_breakdown.append({
+                "rating": rating,
+                "count": count,
+                "percentage": percentage,
+            })
+
         cur.execute("""
             select ratings, review
             from reviews
@@ -248,6 +279,7 @@ def movie_detail(movie_id):
                            start_reviews=pagination["start_item"],
                            end_reviews=pagination["end_item"],
                            avg_rating=avg_rating,
+                           rating_breakdown=rating_breakdown,
                            user_review=user_review,
                            user_id=session["user_id"])
 
