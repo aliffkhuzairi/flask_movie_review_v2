@@ -49,6 +49,35 @@ def user_detail(user_id):
 
         total_reviews = cur.fetchone()[0]
 
+        # GET USER REVIEW STATS
+        cur.execute("""
+            select trunc(avg(r.ratings), 2)
+            from reviews r
+            where r.uid = %s;
+        """,(user_id,))
+
+        avg_rating_given = cur.fetchone()[0]
+
+        cur.execute("""
+            select m.genre, count(*) as genre_count
+            from reviews r
+            join movies m on r.mid = m.id
+            where r.uid = %s group by m.genre
+            order by genre_count desc, m.genre asc
+            limit 1;
+        """,(user_id,))
+
+        top_genre_row = cur.fetchone()
+        top_genre = top_genre_row[0] if top_genre_row else None
+
+        cur.execute("""
+            select max(r.rev_time)
+            from reviews r
+            where r.uid = %s;
+        """,(user_id,))
+
+        latest_review_date = cur.fetchone()[0]
+
         # USER REVIEWS PAGINATION
         page = get_page(request)
         per_page = 5
@@ -122,6 +151,9 @@ def user_detail(user_id):
                            user_id=session["user_id"],
                            review_sort=review_sort,
                            total_reviews=total_reviews,
+                           avg_rating_given=avg_rating_given,
+                           top_genre=top_genre,
+                           latest_review_date=latest_review_date,
                            pages=pagination["pages"],
                            page=pagination["page"],
                            total_pages=pagination["total_pages"],

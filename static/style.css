@@ -1138,7 +1138,7 @@ header.sticky .nav:hover {
     align-items: center;
     justify-content: space-between;
     padding: 20px;
-    margin-bottom: 24px;
+    margin-bottom: 12px;
 }
 
 .profile-title {
@@ -1243,6 +1243,36 @@ header.sticky .nav:hover {
 
 .btn-unmute:hover {
     background: #1f2937;
+}
+
+.profile-stats-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 0 20px;
+    margin: 0 0 24px;
+}
+
+.profile-stat-card {
+    flex: 1 1 calc(25% - 16px);
+    min-width: 180px;
+    padding: 18px;
+    border-radius: 12px;
+    background: rgba(239, 246, 255, 0.08);
+}
+
+.profile-stat-label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.profile-stat-value {
+    display: block;
+    color: var(--text-main);
+    font-size: 1.45rem;
 }
 
 .admin-panel {
@@ -1504,6 +1534,11 @@ header.sticky .nav:hover {
         max-width: calc(33.333% - 16px);
     }
 
+    .profile-stat-card {
+        flex: 1 1 calc(50% - 16px);
+        text-align: center;
+    }
+
     .detail-head {
         padding: 0;
         flex-direction: column;
@@ -1531,7 +1566,7 @@ header.sticky .nav:hover {
 @media (max-width: 768px) {
 
     .header-wrap {
-        padding: 10px 16px;
+        padding: 15px 40px;
     }
 
     .menu-toggle {
@@ -1547,7 +1582,7 @@ header.sticky .nav:hover {
 
     .nav-actions {
         position: absolute;
-        top: 64px;
+        top: 74px;
         right: 0;
         left: 0;
         width: 100%;
@@ -1609,7 +1644,7 @@ header.sticky .nav:hover {
 
     .header-search-form {
         position: fixed;
-        top: 64px;
+        top: 74px;
         left: 0;
         right: 0;
 

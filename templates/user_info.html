@@ -62,6 +62,35 @@
             </div>
         </section>
 
+        <!-- USER STATS -->
+        <section class="profile-stats-grid">
+            <div class="profile-stat-card">
+                <span class="profile-stat-label">Reviews</span>
+                <strong class="profile-stat-value">{{ total_reviews }}</strong>
+            </div>
+
+            <div class="profile-stat-card">
+                <span class="profile-stat-label">Average Rating Given</span>
+                <strong class="profile-stat-value">
+                    {{ avg_rating_given if avg_rating_given else '0.0' }}
+                </strong>
+            </div>
+
+            <div class="profile-stat-card">
+                <span class="profile-stat-label">Top Genre</span>
+                <strong class="profile-stat-value">
+                    {{ top_genre if top_genre else '-' }}
+                </strong>
+            </div>
+
+            <div class="profile-stat-card">
+                <span class="profile-stat-label">Latest Review</span>
+                <strong class="profile-stat-value">
+                    {{ latest_review_date.strftime('%d %b %Y') if latest_review_date else '-' }}
+                </strong>
+            </div>
+        </section>
+
         <section class="two-cols-layout">
 
             <!-- LEFT COLUMN -->
