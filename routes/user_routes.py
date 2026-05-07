@@ -3,6 +3,7 @@ from utils import login_required, is_valid_email, get_page, build_pagination
 from db import db_cursor
 
 ALLOWED_GENRES = {"action", "comedy", "drama", "fantasy", "romance", "thriller", "western"}
+ALLOWED_TABS = {"overview", "reviews", "connections", "settings"}
 
 user_bp = Blueprint("user", __name__)
 
@@ -11,6 +12,10 @@ user_bp = Blueprint("user", __name__)
 def user_detail(user_id):
     current_user_role = session.get("user_role")
     review_sort = request.args.get("review_sort", "latest").strip()
+    active_tab = request.args.get("tab", "overview").strip()
+
+    if active_tab not in ALLOWED_TABS:
+        active_tab = "overview"
 
     sort_review = ["latest", "highest", "lowest"]
 
@@ -102,6 +107,11 @@ def user_detail(user_id):
         is_admin_profile = user_info[1] == "admin"
         is_current_user_admin = current_user_role == "admin"
 
+        if not is_self:
+            active_tab = "reviews"
+
+        if is_self and is_current_user_admin and active_tab == "connections":
+            active_tab = "overview"
 
         # SOCIAL STATUS AND INTERACTIONS
         relationship = None
@@ -150,6 +160,7 @@ def user_detail(user_id):
                            user_reviews=user_reviews,
                            user_id=session["user_id"],
                            review_sort=review_sort,
+                           active_tab=active_tab,
                            total_reviews=total_reviews,
                            avg_rating_given=avg_rating_given,
                            top_genre=top_genre,

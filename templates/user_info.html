@@ -91,11 +91,43 @@
             </div>
         </section>
 
+        <!-- PROFILE TABS -->
+        <nav class="profile-tabs">
+            {% if is_self %}
+                <a class="profile-tab {{ 'active' if active_tab == 'overview' else '' }}"
+                    href="{{ url_for('user.user_detail', user_id=user_info[0], tab='overview') }}">
+                    Overview
+                </a>
+
+                <a class="profile-tab {{ 'active' if active_tab == 'reviews' else '' }}"
+                    href="{{ url_for('user.user_detail', user_id=user_info[0], tab='reviews') }}">
+                    Your Reviews
+                </a>
+
+                {% if not is_current_user_admin %}
+                    <a class="profile-tab {{ 'active' if active_tab == 'connections' else '' }}"
+                       href="{{ url_for('user.user_detail', user_id=user_info[0], tab='connections') }}">
+                        Connections
+                    </a>
+                {% endif %}
+
+                <a class="profile-tab {{ 'active' if active_tab == 'settings' else '' }}"
+                   href="{{ url_for('user.user_detail', user_id=user_info[0], tab='settings') }}">
+                    Account Settings
+                </a>
+            {% else %}
+                <a class="profile-tab active"
+                   href="{{ url_for('user.user_detail', user_id=user_info[0], tab='reviews') }}">
+                    Reviews
+                </a>
+
+            {% endif %}
+        </nav>
+
+        <!-- OVERVIEW TAB -->
+        {% if active_tab == 'overview' %}
         <section class="two-cols-layout">
-
-            <!-- LEFT COLUMN -->
             <div class="profile-left-column">
-
                 <!-- ACCOUNT INFO -->
                 <div class="section-card info-card">
                     <h2>Account Info</h2>
@@ -136,8 +168,218 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="profile-right-column">
 
-                <!-- EDIT PROFILE (SELF ONLY) -->
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- REVIEWS TAB -->
+        {% if active_tab == 'reviews' %}
+        <section class="single-profile-section">
+            <!-- USER REVIEWS -->
+            <div class="section-card reviews-card">
+                <div class="detail-head" id="reviews">
+                    <h2>{{ 'Your Reviews' if is_self else 'Reviews' }}</h2>
+                    <div class="button-row sort">
+                        <a class="button-link {{ 'primary' if review_sort == 'latest' else 'secondary' }}"
+                           href="{{ url_for('user.user_detail', user_id=user_info[0], tab='reviews', review_sort='latest') }}#reviews">
+                            Latest
+                        </a>
+
+                        <a class="button-link {{ 'primary' if review_sort == 'highest' else 'secondary' }}"
+                           href="{{ url_for('user.user_detail', user_id=user_info[0], tab='reviews', review_sort='highest') }}#reviews">
+                            Highest
+                        </a>
+
+                        <a class="button-link {{ 'primary' if review_sort == 'lowest' else 'secondary' }}"
+                           href="{{ url_for('user.user_detail', user_id=user_info[0], tab='reviews', review_sort='lowest') }}#reviews">
+                            Lowest
+                        </a>
+                    </div>
+                </div>
+
+                {% if user_reviews %}
+                <div class="reviews-list">
+                    {% if total_reviews > 0 %}
+                        <p class="small-text result-summary">
+                            Showing {{ start_reviews }} – {{ end_reviews }} of {{ total_reviews }}
+                            review{{ '' if total_reviews == 1 else 's' }}
+                        </p>
+                    {% else %}
+                        <p class="small-text">
+                            No reviews found.
+                        </p>
+                    {% endif %}
+                    <div class="review-feed profile-review-feed">
+                        {% for review in user_reviews %}
+                        <div class="review-card">
+                            <div class="review-card-top">
+                                <div class="review-title-meta">
+                                    <span class="tooltip" data-title="{{ review[1] }}">
+                                        <a class="review-title tooltip"
+                                       href="{{ url_for('movie.movie_detail', movie_id=review[0]) }}">
+                                            {{ review[1] }}
+                                        </a>
+                                    </span>
+                                    <div class="year-time">
+                                        <span class="year-tag">
+                                            {{ review[5].strftime('%Y') if review[5] else '' }}
+                                        </span>
+                                        <p class="review-time">
+                                            {{ review[4] | time_ago }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <span class="review-rating">{{ render_stars(review[2]) }}</span>
+                                </div>
+                            </div>
+
+                            <div class="review-text-block detail-page">
+                                <p class="review-text clamp-text">{{ review[3] }}</p>
+                                <button type="button" class="text-toggle" onclick="toggleReview(this)">Read more</button>
+                            </div>
+
+                            {% if is_self %}
+                            <form class="delete"
+                                  action="{{ url_for('user.delete_review', movie_id=review[0]) }}"
+                                  method="POST"
+                                  onsubmit="return confirm('This action cannot be undone. Delete review?');">
+                                <button type="submit" class="button-link logout">Delete Review</button>
+                            </form>
+                            {% endif %}
+
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
+                {% else %}
+                    <p class="empty-state">No reviews yet.</p>
+                {% endif %}
+
+                {% if total_pages > 1 %}
+                <div class="pagination">
+                    {% if page > 1 %}
+                        <a class="page-nav"
+                           href="{{ url_for('user.user_detail', user_id=user_info[0], tab='reviews', review_sort=review_sort, page=page-1) }}#reviews">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </a>
+                    {% endif %}
+
+                    {% for p in pages %}
+                        {% if p == "..." %}
+                            <p class="ellipsis">...</p>
+                        {% else %}
+                            <a class="page-num {% if p == page %}active{% endif %}"
+                               href="{{ url_for('user.user_detail', user_id=user_info[0], tab='reviews', review_sort=review_sort, page=p) }}#reviews">
+                                {{ p }}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page < total_pages %}
+                        <a class="page-nav"
+                           href="{{ url_for('user.user_detail', user_id=user_info[0], tab='reviews', review_sort=review_sort, page=page+1) }}#reviews" >
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                    {% endif %}
+                    <span class="small-text">
+                        Page {{ page }} of {{ total_pages }}
+                    </span>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- CONNECTION TAB -->
+        {% if active_tab == 'connections' and is_self and not is_current_user_admin %}
+        <section class="two-cols-layout" id="connections">
+            <div class="profile-left-column">
+                <!-- FOLLOWED USERS CARD -->
+                <div class="section-card user-list-card">
+                    <h2>Followed Users
+                        {% if followed_count > 0 %}
+                        <span>({{ followed_count }})</span>
+                        {% endif %}
+                    </h2>
+
+                    {% if followed_users %}
+                        <ul class="relation-list">
+
+                            {% for followed in followed_users[:5] %}
+                            <li class="relation-item">
+                                <div class="relation-user">
+                                    <a class="id-user" href="{{ url_for('user.user_detail', user_id=followed[0]) }}">
+                                        {{ followed[0] }}
+                                    </a>
+                                    {% if followed[1] %}
+                                        <span class="user-name">{{ followed[1] }}</span>
+                                    {% endif %}
+                                </div>
+                                {% if is_self %}
+                                    <form action="{{ url_for('user.unfollow_user', target_user_id=followed[0]) }}"
+                                          method="POST"
+                                          onsubmit="return confirm('Unfollow this user?');">
+                                        <button type="submit" class="button-link btn-unfollow">Unfollow</button>
+                                    </form>
+                                {% endif %}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="empty-state">No followed users.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="profile-right-column">
+                <!-- MUTED USERS CARD -->
+                {% if is_self %}
+                <div class="section-card user-list-card">
+                    <h2>Muted Users
+                        {% if muted_count > 0 %}
+                        <span>({{ muted_count }})</span>
+                        {% endif %}
+                    </h2>
+
+                    {% if muted_users %}
+                        <ul class="relation-list">
+                            {% for muted in muted_users[:5] %}
+                                <li class="relation-item">
+                                    <div class="relation-user">
+                                        <a href="{{ url_for('user.user_detail', user_id=muted[0]) }}" class="id-user">
+                                            {{ muted[0] }}
+                                        </a>
+                                        {% if muted[1] %}
+                                            <span class="user-name">{{ muted[1] }}</span>
+                                        {% endif %}
+                                    </div>
+
+                                    <form action="{{ url_for('user.unmute_user', target_user_id=muted[0]) }}"
+                                          method="POST"
+                                          onsubmit="return confirm('Unmute this user?');">
+                                        <button type="submit" class="button-link btn-unmute">Unmute</button>
+                                    </form>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="empty-state">No muted users.</p>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- SETTINGS TAB -->
+        {% if active_tab == 'settings' and is_self %}
+        <section class="two-cols-layout">
+            <div class="profile-left-column">
+                <!-- EDIT PROFILE CARD -->
                 {% if is_self %}
                 <div class="section-card profile-edit-card">
                     <h2>Edit Profile</h2>
@@ -166,89 +408,12 @@
                     </form>
                 </div>
                 {% endif %}
+            </div>
 
+            <div class="profile-right-column">
 
-                <!--  FOLLOWED AND MUTED USERS  -->
-                {% if is_self and not is_current_user_admin %}
-
-                    <!--  FOLLOWED USERS  -->
-                    <div class="section-card user-list-card">
-                        <h2>Followed Users
-                            {% if followed_count > 0 %}
-                            <span>({{ followed_count }})</span>
-                            {% endif %}
-                        </h2>
-
-                            {% if followed_users %}
-                            <ul class="relation-list">
-
-                                {% for followed in followed_users[:5] %}
-                                <li class="relation-item">
-                                    <div class="relation-user">
-                                        <a class="id-user" href="{{ url_for('user.user_detail', user_id=followed[0]) }}">
-                                            {{ followed[0] }}
-                                        </a>
-                                        {% if followed[1] %}
-                                            <span class="user-name">{{ followed[1] }}</span>
-                                        {% endif %}
-                                    </div>
-                                    {% if is_self %}
-                                        <form action="{{ url_for('user.unfollow_user', target_user_id=followed[0]) }}"
-                                              method="POST"
-                                              onsubmit="return confirm('Unfollow this user?');">
-                                            <button type="submit" class="button-link btn-unfollow">Unfollow</button>
-                                        </form>
-                                    {% endif %}
-                                </li>
-                                {% endfor %}
-
-                            </ul>
-                            {% else %}
-                                <p class="empty-state">No followed users.</p>
-                            {% endif %}
-                    </div>
-
-                    <!--  MUTED USERS  -->
-                    {% if is_self %}
-                    <div class="section-card user-list-card">
-                        <h2>Muted Users
-                            {% if muted_count > 0 %}
-                            <span>({{ muted_count }})</span>
-                            {% endif %}
-                        </h2>
-
-                        {% if muted_users %}
-                            <ul class="relation-list">
-                                {% for muted in muted_users[:5] %}
-                                    <li class="relation-item">
-                                        <div class="relation-user">
-                                            <a href="{{ url_for('user.user_detail', user_id=muted[0]) }}" class="id-user">
-                                                {{ muted[0] }}
-                                            </a>
-                                            {% if muted[1] %}
-                                                <span class="user-name">{{ muted[1] }}</span>
-                                            {% endif %}
-                                        </div>
-
-                                        <form action="{{ url_for('user.unmute_user', target_user_id=muted[0]) }}"
-                                              method="POST"
-                                              onsubmit="return confirm('Unmute this user?');">
-                                            <button type="submit" class="button-link btn-unmute">Unmute</button>
-                                        </form>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        {% else %}
-                            <p class="empty-state">No muted users.</p>
-                        {% endif %}
-                    </div>
-                    {% endif %}
-                {% endif %}
-
-
-                <!-- IF CURRENT USER IS ADMIN -->
+                <!-- ADMIN PANEL -->
                 {% if is_self and is_current_user_admin %}
-
                     <div class="section-card admin-card">
                         <h2>Admin Panel</h2>
                         <p class="small-text admin-panel">Add a new movie to the platform.</p>
@@ -290,127 +455,16 @@
                             <button type="submit" class="button-link primary">Add Movie</button>
                         </form>
                     </div>
+
+                {% else %}
+                    <div class="section-card">
+                        <h2>Security</h2>
+                        <p class="small-text">Change password feature coming later.</p>
+                    </div>
                 {% endif %}
-
-            </div>
-
-
-            <!-- RIGHT COLUMN -->
-            <div class="profile-right-column">
-
-                <!-- USER'S REVIEWS -->
-                <div class="section-card reviews-card">
-                    <div class="detail-head" id="reviews">
-                        <h2>Your Reviews</h2>
-                        <div class="button-row sort">
-                            <a class="button-link {{ 'primary' if review_sort == 'latest' else 'secondary' }}"
-                               href="{{ url_for('user.user_detail', user_id=user_info[0], review_sort='latest') }}#reviews">
-                                Latest
-                            </a>
-
-                            <a class="button-link {{ 'primary' if review_sort == 'highest' else 'secondary' }}"
-                               href="{{ url_for('user.user_detail', user_id=user_info[0], review_sort='highest') }}#reviews">
-                                Highest
-                            </a>
-
-                            <a class="button-link {{ 'primary' if review_sort == 'lowest' else 'secondary' }}"
-                               href="{{ url_for('user.user_detail', user_id=user_info[0], review_sort='lowest') }}#reviews">
-                                Lowest
-                            </a>
-                        </div>
-                    </div>
-
-                    {% if user_reviews %}
-                    <div class="reviews-list">
-                        {% if total_reviews > 0 %}
-                            <p class="small-text result-summary">
-                                Showing {{ start_reviews }} – {{ end_reviews }} of {{ total_reviews }}
-                                review{{ '' if total_reviews == 1 else 's' }}
-                            </p>
-                        {% else %}
-                            <p class="small-text">
-                                No reviews found.
-                            </p>
-                        {% endif %}
-                        {% for review in user_reviews %}
-                            <div class="review-card">
-                                <div class="review-card-top">
-                                    <div class="review-title-meta">
-                                        <span class="tooltip" data-title="{{ review[1] }}">
-                                            <a class="review-title tooltip"
-                                           href="{{ url_for('movie.movie_detail', movie_id=review[0]) }}">
-                                                {{ review[1] }}
-                                            </a>
-                                        </span>
-                                        <div class="year-time">
-                                            <span class="year-tag">
-                                                {{ review[5].strftime('%Y') if review[5] else '' }}
-                                            </span>
-                                            <p class="review-time">
-                                                {{ review[4] | time_ago }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <span class="review-rating">{{ render_stars(review[2]) }}</span>
-                                    </div>
-                                </div>
-
-                                <div class="review-text-block detail-page">
-                                    <p class="review-text clamp-text">{{ review[3] }}</p>
-                                    <button type="button" class="text-toggle" onclick="toggleReview(this)">Read more</button>
-                                </div>
-
-                                {% if is_self %}
-                                <form class="delete"
-                                      action="{{ url_for('user.delete_review', movie_id=review[0]) }}"
-                                      method="POST"
-                                      onsubmit="return confirm('This action cannot be undone. Delete review?');">
-                                    <button type="submit" class="button-link logout">Delete Review</button>
-                                </form>
-                                {% endif %}
-
-                            </div>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                        <p class="empty-state">No reviews yet.</p>
-                    {% endif %}
-
-                    {% if total_pages > 1 %}
-                    <div class="pagination">
-                        {% if page > 1 %}
-                            <a class="page-nav"
-                               href="{{ url_for('user.user_detail', user_id=user_info[0], page=page-1) }}#reviews">
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </a>
-                        {% endif %}
-
-                        {% for p in pages %}
-                            {% if p == "..." %}
-                                <p class="ellipsis">...</p>
-                            {% else %}
-                                <a class="page-num {% if p == page %}active{% endif %}"
-                                   href="{{ url_for('user.user_detail', user_id=user_info[0], page=p) }}#reviews">
-                                    {{ p }}
-                                </a>
-                            {% endif %}
-                        {% endfor %}
-
-                        {% if page < total_pages %}
-                            <a class="page-nav"
-                               href="{{ url_for('user.user_detail', user_id=user_info[0], page=page+1) }}#reviews" >
-                                <i class="fa-solid fa-chevron-right"></i>
-                            </a>
-                        {% endif %}
-                        <span class="small-text">
-                            Page {{ page }} of {{ total_pages }}
-                        </span>
-                    </div>
-                    {% endif %}
-                </div>
             </div>
         </section>
+        {% endif %}
     </main>
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
