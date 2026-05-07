@@ -22,33 +22,65 @@ const toggleMenu = (button) => {
     const menu = document.getElementById('navMenu');
     const icon = button.querySelector('i');
 
-    menu.classList.toggle('open');
+    const open = !menu.classList.contains('open');
+    closeSearch();
 
-    if (menu.classList.contains('open')) {
+    if (open) {
+        menu.classList.add('open');
         icon.classList.remove('fa-bars');
         icon.classList.add('fa-xmark');
-    } else {
-        icon.classList.remove('fa-xmark');
-        icon.classList.add('fa-bars');
     }
-};
+    else {
+        closeMenu();
+    }
+}
 
+// Toggle Search
 const toggleHeaderSearch = (button) => {
     const searchForm = document.getElementById('headerSearchForm');
     const icon = button.querySelector('i');
     const input = searchForm.querySelector('input');
 
-    searchForm.classList.toggle('open');
+    const open = !searchForm.classList.contains('open');
+    closeMenu()
 
-    if (searchForm.classList.contains('open')) {
+    if (open) {
+        searchForm.classList.add('open');
         icon.classList.remove('fa-magnifying-glass');
         icon.classList.add('fa-xmark');
         input.focus();
-    } else {
-        icon.classList.remove('fa-xmark');
-        icon.classList.add('fa-magnifying-glass');
+    }
+    else {
+        closeSearch();
     }
 };
+
+// Close Menu
+const closeMenu = () => {
+    const menu = document.getElementById('navMenu');
+    const menuToggle = document.querySelector('.menu-toggle');
+    const menuIcon = menuToggle.querySelector('i');
+
+    if (!menu || !menuToggle) return;
+
+    menu.classList.remove('open');
+    menuIcon.classList.remove('fa-xmark');
+    menuIcon.classList.add('fa-bars');
+}
+
+// Close Search
+const closeSearch = () => {
+    const searchForm = document.getElementById('headerSearchForm');
+    const searchToggle = document.querySelector('.header-search-toggle');
+    const searchIcon = searchToggle.querySelector('i');
+
+    if (!searchForm || !searchToggle) return;
+
+    searchForm.classList.remove('open');
+    searchIcon.classList.remove('fa-xmark');
+    searchIcon.classList.add('fa-magnifying-glass');
+
+}
 
 document.addEventListener('DOMContentLoaded', function () {
     const blocks = document.querySelectorAll('.review-text-block');
