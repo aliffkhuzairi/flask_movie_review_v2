@@ -84,6 +84,11 @@ body.menu-open {
     text-align: left;
 }
 
+.reviews-card .result-summary {
+    padding: 8px 12px;
+    text-align: left;
+}
+
 .section-card h2 {
     margin-bottom: 24px;
     font-size: 1.6rem;
@@ -953,7 +958,6 @@ header.sticky .nav:hover {
 }
 
 .rating-summary-card {
-    margin-top: 20px;
     padding: 18px;
     border-radius: 14px;
     background: rgba(239, 246, 255, 0.08);
@@ -969,7 +973,7 @@ header.sticky .nav:hover {
 }
 
 .rating-summary-head h3 {
-    font-size: 1.1rem;
+    font-size: 1rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
 }
@@ -995,12 +999,6 @@ header.sticky .nav:hover {
     min-width: 90px;
 }
 
-.rating-axis-star {
-    color: var(--secondary);
-    font-size: 1.4rem;
-    line-height: 1;
-}
-
 .rating-bars-horizontal {
     height: 76px;
     flex: 1 1 auto;
@@ -1018,7 +1016,7 @@ header.sticky .nav:hover {
 }
 
 .rating-column-fill {
-    width: 70%;
+    width: 100%;
     min-height: 4px;
     border-radius: 999px 999px 0 0;
     background: rgba(239, 214, 172, 0.72);
@@ -1036,7 +1034,7 @@ header.sticky .nav:hover {
 }
 
 .rating-average-number {
-    font-size: 3rem;
+    font-size: 2.5rem;
     line-height: 1;
     color: var(--text-muted);
     margin-bottom: 10px;
@@ -1709,14 +1707,11 @@ header.sticky .nav:hover {
 
     .movie-hero {
         flex-direction: column;
+        gap: 24px;
     }
 
     .movie-tags {
         justify-content: center;
-    }
-
-    .movie-rating-box {
-        display: none;
     }
 
     .reviews-list .review-card {
