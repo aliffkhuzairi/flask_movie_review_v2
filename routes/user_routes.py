@@ -1,4 +1,4 @@
-import os
+import os, base64
 from flask import render_template, request, redirect, url_for, flash, session, Blueprint, current_app
 from utils import login_required, is_valid_email, get_page, build_pagination
 from db import db_cursor
@@ -195,10 +195,8 @@ def edit_user_profile(user_id):
 
     name = request.form.get("name", "").strip()
     email = request.form.get("email", "").strip()
-    avatar = request.files.get("avatar")
-    avatar_filename = None
 
-    if not name and not email and not (avatar and avatar.filename):
+    if not name and not email:
         flash("Please enter a name or email.", "warning-profile")
         return redirect(url_for("user_detail", user_id=user_id))
 
@@ -209,20 +207,6 @@ def edit_user_profile(user_id):
     if email and not is_valid_email(email):
         flash("Please enter a valid email address.", "warning-profile")
         return redirect(url_for("user_detail", user_id=user_id))
-
-    if avatar and avatar.filename:
-        if not allowed_avatar(avatar.filename):
-            flash("Avatar must be PNG, JPG, JPEG, GIF or WEBBP.", "warning-profile")
-            return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
-
-        original_filename = secure_filename(avatar.filename)
-        ext = original_filename.rsplit(".", 1)[1].lower()
-        avatar_filename = f"{user_id}_{uuid4().hex}.{ext}"
-
-        upload_folder = os.path.join(current_app.root_path, "static", "uploads", "avatars")
-        os.makedirs(upload_folder, exist_ok=True)
-
-        avatar.save(os.path.join(upload_folder, avatar_filename))
 
     with db_cursor(commit=True) as cur:
         if name:
@@ -239,6 +223,66 @@ def edit_user_profile(user_id):
                 where id = %s;
             """, (email, user_id))
 
+    flash("Your profile has been updated.", "success-profile")
+    return redirect(url_for("user.user_detail", user_id=user_id))
+
+@user_bp.route("/user/<user_id>/avatar", methods=["POST"])
+@login_required
+def update_avatar(user_id):
+    if session["user_id"] != user_id:
+        return redirect(url_for("user.user_detail", user_id=user_id))
+
+    cropped_avatar = request.form.get("cropped_avatar", "").strip()
+
+    if not cropped_avatar:
+        flash("Please crop and save an avatar before updating.", "warning-avatar")
+        return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
+
+    try:
+        header, encoded = cropped_avatar.split(",", 1)
+
+        if "image/jpeg" in header:
+            ext = "jpg"
+        elif "image/png" in header:
+            ext = "png"
+        elif "image/webp" in header:
+            ext = "webp"
+        else:
+            flash("Avatar must be a PNG, JPG, JPEG, or WEBP image.", "warning-avatar")
+            return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
+
+        avatar_data = base64.b64decode(encoded)
+        avatar_filename = f"{user_id}_{uuid4().hex}.{ext}"
+
+        upload_folder = os.path.join(
+            current_app.root_path,
+            "static",
+            "uploads",
+            "avatars"
+        )
+
+        os.makedirs(upload_folder, exist_ok=True)
+
+        avatar_path = os.path.join(upload_folder, avatar_filename)
+
+        with open(avatar_path, "wb") as avatar_file:
+            avatar_file.write(avatar_data)
+
+        with db_cursor(commit=True) as cur:
+            cur.execute("""
+                update user_info
+                set avatar = %s
+                where id = %s;
+            """, (avatar_filename, user_id))
+
+    except Exception:
+        flash("Failed to update avatar.", "error-avatar")
+        return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
+
+    flash("Avatar updated.", "success-avatar")
+    return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
+
+    with db_cursor(commit=True) as cur:
         if avatar_filename:
             cur.execute("""
                 update user_info
@@ -246,8 +290,7 @@ def edit_user_profile(user_id):
                 where id = %s;
             """,(avatar_filename, user_id))
 
-    flash("Your profile has been updated.", "success-profile")
-    return redirect(url_for("user.user_detail", user_id=user_id))
+    return redirect(url_for("user.user_detail", user_id=user_id), tab="settings")
 
 def can_manage_relationship(target_user_id):
     if session.get("user_role") == "admin":

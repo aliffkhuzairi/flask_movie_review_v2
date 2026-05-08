@@ -1412,6 +1412,37 @@ header.sticky .nav:hover {
     background: var(--danger-hover);
 }
 
+.avatar-cropper-panel {
+    display: none;
+    margin-top: 12px;
+    padding: 14px;
+    border-radius: 12px;
+    background: rgba(239, 246, 255, 0.08);
+}
+
+.avatar-cropper-panel.open {
+    display: block;
+}
+
+.avatar-cropper-frame {
+    width: 100%;
+    max-width: 360px;
+    height: 320px;
+    margin: 0 auto 12px;
+    background: rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.avatar-cropper-frame img {
+    display: block;
+    max-width: 100%;
+}
+
+.cropper-view-box,
+.cropper-face {
+    border-radius: 50%;
+}
 /* =============== PAGINATION =============== */
 .pagination {
     display: flex;

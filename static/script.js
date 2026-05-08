@@ -95,6 +95,101 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+const setupAvatarCropper = () => {
+    const avatarInput = document.getElementById('avatarUpload');
+    const cropperPanel = document.getElementById('avatarCropperPanel');
+    const cropperImage = document.getElementById('avatarCropperImage');
+    const croppedAvatarInput = document.getElementById('croppedAvatar');
+    const saveButton = document.getElementById('saveAvatarCrop');
+    const cancelButton = document.getElementById('cancelAvatarCrop');
+
+    if (!avatarInput || !cropperPanel || !cropperImage || !croppedAvatarInput) return;
+
+    let cropper = null;
+    let objectUrl = null;
+
+    avatarInput.addEventListener('change', function () {
+        const file = avatarInput.files[0];
+
+        if (!file) return;
+
+        if (!file.type.startsWith('image/')) {
+            alert('Please choose an image file.');
+            avatarInput.value = '';
+            return;
+        }
+
+        if (objectUrl) {
+            URL.revokeObjectURL(objectUrl);
+        }
+
+        objectUrl = URL.createObjectURL(file);
+        cropperImage.src = objectUrl;
+        cropperPanel.classList.add('open');
+        croppedAvatarInput.value = '';
+
+        if (cropper) {
+            cropper.destroy();
+        }
+
+        cropper = new Cropper(cropperImage, {
+            aspectRatio: 1,
+            viewMode: 1,
+            dragMode: 'move',
+            autoCropArea: 1,
+            background: false,
+            responsive: true,
+            cropBoxMovable: true,
+            cropBoxResizable: true,
+            movable: true,
+            zoomable: true,
+            rotatable: false,
+            scalable: false
+        });
+    });
+
+    saveButton.addEventListener('click', function () {
+        if (!cropper) return;
+
+        const canvas = cropper.getCroppedCanvas({
+            width: 400,
+            height: 400,
+            imageSmoothingEnabled: true,
+            imageSmoothingQuality: 'high'
+        });
+
+        croppedAvatarInput.value = canvas.toDataURL('image/jpeg', 0.9);
+
+        cropperPanel.classList.remove('open');
+
+        cropper.destroy();
+        cropper = null;
+
+        if (objectUrl) {
+            URL.revokeObjectURL(objectUrl);
+            objectUrl = null;
+        }
+    });
+
+    cancelButton.addEventListener('click', function () {
+        avatarInput.value = '';
+        croppedAvatarInput.value = '';
+        cropperPanel.classList.remove('open');
+
+        if (cropper) {
+            cropper.destroy();
+            cropper = null;
+        }
+
+        if (objectUrl) {
+            URL.revokeObjectURL(objectUrl);
+            objectUrl = null;
+        }
+    });
+};
+
+document.addEventListener('DOMContentLoaded', setupAvatarCropper);
+
 // Restore scroll position after reload
 window.addEventListener('load', function () {
     const scrollPos = localStorage.getItem('scrollPosition');

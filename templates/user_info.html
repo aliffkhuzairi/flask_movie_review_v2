@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
     <title>{{ user_info[0] }}</title>
 </head>
 <body>
@@ -40,9 +41,6 @@
                     </div>
 
                 </div>
-
-
-
 
                 <!-- RELATIONSHIP DIV -->
                 {% if not is_self and not is_admin_profile and not is_current_user_admin %}
@@ -395,27 +393,80 @@
             <div class="profile-left-column">
                 <!-- EDIT PROFILE CARD -->
                 {% if is_self %}
-                <div class="section-card profile-edit-card">
-                    <h2>Edit Profile</h2>
 
-                     <div class="flash-container">
-                         {% with messages = get_flashed_messages(with_categories=true, category_filter=['success-profile', 'error-profile', 'warning-profile']) %}
+                <!-- AVATAR EDIT -->
+                <div class="section-card avatar-edit-card">
+                    <h2>Profile Photo</h2>
+                    <div class="flash-container">
+                        {% with messages = get_flashed_messages(with_categories=true, category_filter=['success-avatar', 'error-avatar', 'warning-avatar']) %}
                             {% if messages %}
                                 {% for category, msg in messages %}
                                     <div class="flash {{ category.split('-')[0] }}">{{ msg }}</div>
                                 {% endfor %}
                             {% endif %}
-                         {% endwith %}
-                     </div>
+                        {% endwith %}
+                    </div>
 
-                    <form class="form-grid"
+                    <div class="profile-avatar">
+                        {% if user_info[5] %}
+                            <img src="{{ url_for('static', filename='uploads/avatars/' ~ user_info[5]) }}"
+                                 alt="{{ user_info[0] }} avatar">
+                        {% else %}
+                            <i class="fa-solid fa-user"></i>
+                        {% endif %}
+                    </div>
+
+                    <form class="form-grid avatar-form"
                           action="{{ url_for('user.edit_user_profile', user_id=user_info[0]) }}"
                           method="POST"
                           enctype="multipart/form-data">
 
-                        <label for="avatar">Avatar</label>
-                        <input id="avatar" name="avatar" type="file"
-                               accept="image/jpeg, image/png, image/webp, image/gif">
+                        <label for="avatarUpload">Avatar</label>
+
+                        <input
+                            id="avatarUpload"
+                            type="file"
+                            accept="image/png, image/jpeg, image/webp"
+                        >
+
+                        <input id="croppedAvatar" name="cropped_avatar" type="hidden">
+
+                        <p class="small-text">Choose an image, then crop it before saving.</p>
+
+                        <div class="avatar-cropper-panel" id="avatarCropperPanel">
+                            <div class="avatar-cropper-frame">
+                                <img id="avatarCropperImage" alt="Avatar preview">
+                            </div>
+
+                            <div class="button-row">
+                                <button type="button" class="button-link secondary" id="cancelAvatarCrop">
+                                    Cancel
+                                </button>
+
+                                <button type="button" class="button-link primary" id="saveAvatarCrop">
+                                    Use Cropped Avatar
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- USER INFO EDIT -->
+                <div class="section-card profile-edit-card">
+                    <h2>Edit Profile</h2>
+
+                    <div class="flash-container">
+                        {% with messages = get_flashed_messages(with_categories=true, category_filter=['success-profile', 'error-profile', 'warning-profile']) %}
+                            {% if messages %}
+                            {% for category, msg in messages %}
+                                <div class="flash {{ category.split('-')[0] }}">{{ msg }}</div>
+                            {% endfor %}
+                            {% endif %}
+                         {% endwith %}
+                    </div>
+                    <form class="form-grid"
+                          action="{{ url_for('user.edit_user_profile', user_id=user_info[0]) }}"
+                          method="POST">
 
                         <label for="name">Name</label>
                         <input id="name" name="name" type="text"
@@ -487,7 +538,7 @@
         </section>
         {% endif %}
     </main>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
