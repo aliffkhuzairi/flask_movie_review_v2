@@ -126,7 +126,7 @@ def user_detail(user_id):
         muted_users = []
 
         cur.execute("""
-                    select ui.id, ui.name
+                    select ui.id, ui.name, ui.avatar
                     from ties t
                     join user_info ui on t.opid = ui.id
                     where t.id = %s and t.tie = 'follow'
@@ -138,7 +138,7 @@ def user_detail(user_id):
         if is_self:
 
             cur.execute("""
-                        select ui.id, ui.name
+                        select ui.id, ui.name, ui.avatar
                         from ties t
                         join user_info ui on t.opid = ui.id
                         where t.id = %s and t.tie = 'mute'

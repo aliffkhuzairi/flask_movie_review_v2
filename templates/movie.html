@@ -9,7 +9,7 @@
     <title>{{ movie[1] }}</title>
 </head>
 <body>
-    {% from "macros.html" import render_stars %}
+    {% from "macros.html" import render_stars, render_avatar %}
     <!-- HEADER -->
     {% include "partials/header.html" %}
 
@@ -265,21 +265,25 @@
                                 <div class="review-card">
                                     <div class="review-card-top">
                                         <div class="review-title-meta">
-                                            <a class="review-user" href="{{ url_for('user.user_detail', user_id=review[0]) }}">
-                                                {{ review[0] }}
-                                            </a>
+                                            <div class="avatar-user">
+                                                {{ render_avatar(review[0], review[1], review[2], 'sm') }}
+                                                <a class="review-user" href="{{ url_for('user.user_detail', user_id=review[0]) }}">
+                                                    {{ review[0] }}
+                                                </a>
+                                            </div>
+
                                             <p class="review-time">
-                                                {{ review[2] | time_ago }}
+                                                {{ review[4] | time_ago }}
                                             </p>
                                         </div>
                                         <span class="review-rating">
-                                            {{ render_stars(review[3]) }}
+                                            {{ render_stars(review[5]) }}
                                         </span>
 
                                     </div>
 
                                     <div class="review-text-block detail-page">
-                                        <p class="review-text clamp-text">{{ review[1] }}</p>
+                                        <p class="review-text clamp-text">{{ review[3] }}</p>
                                         <button type="button" class="text-toggle" onclick="toggleReview(this)">Read more</button>
                                     </div>
                                 </div>

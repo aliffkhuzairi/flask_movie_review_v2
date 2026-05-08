@@ -22,9 +22,19 @@ def home():
         movies = cur.fetchall()
 
         cur.execute("""
-            select m.id, m.title, m.rel_date, r.uid, r.review, r.rev_time, r.ratings 
+            select 
+                m.id, 
+                m.title, 
+                m.rel_date, 
+                r.uid, 
+                ui.name, 
+                ui.avatar, 
+                r.review, 
+                r.rev_time, 
+                r.ratings 
             from reviews r 
             join movies m on r.mid = m.id
+            join user_info ui on r.uid = ui.id
             where not exists (
                       select 1 from ties t
                       where t.id = %s and t.opid = r.uid and t.tie = 'mute'
@@ -204,8 +214,9 @@ def movie_detail(movie_id):
 
         # GET PAGINATED REVIEWS
         cur.execute(f"""
-            select r.uid, r.review, r.rev_time, r.ratings
+            select r.uid, ui.name, ui.avatar, r.review, r.rev_time, r.ratings
             from reviews r 
+            join user_info ui on r.uid = ui.id
             where r.mid = %s
             and not exists (
                 select 1 from ties t

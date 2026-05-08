@@ -729,7 +729,7 @@ header.sticky .nav:hover {
     position: relative;
     overflow: hidden;
     border-bottom: 1px solid var(--text-muted);
-    padding: 14px 20px 0;
+    padding: 14px 0;
     margin-bottom: 16px;
     background: none;
     cursor: pointer;
@@ -869,6 +869,31 @@ header.sticky .nav:hover {
 .review-watch-row {
     margin: 5px 0 10px;
     color: var(--text-muted);
+}
+
+.review-watch-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: nowrap;
+}
+
+.avatar-user {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.review-watch-user .profile-avatar {
+    flex: 0 0 auto;
+}
+
+.review-watch-user .review-user {
+    min-width: 0;
+    max-width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .review-user {
@@ -1170,10 +1195,7 @@ header.sticky .nav:hover {
 }
 
 .profile-avatar {
-    width: 108px;
-    height: 108px;
     flex: 0 0 auto;
-
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1183,11 +1205,8 @@ header.sticky .nav:hover {
     background: rgba(239, 246, 255, 0.08);
     border: 1px solid rgba(229, 231, 235, 0.12);
     box-shadow: var(--shadow);
-}
-
-.profile-title {
-    font-size: 2.5rem;
-    margin: 5px 0;
+    width: 108px;
+    height: 108px;
 }
 
 .profile-avatar img {
@@ -1197,9 +1216,38 @@ header.sticky .nav:hover {
     display: block;
 }
 
-.profile-avatar i {
+/* sizes */
+.avatar-sm {
+    width: 40px;
+    height: 40px;
+    box-shadow: #64646F33 0 7px 29px 0;
+}
+
+.avatar-sm i {
+    font-size: 1rem;
+}
+
+.avatar-md {
+    width: 72px;
+    height: 72px;
+}
+
+.avatar-md i {
+    font-size: 2rem;
+}
+
+.avatar-lg {
+    width: 100px;
+    height: 100px;
+}
+
+.avatar-lg i {
     font-size: 2.4rem;
-    color: var(--secondary);
+}
+
+.profile-title {
+    font-size: 2.5rem;
+    margin: 5px 0;
 }
 
 .hero-actions {
@@ -1292,7 +1340,7 @@ header.sticky .nav:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0;
+    padding: 16px 0;
     border-bottom: 1px solid var(--text-main);
 }
 
@@ -1302,8 +1350,8 @@ header.sticky .nav:hover {
 
 .relation-user {
     display: flex;
-    flex-direction: column;
-    gap: 6px;
+    align-items: center;
+    gap: 12px;
 }
 
 .id-user {
@@ -1425,6 +1473,7 @@ header.sticky .nav:hover {
 
 .avatar-upload-label,
 .remove-avatar-form button {
+    padding: 6px 12px;
     width: 160px;
     text-align: center;
 }

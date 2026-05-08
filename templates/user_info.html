@@ -9,7 +9,7 @@
     <title>{{ user_info[0] }}</title>
 </head>
 <body>
-    {% from "macros.html" import render_stars %}
+    {% from "macros.html" import render_stars, render_avatar %}
     <!-- HEADER -->
     {% include "partials/header.html" %}
 
@@ -23,14 +23,7 @@
                 <p class="profile-meta">Profile</p>
 
                 <div class="profile-name-row">
-                    <div class="profile-avatar">
-                        {% if user_info[5] %}
-                            <img src="{{ url_for('static', filename='uploads/avatars/' ~ user_info[5]) }}"
-                                 alt="{{ user_info[0] }} avatar">
-                        {% else %}
-                            <i class="fa-solid fa-user"></i>
-                        {% endif %}
-                    </div>
+                    {{ render_avatar(user_info[0], user_info[2], user_info[5], 'lg') }}
                     <div class="profile-title-column">
                         <h1 class="profile-title">
                             {{ user_info[2] or user_info[0] }}
@@ -324,12 +317,10 @@
                             {% for followed in followed_users[:5] %}
                             <li class="relation-item">
                                 <div class="relation-user">
+                                    {{ render_avatar(followed_users[0], followed_users[1], followed_users[2], 'sm') }}
                                     <a class="id-user" href="{{ url_for('user.user_detail', user_id=followed[0]) }}">
                                         {{ followed[0] }}
                                     </a>
-                                    {% if followed[1] %}
-                                        <span class="user-name">{{ followed[1] }}</span>
-                                    {% endif %}
                                 </div>
                                 {% if is_self %}
                                     <form action="{{ url_for('user.unfollow_user', target_user_id=followed[0]) }}"
@@ -362,12 +353,12 @@
                             {% for muted in muted_users[:5] %}
                                 <li class="relation-item">
                                     <div class="relation-user">
+
+                                        {{ render_avatar(muted_users[0], muted_users[1], muted_users[2], 'sm') }}
                                         <a href="{{ url_for('user.user_detail', user_id=muted[0]) }}" class="id-user">
                                             {{ muted[0] }}
                                         </a>
-                                        {% if muted[1] %}
-                                            <span class="user-name">{{ muted[1] }}</span>
-                                        {% endif %}
+
                                     </div>
 
                                     <form action="{{ url_for('user.unmute_user', target_user_id=muted[0]) }}"
@@ -409,14 +400,7 @@
                     </div>
 
                     <div class="avatar-edit-row">
-                        <div class="profile-avatar">
-                            {% if user_info[5] %}
-                                <img src="{{ url_for('static', filename='uploads/avatars/' ~ user_info[5]) }}"
-                                     alt="{{ user_info[0] }} avatar">
-                            {% else %}
-                                <i class="fa-solid fa-user"></i>
-                            {% endif %}
-                        </div>
+                        {{ render_avatar(user_info[0], user_info[2], user_info[5], 'lg') }}
 
                         <div class="avatar-edit-actions">
                             <form id="avatarForm"
