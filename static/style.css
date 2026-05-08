@@ -86,12 +86,12 @@ body::before {
 }
 
 .result-summary {
-    padding: 8px 24px;
+    padding: 8px 0;
     text-align: left;
 }
 
 .reviews-card .result-summary {
-    padding: 8px 12px;
+    padding: 8px 0;
     text-align: left;
 }
 
@@ -490,11 +490,11 @@ header.sticky .nav:hover {
 .page-container {
     max-width: 1300px;
     margin: 60px auto 20px;
-    padding: 24px 16px 40px;
+    padding: 24px 40px 40px;
 }
 
 .section-card {
-    padding: 20px;
+    padding: 20px 0;
 }
 
 #movies,
@@ -504,7 +504,7 @@ header.sticky .nav:hover {
 
 .section-head {
     width: 100%;
-    padding: 20px 24px;
+    padding: 20px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -516,7 +516,7 @@ header.sticky .nav:hover {
 .detail-head {
     display: flex;
     justify-content: space-between;
-    padding: 0 12px;
+    padding: 0;
     margin-bottom: 0;
 }
 
@@ -568,7 +568,6 @@ header.sticky .nav:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 24px;
 }
 
 .search-form {
@@ -626,7 +625,6 @@ header.sticky .nav:hover {
 }
 
 .movies-head {
-    padding: 0 24px;
     margin: 0;
     align-items: unset;
 }
@@ -635,7 +633,7 @@ header.sticky .nav:hover {
     display: flex;
     gap: 20px;
     flex-wrap: wrap;
-    padding: 0 20px;
+    padding: 0;
 }
 
 .movie-card {
@@ -1086,10 +1084,14 @@ header.sticky .nav:hover {
     color: var(--text-muted);
 }
 
-.info-card,
 .reviews-card {
     margin: 0;
     box-shadow: none;
+    padding-left: 20px;
+}
+
+.reviews-card .review-card {
+    padding: 20px 0;
 }
 
 .reviews-card .empty-state {
@@ -1142,18 +1144,58 @@ header.sticky .nav:hover {
 .profile-hero {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 20px;
+    padding: 20px 0;
+}
+
+.profile-meta {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 700;
     margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.profile-name-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 20px 0;
+    margin-bottom: 12px;
+    gap: 25px;
+}
+
+.profile-avatar {
+    width: 108px;
+    height: 108px;
+    flex: 0 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    overflow: hidden;
+    background: rgba(239, 246, 255, 0.08);
+    border: 1px solid rgba(229, 231, 235, 0.12);
+    box-shadow: var(--shadow);
 }
 
 .profile-title {
     font-size: 2.5rem;
-    margin: 10px 0;
+    margin: 5px 0;
 }
 
-.profile-id {
-    margin-bottom: 14px;
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.profile-avatar i {
+    font-size: 2.4rem;
+    color: var(--secondary);
 }
 
 .hero-actions {
@@ -1167,7 +1209,6 @@ header.sticky .nav:hover {
     justify-content: center;
     flex-wrap: wrap;
     gap: 10px;
-    padding: 0 20px;
     margin: 0 0 18px;
 }
 
@@ -1194,7 +1235,11 @@ header.sticky .nav:hover {
 .single-profile-section {
     max-width: 100%;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0;
+}
+
+.single-profile-section .reviews-card {
+    padding-left: 0;
 }
 
 .profile-review-feed {
@@ -1323,7 +1368,6 @@ header.sticky .nav:hover {
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
-    padding: 0 20px;
     margin: 0 0 24px;
 }
 
@@ -1619,7 +1663,7 @@ header.sticky .nav:hover {
     }
 
     .detail-head .sort{
-        justify-content: flex-end;
+        justify-content: flex-start;
     }
 
     .reviews-list .review-card-top {
@@ -1629,11 +1673,6 @@ header.sticky .nav:hover {
     .reviews-list .review-rating {
         margin: 16px 0 8px;
         padding: 0;
-    }
-
-    .reviews-list .result-summary {
-        text-align: left;
-        padding: 5px 0;
     }
 }
 
@@ -1759,7 +1798,11 @@ header.sticky .nav:hover {
     }
 
     .page-container {
-        padding: 20px 0 12px;
+        padding: 20px 16px 12px;
+    }
+
+    .review-container {
+        margin-top: 50px;
     }
 
     .section-head {
@@ -1776,6 +1819,7 @@ header.sticky .nav:hover {
     .section-head p,
     .result-summary,
     .reviews-list .result-summary,
+    .reviews-card .result-summary,
     .not-found,
     .section-card h2,
     .movie-title,
@@ -1827,6 +1871,10 @@ header.sticky .nav:hover {
         padding: 24px 0;
     }
 
+    .reviews-card {
+        padding-left: 0;
+    }
+
     .reviews-card .button-row {
         justify-content: center;
     }
@@ -1875,6 +1923,10 @@ header.sticky .nav:hover {
 
     .profile-review-feed .review-text {
         min-height: 71px;
+    }
+
+    .profile-name-row {
+        flex-direction: column;
     }
 
     .search-result-grid {

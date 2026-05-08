@@ -1,9 +1,16 @@
-from flask import render_template, request, redirect, url_for, flash, session, Blueprint
+import os
+from flask import render_template, request, redirect, url_for, flash, session, Blueprint, current_app
 from utils import login_required, is_valid_email, get_page, build_pagination
 from db import db_cursor
+from werkzeug.utils import secure_filename
+from uuid import uuid4
 
 ALLOWED_GENRES = {"action", "comedy", "drama", "fantasy", "romance", "thriller", "western"}
 ALLOWED_TABS = {"overview", "reviews", "connections", "settings"}
+ALLOWED_AVATAR_EXTENSIONS = {"png", "jpg", "jpeg", "webp", "gif"}
+
+def allowed_avatar(filename):
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_AVATAR_EXTENSIONS
 
 user_bp = Blueprint("user", __name__)
 
@@ -34,7 +41,7 @@ def user_detail(user_id):
 
         # GET USER INFO
         cur.execute("""
-            select u.id, u.role, ui.name, ui.email, ui.reg_date
+            select u.id, u.role, ui.name, ui.email, ui.reg_date, ui.avatar
             from users u
             join user_info ui on u.id = ui.id
             where u.id = %s;
@@ -188,8 +195,10 @@ def edit_user_profile(user_id):
 
     name = request.form.get("name", "").strip()
     email = request.form.get("email", "").strip()
+    avatar = request.files.get("avatar")
+    avatar_filename = None
 
-    if not name and not email:
+    if not name and not email and not (avatar and avatar.filename):
         flash("Please enter a name or email.", "warning-profile")
         return redirect(url_for("user_detail", user_id=user_id))
 
@@ -200,6 +209,20 @@ def edit_user_profile(user_id):
     if email and not is_valid_email(email):
         flash("Please enter a valid email address.", "warning-profile")
         return redirect(url_for("user_detail", user_id=user_id))
+
+    if avatar and avatar.filename:
+        if not allowed_avatar(avatar.filename):
+            flash("Avatar must be PNG, JPG, JPEG, GIF or WEBBP.", "warning-profile")
+            return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
+
+        original_filename = secure_filename(avatar.filename)
+        ext = original_filename.rsplit(".", 1)[1].lower()
+        avatar_filename = f"{user_id}_{uuid4().hex}.{ext}"
+
+        upload_folder = os.path.join(current_app.root_path, "static", "uploads", "avatars")
+        os.makedirs(upload_folder, exist_ok=True)
+
+        avatar.save(os.path.join(upload_folder, avatar_filename))
 
     with db_cursor(commit=True) as cur:
         if name:
@@ -215,6 +238,13 @@ def edit_user_profile(user_id):
                 set email = %s
                 where id = %s;
             """, (email, user_id))
+
+        if avatar_filename:
+            cur.execute("""
+                update user_info
+                set avatar = %s
+                where id = %s;
+            """,(avatar_filename, user_id))
 
     flash("Your profile has been updated.", "success-profile")
     return redirect(url_for("user.user_detail", user_id=user_id))

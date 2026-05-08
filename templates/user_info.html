@@ -21,13 +21,28 @@
                 <!-- PROFILE DIV -->
                 <p class="profile-meta">Profile</p>
 
-                <h1 class="profile-title">
-                    {{ user_info[2] or user_info[0] }}
-                </h1>
+                <div class="profile-name-row">
+                    <div class="profile-avatar">
+                        {% if user_info[5] %}
+                            <img src="{{ url_for('static', filename='uploads/avatars/' ~ user_info[5]) }}"
+                                 alt="{{ user_info[0] }} avatar">
+                        {% else %}
+                            <i class="fa-solid fa-user"></i>
+                        {% endif %}
+                    </div>
+                    <div class="profile-title-column">
+                        <h1 class="profile-title">
+                            {{ user_info[2] or user_info[0] }}
+                        </h1>
+                        <div class="profile-id">
+                            <span>@{{ user_info[0] }}</span>
+                        </div>
+                    </div>
 
-                <div class="profile-id">
-                    <span>{{ user_info[0] }}</span>
                 </div>
+
+
+
 
                 <!-- RELATIONSHIP DIV -->
                 {% if not is_self and not is_admin_profile and not is_current_user_admin %}
@@ -208,7 +223,7 @@
                             review{{ '' if total_reviews == 1 else 's' }}
                         </p>
                     {% else %}
-                        <p class="small-text">
+                        <p class="small-text result-summary">
                             No reviews found.
                         </p>
                     {% endif %}
@@ -393,7 +408,14 @@
                          {% endwith %}
                      </div>
 
-                    <form class="form-grid" action="{{ url_for('user.edit_user_profile', user_id=user_info[0]) }}" method="POST">
+                    <form class="form-grid"
+                          action="{{ url_for('user.edit_user_profile', user_id=user_info[0]) }}"
+                          method="POST"
+                          enctype="multipart/form-data">
+
+                        <label for="avatar">Avatar</label>
+                        <input id="avatar" name="avatar" type="file"
+                               accept="image/jpeg, image/png, image/webp, image/gif">
 
                         <label for="name">Name</label>
                         <input id="name" name="name" type="text"
