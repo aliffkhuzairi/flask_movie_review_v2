@@ -522,7 +522,7 @@ header.sticky .nav:hover {
 
 .two-cols-layout {
     display: grid;
-    grid-template-columns: 1fr 1.2fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 24px;
 }
 
@@ -1168,7 +1168,7 @@ header.sticky .nav:hover {
     flex-wrap: wrap;
     gap: 10px;
     padding: 0 20px;
-    margin: 0 0 24px;
+    margin: 0 0 18px;
 }
 
 .profile-tab {
@@ -1220,13 +1220,23 @@ header.sticky .nav:hover {
     justify-content: flex-end;
 }
 
+#connections {
+    gap: 0;
+}
+
+.user-list-card h2 {
+    text-align: center;
+}
+
 .relation-list {
     list-style: none;
     padding: 0;
-    max-width: 380px;
-    margin: 10px 0 0;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    max-width: 420px;
+
 }
 
 .relation-item {
