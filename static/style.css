@@ -536,6 +536,11 @@ header.sticky .nav:hover {
     min-width: 0;
 }
 
+.movie-right-column,
+.profile-right-column {
+    padding-left: 24px;
+}
+
 /* =============== AUTH PAGES =============== */
 .auth-shell {
     height: 100vh;
@@ -1087,7 +1092,6 @@ header.sticky .nav:hover {
 .reviews-card {
     margin: 0;
     box-shadow: none;
-    padding-left: 20px;
 }
 
 .reviews-card .review-card {
@@ -1412,24 +1416,74 @@ header.sticky .nav:hover {
     background: var(--danger-hover);
 }
 
-.avatar-cropper-panel {
-    display: none;
-    margin-top: 12px;
-    padding: 14px;
-    border-radius: 12px;
-    background: rgba(239, 246, 255, 0.08);
+.avatar-edit-row {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    margin: 24px 0;
 }
 
-.avatar-cropper-panel.open {
-    display: block;
+.avatar-upload-label,
+.remove-avatar-form button {
+    width: 160px;
+    text-align: center;
+}
+
+.avatar-form,
+.remove-avatar-form {
+    margin: 0;
+}
+
+.avatar-cropper-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.avatar-cropper-overlay.open {
+    display: flex;
+}
+
+.avatar-cropper-modal {
+    position: relative;
+    width: min(100%, 460px);
+    padding: 24px;
+    border-radius: 16px;
+    background: var(--bg-surface);
+    box-shadow: var(--shadow);
+}
+
+.avatar-cropper-modal h3 {
+    margin-bottom: 6px;
+}
+
+.avatar-cropper-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+
+    width: auto;
+    border: none;
+    background: none;
+    color: var(--text-main);
+    cursor: pointer;
+    font-size: 1.25rem;
 }
 
 .avatar-cropper-frame {
     width: 100%;
-    max-width: 360px;
-    height: 320px;
-    margin: 0 auto 12px;
-    background: rgba(0, 0, 0, 0.3);
+    height: 340px;
+    margin: 18px auto 12px;
+    background: rgba(0, 0, 0, 0.35);
     overflow: hidden;
     border-radius: 12px;
 }
@@ -1439,10 +1493,16 @@ header.sticky .nav:hover {
     max-width: 100%;
 }
 
+.avatar-cropper-actions {
+    justify-content: flex-end;
+    margin-bottom: 0;
+}
+
 .cropper-view-box,
 .cropper-face {
     border-radius: 50%;
 }
+
 /* =============== PAGINATION =============== */
 .pagination {
     display: flex;
@@ -1889,6 +1949,11 @@ header.sticky .nav:hover {
         padding: 0 20px;
     }
 
+    .avatar-edit-row {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
     .movie-hero {
         flex-direction: column;
         gap: 24px;
@@ -1902,7 +1967,8 @@ header.sticky .nav:hover {
         padding: 24px 0;
     }
 
-    .reviews-card {
+    .profile-right-column,
+    .movie-right-column {
         padding-left: 0;
     }
 
@@ -2047,6 +2113,22 @@ header.sticky .nav:hover {
 
     .search-form {
         flex-wrap: wrap;
+    }
+
+    .avatar-cropper-modal {
+        padding: 20px;
+    }
+
+    .avatar-cropper-frame {
+        height: 300px;
+    }
+
+    .avatar-cropper-actions {
+        flex-direction: column;
+    }
+
+    .avatar-cropper-actions button {
+        width: 100%;
     }
 
 }

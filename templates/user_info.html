@@ -392,11 +392,12 @@
         <section class="two-cols-layout">
             <div class="profile-left-column">
                 <!-- EDIT PROFILE CARD -->
-                {% if is_self %}
 
+                {% if is_self %}
                 <!-- AVATAR EDIT -->
                 <div class="section-card avatar-edit-card">
                     <h2>Profile Photo</h2>
+
                     <div class="flash-container">
                         {% with messages = get_flashed_messages(with_categories=true, category_filter=['success-avatar', 'error-avatar', 'warning-avatar']) %}
                             {% if messages %}
@@ -407,33 +408,56 @@
                         {% endwith %}
                     </div>
 
-                    <div class="profile-avatar">
-                        {% if user_info[5] %}
-                            <img src="{{ url_for('static', filename='uploads/avatars/' ~ user_info[5]) }}"
-                                 alt="{{ user_info[0] }} avatar">
-                        {% else %}
-                            <i class="fa-solid fa-user"></i>
-                        {% endif %}
+                    <div class="avatar-edit-row">
+                        <div class="profile-avatar">
+                            {% if user_info[5] %}
+                                <img src="{{ url_for('static', filename='uploads/avatars/' ~ user_info[5]) }}"
+                                     alt="{{ user_info[0] }} avatar">
+                            {% else %}
+                                <i class="fa-solid fa-user"></i>
+                            {% endif %}
+                        </div>
+
+                        <div class="avatar-edit-actions">
+                            <form id="avatarForm"
+                                  class="avatar-form"
+                                  action="{{ url_for('user.update_avatar', user_id=user_info[0]) }}"
+                                  method="POST">
+
+                                <label for="avatarUpload" class="button-link secondary avatar-upload-label">
+                                    Change Photo
+                                </label>
+
+                                <input id="avatarUpload"
+                                       type="file"
+                                       accept="image/png, image/jpeg, image/webp"
+                                       hidden>
+
+                                <input id="croppedAvatar" name="cropped_avatar" type="hidden">
+                            </form>
+
+                            {% if user_info[5] %}
+                                <form class="remove-avatar-form"
+                                      action="{{ url_for('user.remove_avatar', user_id=user_info[0]) }}"
+                                      method="POST"
+                                      onsubmit="return confirm('Remove profile photo?');">
+                                    <button type="submit" class="button-link logout">
+                                        Remove Photo
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </div>
                     </div>
 
-                    <form class="form-grid avatar-form"
-                          action="{{ url_for('user.edit_user_profile', user_id=user_info[0]) }}"
-                          method="POST"
-                          enctype="multipart/form-data">
+                    <div class="avatar-cropper-overlay" id="avatarCropperOverlay">
+                        <div class="avatar-cropper-modal">
+                            <button type="button" class="avatar-cropper-close" id="closeAvatarCropper">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
 
-                        <label for="avatarUpload">Avatar</label>
+                            <h3>Crop Profile Photo</h3>
+                            <p class="small-text">Drag and zoom the image to fit your avatar.</p>
 
-                        <input
-                            id="avatarUpload"
-                            type="file"
-                            accept="image/png, image/jpeg, image/webp"
-                        >
-
-                        <input id="croppedAvatar" name="cropped_avatar" type="hidden">
-
-                        <p class="small-text">Choose an image, then crop it before saving.</p>
-
-                        <div class="avatar-cropper-panel" id="avatarCropperPanel">
                             <div class="avatar-cropper-frame">
                                 <img id="avatarCropperImage" alt="Avatar preview">
                             </div>
@@ -444,11 +468,11 @@
                                 </button>
 
                                 <button type="button" class="button-link primary" id="saveAvatarCrop">
-                                    Use Cropped Avatar
+                                    Save Changes
                                 </button>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
 
                 <!-- USER INFO EDIT -->

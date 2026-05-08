@@ -96,17 +96,52 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 const setupAvatarCropper = () => {
+    const avatarForm = document.getElementById('avatarForm');
     const avatarInput = document.getElementById('avatarUpload');
-    const cropperPanel = document.getElementById('avatarCropperPanel');
+    const cropperOverlay = document.getElementById('avatarCropperOverlay');
     const cropperImage = document.getElementById('avatarCropperImage');
     const croppedAvatarInput = document.getElementById('croppedAvatar');
+
     const saveButton = document.getElementById('saveAvatarCrop');
     const cancelButton = document.getElementById('cancelAvatarCrop');
+    const closeButton = document.getElementById('closeAvatarCropper');
 
-    if (!avatarInput || !cropperPanel || !cropperImage || !croppedAvatarInput) return;
+    if (
+        !avatarForm ||
+        !avatarInput ||
+        !cropperOverlay ||
+        !cropperImage ||
+        !croppedAvatarInput ||
+        !saveButton ||
+        !cancelButton ||
+        !closeButton
+    ) {
+        return;
+    }
+
+    if (typeof Cropper === 'undefined') {
+        console.error('Cropper.js is not loaded.');
+        return;
+    }
 
     let cropper = null;
     let objectUrl = null;
+
+    const closeCropper = () => {
+        avatarInput.value = '';
+        croppedAvatarInput.value = '';
+        cropperOverlay.classList.remove('open');
+
+        if (cropper) {
+            cropper.destroy();
+            cropper = null;
+        }
+
+        if (objectUrl) {
+            URL.revokeObjectURL(objectUrl);
+            objectUrl = null;
+        }
+    };
 
     avatarInput.addEventListener('change', function () {
         const file = avatarInput.files[0];
@@ -125,27 +160,31 @@ const setupAvatarCropper = () => {
 
         objectUrl = URL.createObjectURL(file);
         cropperImage.src = objectUrl;
-        cropperPanel.classList.add('open');
         croppedAvatarInput.value = '';
+        cropperOverlay.classList.add('open');
 
         if (cropper) {
             cropper.destroy();
+            cropper = null;
         }
 
-        cropper = new Cropper(cropperImage, {
-            aspectRatio: 1,
-            viewMode: 1,
-            dragMode: 'move',
-            autoCropArea: 1,
-            background: false,
-            responsive: true,
-            cropBoxMovable: true,
-            cropBoxResizable: true,
-            movable: true,
-            zoomable: true,
-            rotatable: false,
-            scalable: false
-        });
+        cropperImage.onload = () => {
+            cropper = new Cropper(cropperImage, {
+                aspectRatio: 1,
+                viewMode: 1,
+                dragMode: 'move',
+                autoCropArea: 1,
+                background: false,
+                responsive: true,
+                cropBoxMovable: false,
+                cropBoxResizable: false,
+                movable: true,
+                zoomable: true,
+                wheelZoomRatio: 0.08,
+                rotatable: false,
+                scalable: false
+            });
+        };
     });
 
     saveButton.addEventListener('click', function () {
@@ -158,9 +197,9 @@ const setupAvatarCropper = () => {
             imageSmoothingQuality: 'high'
         });
 
-        croppedAvatarInput.value = canvas.toDataURL('image/jpeg', 0.9);
+        if (!canvas) return;
 
-        cropperPanel.classList.remove('open');
+        croppedAvatarInput.value = canvas.toDataURL('image/jpeg', 0.9);
 
         cropper.destroy();
         cropper = null;
@@ -169,21 +208,17 @@ const setupAvatarCropper = () => {
             URL.revokeObjectURL(objectUrl);
             objectUrl = null;
         }
+
+        cropperOverlay.classList.remove('open');
+        avatarForm.submit();
     });
 
-    cancelButton.addEventListener('click', function () {
-        avatarInput.value = '';
-        croppedAvatarInput.value = '';
-        cropperPanel.classList.remove('open');
+    cancelButton.addEventListener('click', closeCropper);
+    closeButton.addEventListener('click', closeCropper);
 
-        if (cropper) {
-            cropper.destroy();
-            cropper = null;
-        }
-
-        if (objectUrl) {
-            URL.revokeObjectURL(objectUrl);
-            objectUrl = null;
+    cropperOverlay.addEventListener('click', function (event) {
+        if (event.target === cropperOverlay) {
+            closeCropper();
         }
     });
 };

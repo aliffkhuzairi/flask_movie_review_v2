@@ -282,15 +282,42 @@ def update_avatar(user_id):
     flash("Avatar updated.", "success-avatar")
     return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
 
-    with db_cursor(commit=True) as cur:
-        if avatar_filename:
-            cur.execute("""
-                update user_info
-                set avatar = %s
-                where id = %s;
-            """,(avatar_filename, user_id))
+@user_bp.route("/user/<user_id>/avatar/remove", methods=["POST"])
+@login_required
+def remove_avatar(user_id):
+    if session["user_id"] != user_id:
+        return redirect(url_for("user.user_detail", user_id=user_id))
 
-    return redirect(url_for("user.user_detail", user_id=user_id), tab="settings")
+    with db_cursor(commit=True) as cur:
+        cur.execute("""
+                    select avatar
+                    from user_info
+                    where id = %s;
+                    """, (user_id,))
+
+        avatar_row = cur.fetchone()
+        avatar_filename = avatar_row[0] if avatar_row else None
+
+        cur.execute("""
+                    update user_info
+                    set avatar = null
+                    where id = %s;
+                    """, (user_id,))
+
+    if avatar_filename:
+        avatar_path = os.path.join(
+            current_app.root_path,
+            "static",
+            "uploads",
+            "avatars",
+            avatar_filename
+        )
+
+        if os.path.exists(avatar_path):
+            os.remove(avatar_path)
+
+    flash("Profile photo removed.", "success-avatar")
+    return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
 
 def can_manage_relationship(target_user_id):
     if session.get("user_role") == "admin":
