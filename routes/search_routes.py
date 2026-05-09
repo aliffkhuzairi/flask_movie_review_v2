@@ -35,7 +35,7 @@ def global_search():
 
             if result_type in {"all", "people"}:
                 cur.execute("""
-                    select u.id, u.role, ui.name
+                    select u.id, u.role, ui.name, ui.avatar
                     from users u
                     join user_info ui on u.id = ui.id
                     where u.id ilike %s or ui.name ilike %s

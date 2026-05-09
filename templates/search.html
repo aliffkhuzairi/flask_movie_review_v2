@@ -8,7 +8,7 @@
     <title>Search</title>
 </head>
 <body>
-
+    {% from "macros.html" import render_stars, render_avatar %}
     <!-- HEADER -->
     {% include "partials/header.html" %}
 
@@ -87,9 +87,13 @@
                         {% for user in users %}
                             <a class="search-result-item user-search-item"
                                href="{{ url_for('user.user_detail', user_id=user[0] ) }}">
+
                                 <div class="user-tag">
-                                    <h3>{{ user[0] }}</h3>
-                                    <p class="small-text">{{ user[2] if user[2] else '' }}</p>
+                                    {{ render_avatar(user[0], user[2], user[3], 'md') }}
+                                    <div>
+                                        <h3>{{ user[0] }}</h3>
+                                        <p class="small-text">{{ user[2] if user[2] else '' }}</p>
+                                    </div>
                                 </div>
 
                                 {% if session["user_role"] == "admin" %}

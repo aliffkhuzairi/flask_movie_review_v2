@@ -1228,8 +1228,9 @@ header.sticky .nav:hover {
 }
 
 .avatar-md {
-    width: 72px;
-    height: 72px;
+    width: 63px;
+    height: 63px;
+    box-shadow: #64646F33 0 7px 29px 0;
 }
 
 .avatar-md i {
@@ -1654,6 +1655,12 @@ header.sticky .nav:hover {
 .search-result-item:hover {
     color: var(--secondary);
     border-color: var(--secondary);
+}
+
+.user-tag {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .search-result-main {
