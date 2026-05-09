@@ -499,6 +499,8 @@
             </div>
 
             <div class="profile-right-column">
+
+                <!-- CHANGE PASSWORD CARD -->
                 <div class="section-card">
                     <h2>Security</h2>
 
@@ -530,7 +532,112 @@
                         <button class="button-link primary" type="submit">Change Password</button>
                     </form>
                 </div>
+
+                <!-- DELETE ACCOUNT CARD -->
+                {% if is_self and not is_current_user_admin %}
+                <div class="section-card danger-zone-card">
+                    <h2>Danger Zone</h2>
+
+                    <p class="small-text">
+                        Delete your account, profile, reviews, avatar, and connections.
+                        This action cannot be undone.
+                    </p>
+
+                    <div class="flash-container">
+                        {% with messages = get_flashed_messages(with_categories=true, category_filter=['success-delete-account', 'error-delete-account', 'warning-delete-account']) %}
+                            {% if messages %}
+                                {% for category, msg in messages %}
+                                    <div class="flash {{ category.split('-')[0] }}">{{ msg }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+
+                    <button type="button"
+                            class="button-link logout danger-open-btn"
+                            onclick="openDeleteStepOne()">
+                        Delete Account
+                    </button>
+                </div>
+                {% endif %}
+
+                {% if is_self and not is_current_user_admin %}
+                <!-- DELETE ACCOUNT MODAL: STEP 1 -->
+                <div class="delete-modal-overlay" id="deleteStepOneModal">
+                    <div class="delete-modal">
+                        <button type="button" class="delete-modal-close" onclick="closeDeleteModals()">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+
+                        <h3>Delete account?</h3>
+
+                        <p class="small-text">
+                            This will permanently delete your profile, reviews, avatar, and connections.
+                            You cannot undo this action.
+                        </p>
+
+                        <div class="delete-modal-actions">
+                            <button type="button" class="button-link secondary" onclick="closeDeleteModals()">
+                                Cancel
+                            </button>
+
+                            <button type="button" class="button-link logout" onclick="openDeleteStepTwo()">
+                                Yes, continue
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DELETE ACCOUNT MODAL: STEP 2 -->
+                <div class="delete-modal-overlay" id="deleteStepTwoModal">
+                    <div class="delete-modal">
+                        <button type="button" class="delete-modal-close" onclick="closeDeleteModals()">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+
+                        <h3>Final confirmation</h3>
+
+                        <p class="small-text">
+                            Enter your password and type DELETE to confirm.
+                        </p>
+
+                        <form class="form-grid"
+                              action="{{ url_for('user.delete_account', user_id=user_info[0]) }}"
+                              method="POST">
+
+                            <label for="delete-password">Password</label>
+                            <input id="delete-password"
+                                   name="delete_password"
+                                   type="password"
+                                   autocomplete="current-password"
+                                   required>
+
+                            <label for="confirm-delete">Type DELETE to confirm</label>
+                            <input id="confirm-delete"
+                                   name="confirm_delete"
+                                   type="text"
+                                   placeholder="DELETE"
+                                   required>
+
+                            <div class="delete-modal-actions">
+                                <button type="button" class="button-link secondary" onclick="closeDeleteModals()">
+                                    Cancel
+                                </button>
+
+                                <button type="submit" class="button-link logout">
+                                    Delete Permanently
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                {% endif %}
             </div>
+
+
+
+
+
         </section>
         {% endif %}
 

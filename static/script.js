@@ -289,3 +289,63 @@ const setupStarRating = () => {
 
 document.addEventListener('DOMContentLoaded', setupStarRating);
 
+const openDeleteStepOne = () => {
+    const modal = document.getElementById('deleteStepOneModal');
+
+    if (!modal) return;
+
+    modal.classList.add('open');
+};
+
+const openDeleteStepTwo = () => {
+    const stepOne = document.getElementById('deleteStepOneModal');
+    const stepTwo = document.getElementById('deleteStepTwoModal');
+    const passwordInput = document.getElementById('delete-password');
+
+    if (!stepOne || !stepTwo) return;
+
+    stepOne.classList.remove('open');
+    stepTwo.classList.add('open');
+
+    if (passwordInput) {
+        passwordInput.focus();
+    }
+};
+
+const closeDeleteModals = () => {
+    const stepOne = document.getElementById('deleteStepOneModal');
+    const stepTwo = document.getElementById('deleteStepTwoModal');
+    const passwordInput = document.getElementById('delete-password');
+    const confirmInput = document.getElementById('confirm-delete');
+
+    if (stepOne) {
+        stepOne.classList.remove('open');
+    }
+
+    if (stepTwo) {
+        stepTwo.classList.remove('open');
+    }
+
+    if (passwordInput) {
+        passwordInput.value = '';
+    }
+
+    if (confirmInput) {
+        confirmInput.value = '';
+    }
+};
+
+document.addEventListener('click', function (event) {
+    const stepOne = document.getElementById('deleteStepOneModal');
+    const stepTwo = document.getElementById('deleteStepTwoModal');
+
+    if (event.target === stepOne || event.target === stepTwo) {
+        closeDeleteModals();
+    }
+});
+
+document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') {
+        closeDeleteModals();
+    }
+});

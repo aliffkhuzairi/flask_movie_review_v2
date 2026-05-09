@@ -496,3 +496,81 @@ def delete_review(movie_id):
 
     flash("Review deleted!", "success-delete")
     return redirect(url_for("user.user_detail", user_id=session["user_id"]))
+
+@user_bp.route("/user/<user_id>/delete", methods=["POST"])
+@login_required
+def delete_account(user_id):
+    if session["user_id"] != user_id:
+        return redirect(url_for("user.user_detail", user_id=user_id))
+
+    if session.get("user_role") == "admin":
+        flash("Admin accounts cannot be deleted from this page.", "warning-delete-account")
+        return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
+
+    confirm_text = request.form.get("confirm_delete", "").strip()
+    password = request.form.get("delete_password", "").strip()
+
+    if confirm_text != "DELETE":
+        flash("Type DELETE to confirm account deletion.", "warning-delete-account")
+        return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
+
+    if not password:
+        flash("Please enter your password to delete your account.", "warning-delete-account")
+        return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
+
+    with db_cursor(commit=True) as cur:
+        cur.execute("""
+            select u.password, ui.avatar
+            from users u
+            join user_info ui on u.id = ui.id
+            where u.id = %s;
+        """, (user_id,))
+
+        user = cur.fetchone()
+
+        if user is None:
+            flash("User does not exist.", "error-delete-account")
+            return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
+
+        stored_password = user[0]
+        avatar_filename = user[1]
+
+        if not check_password_hash(stored_password, password):
+            flash("Password is incorrect.", "error-delete-account")
+            return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
+
+        cur.execute("""
+            delete from ties
+            where id = %s or opid = %s;
+        """, (user_id, user_id))
+
+        cur.execute("""
+            delete from reviews
+            where uid = %s;
+        """, (user_id,))
+
+        cur.execute("""
+            delete from user_info
+            where id = %s;
+        """, (user_id,))
+
+        cur.execute("""
+            delete from users
+            where id = %s;
+        """, (user_id,))
+
+    if avatar_filename:
+        avatar_path = os.path.join(
+            current_app.root_path,
+            "static",
+            "uploads",
+            "avatars",
+            avatar_filename
+        )
+
+        if os.path.exists(avatar_path):
+            os.remove(avatar_path)
+
+    session.clear()
+    flash("Your account has been deleted.", "success")
+    return redirect(url_for("auth.index"))
