@@ -1,6 +1,7 @@
 import os, base64
 from flask import render_template, request, redirect, url_for, flash, session, Blueprint, current_app
 from utils import login_required, is_valid_email, get_page, build_pagination
+from werkzeug.security import check_password_hash, generate_password_hash
 from db import db_cursor
 from werkzeug.utils import secure_filename
 from uuid import uuid4
@@ -225,6 +226,62 @@ def edit_user_profile(user_id):
 
     flash("Your profile has been updated.", "success-profile")
     return redirect(url_for("user.user_detail", user_id=user_id))
+
+@user_bp.route("/user/<user_id>/password", methods=["POST"])
+@login_required
+def change_password(user_id):
+    if session["user_id"] != user_id:
+        return redirect(url_for("user.user_detail", user_id=user_id))
+
+    current_password = request.form.get("current-password", "").strip()
+    new_password = request.form.get("new-password", "").strip()
+    confirm_password = request.form.get("confirm-password", "").strip()
+
+    if not current_password or not new_password or not confirm_password:
+        flash("All fields are required.", "warning-password")
+        return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
+
+    if len(new_password) < 8:
+        flash("Password must be at least 8 characters.", "warning-password")
+        return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
+
+    if new_password != confirm_password:
+        flash("New passwords do not match.", "warning-password")
+        return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
+
+    with db_cursor(commit=True) as cur:
+        cur.execute("""
+            select password
+            from users
+            where id = %s;
+        """, (user_id,))
+
+        user = cur.fetchone()
+
+        if user is None:
+            flash("User does not exist.", "error-password")
+            return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
+
+        stored_password = user[0]
+
+        if not check_password_hash(stored_password, current_password):
+            flash("Current password does not match.", "warning-password")
+            return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
+
+        if check_password_hash(stored_password, new_password):
+            flash("New password cannot be the same as your current password.", "warning-password")
+            return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
+
+        hashed_password = generate_password_hash(new_password)
+
+        cur.execute("""
+            update users
+            set password = %s
+            where id = %s;
+        """, (hashed_password, user_id))
+
+    flash("Password has been changed.", "success-password")
+    return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
 
 @user_bp.route("/user/<user_id>/avatar", methods=["POST"])
 @login_required

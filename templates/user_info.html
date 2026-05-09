@@ -501,7 +501,34 @@
             <div class="profile-right-column">
                 <div class="section-card">
                     <h2>Security</h2>
-                    <p class="small-text">Change password feature coming later.</p>
+
+                    <div class="flash-container">
+                        {% with messages = get_flashed_messages(with_categories=true, category_filter=['success-password', 'error-password', 'warning-password']) %}
+                            {% if messages %}
+                                {% for category, msg in messages %}
+                                    <div class="flash {{ category.split('-')[0] }}">{{ msg }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+
+                    <form class="form-grid password-change"
+                          action="{{ url_for('user.change_password', user_id=user_info[0]) }}"
+                          method="POST">
+                        <label for="current-password">Current Password</label>
+                        <input id="current-password" name="current-password" type="password"
+                               autocomplete="current-password" required />
+
+                        <label for="new-password">New Password</label>
+                        <input id="new-password" name="new-password" type="password"
+                               autocomplete="new-password" required />
+
+                        <label for="confirm-password">Confirm New Password</label>
+                        <input id="confirm-password" name="confirm-password" type="password"
+                               autocomplete="new-password" required />
+
+                        <button class="button-link primary" type="submit">Change Password</button>
+                    </form>
                 </div>
             </div>
         </section>
