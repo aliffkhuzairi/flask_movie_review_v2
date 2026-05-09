@@ -121,6 +121,14 @@
                    href="{{ url_for('user.user_detail', user_id=user_info[0], tab='settings') }}">
                     Account Settings
                 </a>
+
+                {% if is_self and is_current_user_admin %}
+                <a class="profile-tab {{ 'active' if active_tab == 'admin-panel' else '' }}"
+                   href="{{ url_for('user.user_detail', user_id=user_info[0], tab='admin-panel') }}">
+                    Admin Panel
+                </a>
+                {% endif %}
+
             {% else %}
                 <a class="profile-tab active"
                    href="{{ url_for('user.user_detail', user_id=user_info[0], tab='reviews') }}">
@@ -491,7 +499,17 @@
             </div>
 
             <div class="profile-right-column">
+                <div class="section-card">
+                    <h2>Security</h2>
+                    <p class="small-text">Change password feature coming later.</p>
+                </div>
+            </div>
+        </section>
+        {% endif %}
 
+        {% if active_tab == 'admin-panel' and is_self and is_current_user_admin %}
+        <section class="two-cols-layout">
+            <div class="profile-left-column">
                 <!-- ADMIN PANEL -->
                 {% if is_self and is_current_user_admin %}
                     <div class="section-card admin-card">
@@ -535,13 +553,10 @@
                             <button type="submit" class="button-link primary">Add Movie</button>
                         </form>
                     </div>
-
-                {% else %}
-                    <div class="section-card">
-                        <h2>Security</h2>
-                        <p class="small-text">Change password feature coming later.</p>
-                    </div>
                 {% endif %}
+            </div>
+            <div class="profile-right-column">
+
             </div>
         </section>
         {% endif %}

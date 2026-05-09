@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 from uuid import uuid4
 
 ALLOWED_GENRES = {"action", "comedy", "drama", "fantasy", "romance", "thriller", "western"}
-ALLOWED_TABS = {"overview", "reviews", "connections", "settings"}
+ALLOWED_TABS = {"overview", "reviews", "connections", "settings", "admin-panel"}
 ALLOWED_AVATAR_EXTENSIONS = {"png", "jpg", "jpeg", "webp", "gif"}
 
 def allowed_avatar(filename):
