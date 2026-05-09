@@ -51,14 +51,26 @@ The project focuses on backend CRUD, PostgreSQL relationships, authentication, r
 - Add, update, and delete reviews
 - Star-based rating input UI
 - Rating validation from 1 to 5
+- Average rating display on movie detail pages
+- Rating breakdown chart for each movie
 - Relative time display such as `5m`, `1h`, and `2d`
 - Sort reviews by latest, highest rating, and lowest rating
 - Paginated reviews on user profile pages
 - Paginated reviews on movie detail pages
 - Review count summary such as `Showing 1 – 5 of 12 reviews`
 
+### Global Search
+- Header search for movies and users
+- Search result page with filter tabs for all results, movies, and people
+- People search results include user avatars
+- Search layout is responsive across desktop, tablet, and mobile
+
 ### User Profiles
-- View user information
+- View user profile information
+- Profile dashboard with tabs for overview, reviews, connections, and account settings
+- User review stats including total reviews, average rating given, top genre, and latest review date
+- Upload and crop profile avatar using Cropper.js
+- Remove uploaded avatar and fall back to default icon avatar
 - Edit name and email
 - View review history
 - Sort user reviews
@@ -103,6 +115,7 @@ The project focuses on backend CRUD, PostgreSQL relationships, authentication, r
 - CSS3 (Flexbox + responsive design)
 - JavaScript (vanilla)
 - Font Awesome (icons)
+- Cropper.js for avatar cropping
 
 ---
 
@@ -129,18 +142,34 @@ Key relationships:
 ```bash
 .
 ├── app.py
+├── db.py
+├── utils.py
+├── routes/
+│   ├── __init__.py
+│   ├── auth_routes.py
+│   ├── movie_routes.py
+│   ├── search_routes.py
+│   └── user_routes.py
 ├── templates/
-│ ├── base.html
-│ ├── home.html
-│ ├── movies.html
-│ ├── movie.html
-│ ├── user_info.html
-│ ├── login.html
-│ └── signup.html
+│   ├── partials/
+│   │   └── header.html
+│   ├── macros.html
+│   ├── home.html
+│   ├── movies.html
+│   ├── movie.html
+│   ├── search.html
+│   ├── user_info.html
+│   ├── login.html
+│   └── signup.html
 ├── static/
-│ ├── style.css
-│ └── script.js
+│   ├── style.css
+│   ├── script.js
+│   └── uploads/
+│       └── avatars/
+│           └── .gitkeep
+├── screenshots/
 ├── movie_db.sql
+├── .gitignore
 └── README.md
 ```
 
@@ -245,7 +274,7 @@ http://127.0.0.1:5000
 
 ---
 
-## Security Notes
+### Security Notes
 
 - Database credentials are loaded from environment variables.
 - Passwords are hashed for new users.
@@ -254,6 +283,8 @@ http://127.0.0.1:5000
 - Admin-only features are protected by role checks.
 - User actions are guarded with session checks.
 - Delete actions use POST requests instead of GET links.
+- Uploaded avatar files are ignored by Git and stored locally during development.
+- Avatar uploads are processed as cropped image data before saving.
 
 ---
 
@@ -276,11 +307,12 @@ http://127.0.0.1:5000
 ## Future Improvements
 
 - Add movie posters using an external API
-- Add movie detail statistics such as review count and rating distribution
-- Add user search
-- Add deployment support
+- Add password change feature
+- Add account deletion or deactivation
+- Add full deployment support
 - Add automated tests
 - Add CSRF protection for forms
+- Store uploaded images in cloud storage for production
 
 ---
 
