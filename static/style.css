@@ -806,6 +806,35 @@ header.sticky .nav:hover {
     min-height: 200px;
 }
 
+.review-card-clickable {
+    position: relative;
+}
+
+.review-card-cover {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+}
+
+/* Put normal content above the cover visually,
+   but allow clicks to pass through it */
+.review-card-clickable > *:not(.review-card-cover) {
+    position: relative;
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* Actual clickable elements must receive clicks */
+.review-card-clickable a:not(.review-card-cover),
+.review-card-clickable button,
+.review-card-clickable form,
+.review-card-clickable form * {
+    position: relative;
+    z-index: 3;
+    pointer-events: auto;
+}
+
 .reviews-list {
     display: flex;
     flex-direction: column;
@@ -945,8 +974,14 @@ header.sticky .nav:hover {
     font-weight: 500;
     font-size: 1.1rem;
     padding-left: 3px;
-    color: #66eaea;
+    color: var(--secondary);
     text-decoration: none;
+    transition: all 0.1s ease;
+}
+
+.review-user:hover {
+    color: var(--secondary-hover);
+    transform: scale(1.01);
 }
 
 .review-text-block {

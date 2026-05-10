@@ -262,7 +262,10 @@
                     {% if reviews %}
                         <div class="reviews-list">
                             {% for review in reviews %}
-                                <div class="review-card">
+                                <article class="review-card review-card-clickable">
+                                    <a class="review-card-cover"
+                                       href="{{ url_for('user.user_detail', user_id=review[0]) }}"
+                                       aria-label="View {{ review[1] }} details"></a>
                                     <div class="review-card-top">
                                         <div class="review-title-meta">
                                             <div class="avatar-user">
@@ -286,7 +289,7 @@
                                         <p class="review-text clamp-text">{{ review[3] }}</p>
                                         <button type="button" class="text-toggle" onclick="toggleReview(this)">Read more</button>
                                     </div>
-                                </div>
+                                </article>
                             {% endfor %}
                         </div>
                     {% else %}

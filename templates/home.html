@@ -71,7 +71,10 @@
 
                 <div class="review-feed">
                     {% for review in reviews %}
-                    <div class="review-card">
+                    <article class="review-card review-card-clickable">
+                        <a class="review-card-cover"
+                           href="{{ url_for('movie.movie_detail', movie_id=review[0]) }}"
+                           aria-label="View {{ review[1] }} details"></a>
                         <div class="review-card-top">
                             <div class="review-title-meta">
                                  <span class="tooltip" data-title="{{ review[1] }}">
@@ -113,7 +116,7 @@
                             <p class="review-text clamp-text">{{ review[6] }}</p>
                             <button type="button" class="text-toggle" onclick="toggleReview(this)">Read more</button>
                         </div>
-                    </div>
+                    </article>
                     {% endfor %}
                 </div>
             {% else %}
