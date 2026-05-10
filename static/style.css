@@ -1058,7 +1058,7 @@ header.sticky .nav:hover {
 
 .review-user:hover {
     color: var(--secondary-hover);
-    transform: scale(1.01);
+    transform: scale(1.05);
 }
 
 .review-text-block {

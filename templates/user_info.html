@@ -40,18 +40,31 @@
                 <div class="hero-actions">
 
                     {% if relationship == 'follow' %}
-                        <form action="{{ url_for('user.unfollow_user', target_user_id=user_info[0]) }}" method="POST">
+                        <form class="js-confirm-form"
+                              action="{{ url_for('user.unfollow_user', target_user_id=user_info[0]) }}"
+                              method="POST"
+                              data-confirm-title="Unfollow user?"
+                              data-confirm-message="You can follow this user again later.">
                             <button type="submit" class="button-link btn-unfollow">Unfollow</button>
                         </form>
-                        <form action="{{ url_for('user.mute_user', target_user_id=user_info[0]) }}" method="POST">
+                        <form class="js-confirm-form"
+                              action="{{ url_for('user.mute_user', target_user_id=user_info[0]) }}"
+                              method="POST"
+                              data-confirm-title="Mute user?"
+                              data-confirm-message="Their reviews will not appear in your feed.">
                             <button type="submit" class="button-link btn-mute">Mute</button>
                         </form>
 
                     {% elif relationship == 'mute' %}
-                        <form action="{{ url_for('user.follow_user', target_user_id=user_info[0]) }}" method="POST">
+                        <form action="{{ url_for('user.follow_user', target_user_id=user_info[0]) }}"
+                              method="POST">
                             <button type="submit" class="button-link btn-follow">Follow</button>
                         </form>
-                        <form action="{{ url_for('user.unmute_user', target_user_id=user_info[0]) }}" method="POST">
+                        <form class="js-confirm-form"
+                              action="{{ url_for('user.unmute_user', target_user_id=user_info[0]) }}"
+                              method="POST"
+                              data-confirm-title="Unmute this user?"
+                              data-confirm-message="Their reviews may appear again in your feed.">
                             <button type="submit" class="button-link btn-unmute">Unmute</button>
                         </form>
 
@@ -59,7 +72,11 @@
                         <form action="{{ url_for('user.follow_user', target_user_id=user_info[0]) }}" method="POST">
                             <button type="submit" class="button-link btn-follow">Follow</button>
                         </form>
-                        <form action="{{ url_for('user.mute_user', target_user_id=user_info[0]) }}" method="POST">
+                        <form class="js-confirm-form"
+                              action="{{ url_for('user.mute_user', target_user_id=user_info[0]) }}"
+                              method="POST"
+                              data-confirm-title="Mute user?"
+                              data-confirm-message="Their reviews will not appear in your feed.">
                             <button type="submit" class="button-link btn-mute">Mute</button>
                         </form>
                     {% endif %}
@@ -260,10 +277,11 @@
                             </div>
 
                             {% if is_self %}
-                            <form class="delete"
+                            <form class="delete js-confirm-form"
                                   action="{{ url_for('user.delete_review', movie_id=review[0]) }}"
                                   method="POST"
-                                  onsubmit="return confirm('This action cannot be undone. Delete review?');">
+                                  data-confirm-title="Delete review?"
+                                  data-confirm-message="This action cannot be undone. Delete this review?">
                                 <button type="submit" class="button-link logout">Delete Review</button>
                             </form>
                             {% endif %}
@@ -334,9 +352,11 @@
                                     </a>
                                 </div>
                                 {% if is_self %}
-                                    <form action="{{ url_for('user.unfollow_user', target_user_id=followed[0]) }}"
+                                    <form class="js-confirm-form"
+                                          action="{{ url_for('user.unfollow_user', target_user_id=followed[0]) }}"
                                           method="POST"
-                                          onsubmit="return confirm('Unfollow this user?');">
+                                          data-confirm-title="Unfollow user?"
+                                          data-confirm-message="You can follow this user again later.">
                                         <button type="submit" class="button-link btn-unfollow">Unfollow</button>
                                     </form>
                                 {% endif %}
@@ -372,9 +392,11 @@
 
                                     </div>
 
-                                    <form action="{{ url_for('user.unmute_user', target_user_id=muted[0]) }}"
+                                    <form class="js-confirm-form"
+                                          action="{{ url_for('user.unmute_user', target_user_id=muted[0]) }}"
                                           method="POST"
-                                          onsubmit="return confirm('Unmute this user?');">
+                                          data-confirm-title="Unmute user?"
+                                          data-confirm-message="Their reviews may appear again in your feed.">
                                         <button type="submit" class="button-link btn-unmute">Unmute</button>
                                     </form>
                                 </li>
@@ -432,10 +454,11 @@
                             </form>
 
                             {% if user_info[5] %}
-                                <form class="remove-avatar-form"
+                                <form class="remove-avatar-form js-confirm-form"
                                       action="{{ url_for('user.remove_avatar', user_id=user_info[0]) }}"
                                       method="POST"
-                                      onsubmit="return confirm('Remove profile photo?');">
+                                      data-confirm-title="Remove profile photo?"
+                                      data-confirm-message="Your profile will return to the default avatar.">
                                     <button type="submit" class="button-link logout">
                                         Remove Photo
                                     </button>
@@ -444,8 +467,8 @@
                         </div>
                     </div>
 
-                    <div class="modal-overlay avatar-cropper-overlay" id="avatarCropperOverlay">
-                        <div class="modal-card avatar-cropper-modal">
+                    <div class="modal-overlay" id="avatarCropperOverlay">
+                        <div class="modal-card">
                             <button type="button" class="modal-close avatar-cropper-close" id="closeAvatarCropper">
                                 <i class="fa-solid fa-xmark"></i>
                             </button>
@@ -582,9 +605,9 @@
 
                 {% if is_self and not is_current_user_admin %}
                 <!-- DELETE ACCOUNT MODAL: STEP 1 -->
-                <div class="modal-overlay delete-modal-overlay" id="deleteStepOneModal">
-                    <div class="modal-card delete-modal">
-                        <button type="button" class="modal-close delete-modal-close" onclick="closeDeleteModals()">
+                <div class="modal-overlay" id="deleteStepOneModal">
+                    <div class="modal-card">
+                        <button type="button" class="modal-close" onclick="closeDeleteModals()">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
 
@@ -608,9 +631,9 @@
                 </div>
 
                 <!-- DELETE ACCOUNT MODAL: STEP 2 -->
-                <div class="modal-overlay delete-modal-overlay" id="deleteStepTwoModal">
-                    <div class="modal-card delete-modal">
-                        <button type="button" class="modal-close delete-modal-close" onclick="closeDeleteModals()">
+                <div class="modal-overlay" id="deleteStepTwoModal">
+                    <div class="modal-card">
+                        <button type="button" class="modal-close" onclick="closeDeleteModals()">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
 
@@ -652,11 +675,6 @@
                 </div>
                 {% endif %}
             </div>
-
-
-
-
-
         </section>
         {% endif %}
 
@@ -714,6 +732,31 @@
         </section>
         {% endif %}
     </main>
+
+    <!-- MODAL TEMPLATE -->
+    <div class="modal-overlay" id="confirmActionModal">
+        <div class="modal-card">
+            <button type="button" class="modal-close" onclick="closeConfirmModal()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <h3 id="confirmModalTitle">Are you sure?</h3>
+
+            <p class="small-text" id="confirmModalMessage">
+                This action cannot be undone.
+            </p>
+
+            <div class="modal-actions">
+                <button type="button" class="button-link secondary" onclick="closeConfirmModal()">
+                    Cancel
+                </button>
+
+                <button type="button" class="button-link logout" id="confirmModalSubmit">
+                    Confirm
+                </button>
+            </div>
+        </div>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>

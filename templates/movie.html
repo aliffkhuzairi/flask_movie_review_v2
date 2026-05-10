@@ -210,10 +210,11 @@
 
                             <button type="submit" class="button-link primary">Update Movie</button>
                         </form>
-                        <form class="delete-movie"
+                        <form class="delete-movie js-confirm-form"
                               action="{{ url_for('movie.movie_delete', movie_id=movie[0]) }}"
                               method="POST"
-                              onsubmit="return confirm('This action cannot be undone. Delete this movie and all its reviews?');">
+                              data-confirm-title="Delete movie?"
+                              data-confirm-message="This action cannot be undone. Delete this movie?">
                             <button type="submit" class="button-link logout">
                                 Delete Movie
                             </button>
@@ -330,8 +331,33 @@
                 </div>
             </div>
         </section>
-
     </main>
+
+    <!-- MODAL TEMPLATE -->
+    <div class="modal-overlay" id="confirmActionModal">
+        <div class="modal-card">
+            <button type="button" class="modal-close" onclick="closeConfirmModal()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <h3 id="confirmModalTitle">Are you sure?</h3>
+
+            <p class="small-text" id="confirmModalMessage">
+                This action cannot be undone.
+            </p>
+
+            <div class="modal-actions">
+                <button type="button" class="button-link secondary" onclick="closeConfirmModal()">
+                    Cancel
+                </button>
+
+                <button type="button" class="button-link logout" id="confirmModalSubmit">
+                    Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

@@ -121,6 +121,66 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+let pendingConfirmForm = null;
+
+const openConfirmModal = (form) => {
+    const modal = document.getElementById('confirmActionModal');
+    const title = document.getElementById('confirmModalTitle');
+    const message = document.getElementById('confirmModalMessage');
+
+    if (!modal || !title || !message) return;
+
+    pendingConfirmForm = form;
+
+    title.textContent = form.dataset.confirmTitle || 'Are you sure?';
+    message.textContent = form.dataset.confirmMessage || 'This action cannot be undone.';
+
+    modal.classList.add('open');
+};
+
+const closeConfirmModal = () => {
+    const modal = document.getElementById('confirmActionModal');
+
+    if (modal) {
+        modal.classList.remove('open');
+    }
+
+    pendingConfirmForm = null;
+};
+
+const setupConfirmModal = () => {
+    const forms = document.querySelectorAll('.js-confirm-form');
+    const confirmButton = document.getElementById('confirmModalSubmit');
+    const modal = document.getElementById('confirmActionModal');
+
+    forms.forEach((form) => {
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            openConfirmModal(form);
+        });
+    });
+
+    if (confirmButton) {
+        confirmButton.addEventListener('click', () => {
+            if (!pendingConfirmForm) return;
+
+            const form = pendingConfirmForm;
+            pendingConfirmForm = null;
+            form.submit();
+        });
+    }
+
+    if (modal) {
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                closeConfirmModal();
+            }
+        });
+    }
+};
+
+document.addEventListener('DOMContentLoaded', setupConfirmModal);
+
 const setupAvatarCropper = () => {
     const avatarForm = document.getElementById('avatarForm');
     const avatarInput = document.getElementById('avatarUpload');
