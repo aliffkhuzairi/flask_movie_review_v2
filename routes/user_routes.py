@@ -199,15 +199,15 @@ def edit_user_profile(user_id):
 
     if not name and not email:
         flash("Please enter a name or email.", "warning-profile")
-        return redirect(url_for("user_detail", user_id=user_id))
+        return redirect(url_for("user_detail", user_id=user_id, tab="settings"))
 
     if name and len(name) < 4:
         flash("Name must be at least 4 characters.", "warning-profile")
-        return redirect(url_for("user_detail", user_id=user_id))
+        return redirect(url_for("user_detail", user_id=user_id, tab="settings"))
 
     if email and not is_valid_email(email):
         flash("Please enter a valid email address.", "warning-profile")
-        return redirect(url_for("user_detail", user_id=user_id))
+        return redirect(url_for("user_detail", user_id=user_id, tab="settings"))
 
     with db_cursor(commit=True) as cur:
         if name:
@@ -225,7 +225,7 @@ def edit_user_profile(user_id):
             """, (email, user_id))
 
     flash("Your profile has been updated.", "success-profile")
-    return redirect(url_for("user.user_detail", user_id=user_id))
+    return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
 
 @user_bp.route("/user/<user_id>/password", methods=["POST"])
 @login_required
@@ -421,7 +421,7 @@ def unfollow_user(target_user_id):
             where id = %s and opid = %s and tie = 'follow';
         """, (session["user_id"], target_user_id))
 
-    return redirect(url_for("user.user_detail", user_id=session["user_id"]))
+    return redirect(url_for("user.user_detail", user_id=target_user_id))
 
 @user_bp.route("/mute/<target_user_id>", methods=["POST"])
 @login_required
@@ -437,7 +437,7 @@ def mute_user(target_user_id):
             set tie = 'mute';
         """, (session["user_id"], target_user_id))
 
-    return redirect(url_for("user.user_detail", user_id=session["user_id"]))
+    return redirect(url_for("user.user_detail", user_id=target_user_id))
 
 @user_bp.route("/unmute/<target_user_id>", methods=["POST"])
 @login_required
@@ -461,11 +461,11 @@ def add_movie():
 
     if not title or not director or not genre or not rel_date:
         flash("All fields are required.", "warning-admin")
-        return redirect(url_for("user.user_detail", user_id=session["user_id"]))
+        return redirect(url_for("user.user_detail", user_id=session["user_id"], tab="admin-panel"))
 
     if genre not in ALLOWED_GENRES:
         flash("Please select a valid genre.", "warning-admin")
-        return redirect(url_for("user.user_detail", user_id=session["user_id"]))
+        return redirect(url_for("user.user_detail", user_id=session["user_id"], tab="admin-panel"))
 
     try:
         with db_cursor(commit=True) as cur:
@@ -483,7 +483,7 @@ def add_movie():
     except Exception as err:
         flash(f"Failed to add movie!: {err}", "error-admin")
 
-    return redirect(url_for("user.user_detail", user_id=session["user_id"]))
+    return redirect(url_for("user.user_detail", user_id=session["user_id"], tab="admin-panel"))
 
 @user_bp.route("/review/<int:movie_id>/delete", methods=["POST"])
 @login_required
@@ -495,7 +495,7 @@ def delete_review(movie_id):
         """,(movie_id, session["user_id"]))
 
     flash("Review deleted!", "success-delete")
-    return redirect(url_for("user.user_detail", user_id=session["user_id"]))
+    return redirect(url_for("user.user_detail", user_id=session["user_id"], tab="reviews"))
 
 @user_bp.route("/user/<user_id>/delete", methods=["POST"])
 @login_required
