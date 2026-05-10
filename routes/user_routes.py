@@ -3,12 +3,11 @@ from flask import render_template, request, redirect, url_for, flash, session, B
 from utils import login_required, is_valid_email, get_page, build_pagination
 from werkzeug.security import check_password_hash, generate_password_hash
 from db import db_cursor
-from werkzeug.utils import secure_filename
 from uuid import uuid4
 
 ALLOWED_GENRES = {"action", "comedy", "drama", "fantasy", "romance", "thriller", "western"}
 ALLOWED_TABS = {"overview", "reviews", "connections", "settings", "admin-panel"}
-ALLOWED_AVATAR_EXTENSIONS = {"png", "jpg", "jpeg", "webp", "gif"}
+ALLOWED_AVATAR_EXTENSIONS = {"png", "jpg", "jpeg", "webp"}
 
 def allowed_avatar(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_AVATAR_EXTENSIONS
@@ -199,15 +198,15 @@ def edit_user_profile(user_id):
 
     if not name and not email:
         flash("Please enter a name or email.", "warning-profile")
-        return redirect(url_for("user_detail", user_id=user_id, tab="settings"))
+        return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
 
     if name and len(name) < 4:
         flash("Name must be at least 4 characters.", "warning-profile")
-        return redirect(url_for("user_detail", user_id=user_id, tab="settings"))
+        return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
 
     if email and not is_valid_email(email):
         flash("Please enter a valid email address.", "warning-profile")
-        return redirect(url_for("user_detail", user_id=user_id, tab="settings"))
+        return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
 
     with db_cursor(commit=True) as cur:
         if name:

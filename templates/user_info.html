@@ -328,7 +328,7 @@
                             {% for followed in followed_users[:5] %}
                             <li class="relation-item">
                                 <div class="relation-user">
-                                    {{ render_avatar(followed_users[0], followed_users[1], followed_users[2], 'sm') }}
+                                    {{ render_avatar(followed[0], followed[1], followed[2], 'sm') }}
                                     <a class="id-user" href="{{ url_for('user.user_detail', user_id=followed[0]) }}">
                                         {{ followed[0] }}
                                     </a>
@@ -365,7 +365,7 @@
                                 <li class="relation-item">
                                     <div class="relation-user">
 
-                                        {{ render_avatar(muted_users[0], muted_users[1], muted_users[2], 'sm') }}
+                                        {{ render_avatar(muted[0], muted[1], muted[2], 'sm') }}
                                         <a href="{{ url_for('user.user_detail', user_id=muted[0]) }}" class="id-user">
                                             {{ muted[0] }}
                                         </a>
@@ -444,9 +444,9 @@
                         </div>
                     </div>
 
-                    <div class="avatar-cropper-overlay" id="avatarCropperOverlay">
-                        <div class="avatar-cropper-modal">
-                            <button type="button" class="avatar-cropper-close" id="closeAvatarCropper">
+                    <div class="modal-overlay avatar-cropper-overlay" id="avatarCropperOverlay">
+                        <div class="modal-card avatar-cropper-modal">
+                            <button type="button" class="modal-close avatar-cropper-close" id="closeAvatarCropper">
                                 <i class="fa-solid fa-xmark"></i>
                             </button>
 
@@ -582,9 +582,9 @@
 
                 {% if is_self and not is_current_user_admin %}
                 <!-- DELETE ACCOUNT MODAL: STEP 1 -->
-                <div class="delete-modal-overlay" id="deleteStepOneModal">
-                    <div class="delete-modal">
-                        <button type="button" class="delete-modal-close" onclick="closeDeleteModals()">
+                <div class="modal-overlay delete-modal-overlay" id="deleteStepOneModal">
+                    <div class="modal-card delete-modal">
+                        <button type="button" class="modal-close delete-modal-close" onclick="closeDeleteModals()">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
 
@@ -595,7 +595,7 @@
                             You cannot undo this action.
                         </p>
 
-                        <div class="delete-modal-actions">
+                        <div class="modal-actions delete-modal-actions">
                             <button type="button" class="button-link secondary" onclick="closeDeleteModals()">
                                 Cancel
                             </button>
@@ -608,9 +608,9 @@
                 </div>
 
                 <!-- DELETE ACCOUNT MODAL: STEP 2 -->
-                <div class="delete-modal-overlay" id="deleteStepTwoModal">
-                    <div class="delete-modal">
-                        <button type="button" class="delete-modal-close" onclick="closeDeleteModals()">
+                <div class="modal-overlay delete-modal-overlay" id="deleteStepTwoModal">
+                    <div class="modal-card delete-modal">
+                        <button type="button" class="modal-close delete-modal-close" onclick="closeDeleteModals()">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
 
