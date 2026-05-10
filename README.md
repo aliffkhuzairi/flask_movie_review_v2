@@ -72,6 +72,9 @@ The project focuses on backend CRUD, PostgreSQL relationships, authentication, r
 - Upload and crop profile avatar using Cropper.js
 - Remove uploaded avatar and fall back to default icon avatar
 - Edit name and email
+- Change password from account settings
+- Delete own account with double confirmation
+- Account deletion removes profile data, reviews, avatar, and social connections
 - View review history
 - Sort user reviews
 - View followed users
@@ -285,6 +288,9 @@ http://127.0.0.1:5000
 - Delete actions use POST requests instead of GET links.
 - Uploaded avatar files are ignored by Git and stored locally during development.
 - Avatar uploads are processed as cropped image data before saving.
+- Password change requires the current password.
+- Account deletion requires password confirmation and `DELETE` text confirmation.
+- Admin accounts cannot be deleted from the settings page.
 
 ---
 
@@ -301,14 +307,15 @@ http://127.0.0.1:5000
 - Refactoring pagination logic into helper functions
 - Improving mobile layout with responsive CSS
 - Managing UI growth through CSS restructuring
+- Handling account deletion with related database cleanup
+- Managing user-uploaded files and deleting old avatar files
+- Building modal confirmation flows with JavaScript
 
 ---
 
 ## Future Improvements
 
 - Add movie posters using an external API
-- Add password change feature
-- Add account deletion or deactivation
 - Add full deployment support
 - Add automated tests
 - Add CSRF protection for forms
