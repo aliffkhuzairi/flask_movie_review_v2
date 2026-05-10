@@ -522,12 +522,28 @@
                                autocomplete="current-password" required />
 
                         <label for="new-password">New Password</label>
-                        <input id="new-password" name="new-password" type="password"
+                        <div class="password-field">
+                            <input id="new-password" name="new-password" type="password"
                                autocomplete="new-password" required />
+                            <button type="button"
+                                    class="password-toggle"
+                                    aria-label="Show password">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+
 
                         <label for="confirm-password">Confirm New Password</label>
-                        <input id="confirm-password" name="confirm-password" type="password"
+                        <div class="password-field">
+                            <input id="confirm-password" name="confirm-password" type="password"
                                autocomplete="new-password" required />
+                            <button type="button"
+                                    class="password-toggle"
+                                    aria-label="Show password">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+
 
                         <button class="button-link primary" type="submit">Change Password</button>
                     </form>

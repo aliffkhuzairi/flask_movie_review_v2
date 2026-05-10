@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <title>Sign Up</title>
 </head>
 <body>
@@ -23,15 +25,24 @@
 
              <form action="{{ url_for('auth.signup') }}" method="POST" class="form-grid">
 
-                <label for="id">ID:</label>
-                <input id="id" type="text" name="user_id" required>
 
-                <label for="password">Password:</label>
-                <input id="password" type="password" name="password" required>
+                 <label for="id">ID:</label>
+                 <input id="id" type="text" name="user_id" required>
 
-                <div class="button-row">
-                    <button type="submit" class="button-link primary">Sign Up</button>
-                </div>
+                 <label for="password">Password:</label>
+                 <div class="password-field">
+                     <input id="password" type="password" name="password" required>
+                     <button type="button"
+                             class="password-toggle"
+                             aria-label="Show password">
+                        <i class="fa-solid fa-eye"></i>
+                     </button>
+                 </div>
+
+
+                 <div class="button-row">
+                     <button type="submit" class="button-link primary">Sign Up</button>
+                 </div>
 
              </form>
 
@@ -41,5 +52,6 @@
              </p>
          </div>
     </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

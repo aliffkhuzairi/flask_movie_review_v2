@@ -4,6 +4,32 @@ window.addEventListener('scroll', function () {
     header.classList.toggle('sticky', window.scrollY > 0);
 });
 
+const setupPasswordToggles = () => {
+    const passwordToggles = document.querySelectorAll('.password-toggle');
+
+    passwordToggles.forEach((toggle) => {
+        toggle.addEventListener('click', () => {
+            const passwordField = toggle.closest('.password-field');
+            const input = passwordField.querySelector('input');
+            const icon = toggle.querySelector('i');
+
+            const isPassword = input.type === 'password';
+
+            input.type = isPassword ? 'text' : 'password';
+
+            icon.classList.toggle('fa-eye', !isPassword);
+            icon.classList.toggle('fa-eye-slash', isPassword);
+
+            toggle.setAttribute(
+                'aria-label',
+                isPassword ? 'Hide password' : 'Show password'
+            );
+        });
+    });
+};
+
+document.addEventListener('DOMContentLoaded', setupPasswordToggles);
+
 // Toggle Review
 const toggleReview = (button) => {
     const text = button.previousElementSibling;

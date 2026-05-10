@@ -235,7 +235,7 @@ body::before {
 .form-grid {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
 }
 
 label {
@@ -296,6 +296,15 @@ select option {
     width: 100%;
 }
 
+.form-grid > button[type="submit"],
+.form-grid .button-row {
+    margin-top: 8px;
+}
+
+.password-field .password-toggle {
+    width: auto;
+}
+
 .form-grid .star-btn {
     width: auto;
 }
@@ -305,6 +314,39 @@ select option {
 .form-card form {
     margin: 0;
 }
+
+.password-field input {
+    width: 100%;
+    padding-right: 42px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    width: auto;
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 0.9rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.13s ease;
+}
+
+.password-toggle:hover {
+    color: var(--secondary);
+    background: none;
+}
+
+.password-toggle:focus {
+    outline: none;
+}
+
 
 /* =============== HEADER AND NAVIGATIONS =============== */
 .header {
@@ -493,6 +535,13 @@ header.sticky .nav:hover {
     padding: 24px 40px 40px;
 }
 
+.password-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
 .section-card {
     padding: 20px 0;
 }
@@ -615,10 +664,6 @@ header.sticky .nav:hover {
 /* =============== MOVIE LIST AND MOVIE CARDS ===============*/
 .movie-container {
     margin: 28px 0 40px;
-}
-
-.section-card form button {
-    margin-top: 8px;
 }
 
 .search-section form button {
@@ -1161,7 +1206,7 @@ header.sticky .nav:hover {
 }
 
 .delete-movie {
-    margin-top: 8px;
+    margin-top: 16px;
 }
 
 .delete-movie button {
@@ -1470,6 +1515,12 @@ header.sticky .nav:hover {
     gap: 24px;
     align-items: center;
     margin: 24px 0;
+}
+
+.avatar-edit-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .avatar-upload-label,
