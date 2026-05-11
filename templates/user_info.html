@@ -117,24 +117,24 @@
         <!-- PROFILE TABS -->
         <nav class="profile-tabs">
             {% if is_self %}
-                <a class="profile-tab {{ 'active' if active_tab == 'overview' else '' }}"
+                <a class="profile-tab js-profile-tab {{ 'active' if active_tab == 'overview' else '' }}"
                     href="{{ url_for('user.user_detail', user_id=user_info[0], tab='overview') }}">
                     Overview
                 </a>
 
-                <a class="profile-tab {{ 'active' if active_tab == 'reviews' else '' }}"
+                <a class="profile-tab js-profile-tab {{ 'active' if active_tab == 'reviews' else '' }}"
                     href="{{ url_for('user.user_detail', user_id=user_info[0], tab='reviews') }}">
                     Your Reviews
                 </a>
 
                 {% if not is_current_user_admin %}
-                    <a class="profile-tab {{ 'active' if active_tab == 'connections' else '' }}"
+                    <a class="profile-tab js-profile-tab {{ 'active' if active_tab == 'connections' else '' }}"
                        href="{{ url_for('user.user_detail', user_id=user_info[0], tab='connections') }}">
                         Connections
                     </a>
                 {% endif %}
 
-                <a class="profile-tab {{ 'active' if active_tab == 'settings' else '' }}"
+                <a class="profile-tab js-profile-tab {{ 'active' if active_tab == 'settings' else '' }}"
                    href="{{ url_for('user.user_detail', user_id=user_info[0], tab='settings') }}">
                     Account Settings
                 </a>

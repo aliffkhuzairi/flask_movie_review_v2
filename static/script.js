@@ -1,3 +1,7 @@
+document.addEventListener("DOMContentLoaded", () => {
+    setupProfileTabScrollRestore();
+})
+
 // Sticky Header
 window.addEventListener('scroll', function () {
     const header = document.querySelector('header');
@@ -435,3 +439,26 @@ document.addEventListener('keydown', function (event) {
         closeDeleteModals();
     }
 });
+
+const setupProfileTabScrollRestore = () => {
+    const profileTabs = document.querySelectorAll('.js-profile-tab');
+
+    if (!profileTabs.length) return;
+
+    profileTabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+            sessionStorage.setItem('profileTabScrollY', String(window.scrollY));
+        });
+    });
+
+    const savedScrollY = sessionStorage.getItem('profileTabScrollY');
+
+    if (savedScrollY !== null) {
+        window.scrollTo({
+            top: Number(savedScrollY),
+            behavior: 'instant'
+        });
+
+        sessionStorage.removeItem('profileTabScrollY');
+    }
+};
