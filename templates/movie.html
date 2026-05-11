@@ -288,7 +288,7 @@
 
                                     <div class="review-text-block detail-page">
                                         <p class="review-text clamp-text">{{ review[3] }}</p>
-                                        <button type="button" class="text-toggle" onclick="toggleReview(this)">Read more</button>
+                                        <button type="button" class="text-toggle">Read more</button>
                                     </div>
                                 </article>
                             {% endfor %}
@@ -336,7 +336,7 @@
     <!-- MODAL TEMPLATE -->
     <div class="modal-overlay" id="confirmActionModal">
         <div class="modal-card">
-            <button type="button" class="modal-close" onclick="closeConfirmModal()">
+            <button type="button" class="modal-close" id="confirmModalClose">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
@@ -347,7 +347,7 @@
             </p>
 
             <div class="modal-actions">
-                <button type="button" class="button-link secondary" onclick="closeConfirmModal()">
+                <button type="button" class="button-link secondary" id="confirmModalCancel">
                     Cancel
                 </button>
 

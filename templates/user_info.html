@@ -273,7 +273,7 @@
 
                             <div class="review-text-block detail-page">
                                 <p class="review-text clamp-text">{{ review[3] }}</p>
-                                <button type="button" class="text-toggle" onclick="toggleReview(this)">Read more</button>
+                                <button type="button" class="text-toggle">Read more</button>
                             </div>
 
                             {% if is_self %}
@@ -607,7 +607,7 @@
                 <!-- DELETE ACCOUNT MODAL: STEP 1 -->
                 <div class="modal-overlay" id="deleteStepOneModal">
                     <div class="modal-card">
-                        <button type="button" class="modal-close" onclick="closeDeleteModals()">
+                        <button type="button" class="modal-close" id="deleteStepOneClose">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
 
@@ -619,11 +619,11 @@
                         </p>
 
                         <div class="modal-actions delete-modal-actions">
-                            <button type="button" class="button-link secondary" onclick="closeDeleteModals()">
+                            <button type="button" class="button-link secondary" id="deleteStepOneCancel">
                                 Cancel
                             </button>
 
-                            <button type="button" class="button-link logout" onclick="openDeleteStepTwo()">
+                            <button type="button" class="button-link logout" id="deleteStepOneContinue">
                                 Yes, continue
                             </button>
                         </div>
@@ -633,7 +633,7 @@
                 <!-- DELETE ACCOUNT MODAL: STEP 2 -->
                 <div class="modal-overlay" id="deleteStepTwoModal">
                     <div class="modal-card">
-                        <button type="button" class="modal-close" onclick="closeDeleteModals()">
+                        <button type="button" class="modal-close" id="deleteStepTwoClose">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
 
@@ -662,7 +662,7 @@
                                    required>
 
                             <div class="delete-modal-actions">
-                                <button type="button" class="button-link secondary" onclick="closeDeleteModals()">
+                                <button type="button" class="button-link secondary" id="deleteStepTwoCancel">
                                     Cancel
                                 </button>
 

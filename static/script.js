@@ -1,13 +1,92 @@
-document.addEventListener("DOMContentLoaded", () => {
-    setupProfileTabScrollRestore();
-})
-
-// Sticky Header
-window.addEventListener('scroll', function () {
+// HEADER
+const setupStickyHeader = () => {
     const header = document.querySelector('header');
-    header.classList.toggle('sticky', window.scrollY > 0);
-});
 
+    if (!header) return;
+
+    window.addEventListener('scroll', () => {
+        header.classList.toggle('sticky', window.scrollY > 0);
+    });
+};
+
+// TOGGLE MENU
+const setupMenuToggle = () => {
+    const menuToggle = document.getElementById('menuToggle');
+    const menu = document.getElementById('navMenu');
+
+    if (!menuToggle || !menu) return;
+
+    menuToggle.addEventListener('click', () => {
+        const icon = menuToggle.querySelector('i');
+        const open = !menu.classList.contains('open');
+
+        closeSearch();
+
+        if (open) {
+            menu.classList.add('open');
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-xmark');
+        } else {
+            closeMenu();
+        }
+    });
+};
+
+// CLOSE MENU
+const closeMenu = () => {
+    const menu = document.getElementById('navMenu');
+    const menuToggle = document.querySelector('.menu-toggle');
+
+    if (!menu || !menuToggle) return;
+
+    const menuIcon = menuToggle.querySelector('i');
+
+    menu.classList.remove('open');
+    menuIcon.classList.remove('fa-xmark');
+    menuIcon.classList.add('fa-bars');
+}
+
+// TOGGLE SEARCH
+const setupHeaderSearchToggle = () => {
+    const searchToggle = document.getElementById('headerSearchToggle');
+    const searchForm = document.getElementById('headerSearchForm');
+
+    if (!searchToggle || !searchForm) return;
+
+    searchToggle.addEventListener('click', () => {
+        const icon = searchToggle.querySelector('i');
+        const input = searchForm.querySelector('input');
+        const open = !searchForm.classList.contains('open');
+
+        closeMenu();
+
+        if (open) {
+            searchForm.classList.add('open');
+            icon.classList.remove('fa-magnifying-glass');
+            icon.classList.add('fa-xmark');
+
+            if (input) input.focus();
+        } else {
+            closeSearch();
+        }
+    });
+};
+
+// CLOSE SEARCH
+const closeSearch = () => {
+    const searchForm = document.getElementById('headerSearchForm');
+    const searchToggle = document.querySelector('.header-search-toggle');
+
+    if (!searchForm || !searchToggle) return;
+
+    const searchIcon = searchToggle.querySelector('i');
+
+    searchForm.classList.remove('open');
+    searchIcon.classList.remove('fa-xmark');
+    searchIcon.classList.add('fa-magnifying-glass');
+}
+
+// PASSWORD VISIBILITY TOGGLE
 const setupPasswordToggles = () => {
     const passwordToggles = document.querySelectorAll('.password-toggle');
 
@@ -32,101 +111,55 @@ const setupPasswordToggles = () => {
     });
 };
 
-document.addEventListener('DOMContentLoaded', setupPasswordToggles);
-
-// Toggle Review
-const toggleReview = (button) => {
-    const text = button.previousElementSibling;
-
-    if (text.classList.contains('expanded')) {
-        text.classList.remove('expanded');
-        button.textContent = 'Read more';
-    } else {
-        text.classList.add('expanded');
-        button.textContent = 'Show less';
-    }
-}
-
-// Toggle Menu
-const toggleMenu = (button) => {
-    const menu = document.getElementById('navMenu');
-    const icon = button.querySelector('i');
-
-    const open = !menu.classList.contains('open');
-    closeSearch();
-
-    if (open) {
-        menu.classList.add('open');
-        icon.classList.remove('fa-bars');
-        icon.classList.add('fa-xmark');
-    }
-    else {
-        closeMenu();
-    }
-}
-
-// Toggle Search
-const toggleHeaderSearch = (button) => {
-    const searchForm = document.getElementById('headerSearchForm');
-    const icon = button.querySelector('i');
-    const input = searchForm.querySelector('input');
-
-    const open = !searchForm.classList.contains('open');
-    closeMenu()
-
-    if (open) {
-        searchForm.classList.add('open');
-        icon.classList.remove('fa-magnifying-glass');
-        icon.classList.add('fa-xmark');
-        input.focus();
-    }
-    else {
-        closeSearch();
-    }
-};
-
-// Close Menu
-const closeMenu = () => {
-    const menu = document.getElementById('navMenu');
-    const menuToggle = document.querySelector('.menu-toggle');
-    const menuIcon = menuToggle.querySelector('i');
-
-    if (!menu || !menuToggle) return;
-
-    menu.classList.remove('open');
-    menuIcon.classList.remove('fa-xmark');
-    menuIcon.classList.add('fa-bars');
-}
-
-// Close Search
-const closeSearch = () => {
-    const searchForm = document.getElementById('headerSearchForm');
-    const searchToggle = document.querySelector('.header-search-toggle');
-    const searchIcon = searchToggle.querySelector('i');
-
-    if (!searchForm || !searchToggle) return;
-
-    searchForm.classList.remove('open');
-    searchIcon.classList.remove('fa-xmark');
-    searchIcon.classList.add('fa-magnifying-glass');
-
-}
-
-document.addEventListener('DOMContentLoaded', function () {
+// SETUP REVIEW TEXT TOGGLE
+const setupReviewTextToggle = () => {
     const blocks = document.querySelectorAll('.review-text-block');
 
-    blocks.forEach(block => {
+    blocks.forEach((block) => {
         const text = block.querySelector('.review-text');
         const button = block.querySelector('.text-toggle');
 
+        if (!text || !button) return;
+
         if (text.scrollHeight <= text.clientHeight + 2) {
             button.style.display = 'none';
+            return;
         }
+
+        button.addEventListener('click', () => {
+            const expanded = text.classList.toggle('expanded');
+            button.textContent = expanded ? 'Show less' : 'Read more';
+        });
     });
-});
+};
+
+// SETUP PROFILE TAB SCROLL RESTORE
+const setupProfileTabScrollRestore = () => {
+    const profileTabs = document.querySelectorAll('.js-profile-tab');
+
+    if (!profileTabs.length) return;
+
+    profileTabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+            sessionStorage.setItem('profileTabScrollY', String(window.scrollY));
+        });
+    });
+
+    const savedScrollY = sessionStorage.getItem('profileTabScrollY');
+
+    if (savedScrollY !== null) {
+        window.scrollTo({
+            top: Number(savedScrollY),
+            behavior: 'instant'
+        });
+
+        sessionStorage.removeItem('profileTabScrollY');
+    }
+};
 
 let pendingConfirmForm = null;
 
+// OPEN CONFIRMATION MODAL
 const openConfirmModal = (form) => {
     const modal = document.getElementById('confirmActionModal');
     const title = document.getElementById('confirmModalTitle');
@@ -142,6 +175,7 @@ const openConfirmModal = (form) => {
     modal.classList.add('open');
 };
 
+// CLOSE CONFIRMATION MODAL
 const closeConfirmModal = () => {
     const modal = document.getElementById('confirmActionModal');
 
@@ -152,10 +186,13 @@ const closeConfirmModal = () => {
     pendingConfirmForm = null;
 };
 
+// SETUP CONFIRMATION MODAL
 const setupConfirmModal = () => {
     const forms = document.querySelectorAll('.js-confirm-form');
     const confirmButton = document.getElementById('confirmModalSubmit');
     const modal = document.getElementById('confirmActionModal');
+    const closeButton = document.getElementById('confirmModalClose');
+    const cancelButton = document.getElementById('confirmModalCancel');
 
     forms.forEach((form) => {
         form.addEventListener('submit', (event) => {
@@ -181,10 +218,17 @@ const setupConfirmModal = () => {
             }
         });
     }
+
+    if (closeButton) {
+        closeButton.addEventListener('click', closeConfirmModal);
+    }
+
+    if (cancelButton) {
+        cancelButton.addEventListener('click', closeConfirmModal);
+    }
 };
 
-document.addEventListener('DOMContentLoaded', setupConfirmModal);
-
+// SETUP AVATAR CROPPER
 const setupAvatarCropper = () => {
     const avatarForm = document.getElementById('avatarForm');
     const avatarInput = document.getElementById('avatarUpload');
@@ -313,22 +357,7 @@ const setupAvatarCropper = () => {
     });
 };
 
-document.addEventListener('DOMContentLoaded', setupAvatarCropper);
-
-// Restore scroll position after reload
-window.addEventListener('load', function () {
-    const scrollPos = localStorage.getItem('scrollPosition');
-
-    if (scrollPos !== null) {
-        window.scrollTo({
-            top: parseInt(scrollPos),
-            behavior: 'smooth'
-        });
-        localStorage.removeItem('scrollPosition');
-    }
-});
-
-// Star Rating
+// SETUP STAR RATING
 const setupStarRating = () => {
     const ratingContainers = document.querySelectorAll('.star-rating-input');
 
@@ -377,8 +406,7 @@ const setupStarRating = () => {
     });
 }
 
-document.addEventListener('DOMContentLoaded', setupStarRating);
-
+// OPEN DELETE MODAL STEP 1
 const openDeleteStepOne = () => {
     const modal = document.getElementById('deleteStepOneModal');
 
@@ -387,6 +415,7 @@ const openDeleteStepOne = () => {
     modal.classList.add('open');
 };
 
+// OPEN DELETE MODAL STEP 2
 const openDeleteStepTwo = () => {
     const stepOne = document.getElementById('deleteStepOneModal');
     const stepTwo = document.getElementById('deleteStepTwoModal');
@@ -402,6 +431,7 @@ const openDeleteStepTwo = () => {
     }
 };
 
+// CLOSE DELETE MODAL
 const closeDeleteModals = () => {
     const stepOne = document.getElementById('deleteStepOneModal');
     const stepTwo = document.getElementById('deleteStepTwoModal');
@@ -440,25 +470,15 @@ document.addEventListener('keydown', function (event) {
     }
 });
 
-const setupProfileTabScrollRestore = () => {
-    const profileTabs = document.querySelectorAll('.js-profile-tab');
-
-    if (!profileTabs.length) return;
-
-    profileTabs.forEach((tab) => {
-        tab.addEventListener('click', () => {
-            sessionStorage.setItem('profileTabScrollY', String(window.scrollY));
-        });
-    });
-
-    const savedScrollY = sessionStorage.getItem('profileTabScrollY');
-
-    if (savedScrollY !== null) {
-        window.scrollTo({
-            top: Number(savedScrollY),
-            behavior: 'instant'
-        });
-
-        sessionStorage.removeItem('profileTabScrollY');
-    }
-};
+// INIT
+document.addEventListener("DOMContentLoaded", () => {
+    setupPasswordToggles();
+    setupStickyHeader();
+    setupMenuToggle();
+    setupHeaderSearchToggle();
+    setupReviewTextToggle();
+    setupProfileTabScrollRestore();
+    setupStarRating();
+    setupAvatarCropper();
+    setupConfirmModal();
+})
