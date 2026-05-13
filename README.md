@@ -98,8 +98,12 @@ The project focuses on backend CRUD, PostgreSQL relationships, authentication, r
 - Dark theme
 - Responsive layout for desktop, tablet, and mobile
 - Mobile navigation toggle
+- Header search toggle
 - Font Awesome icons
 - Card-based movie and review layout
+- Clickable review cards while keeping inner links and buttons usable
+- Password visibility toggle for login, signup, and password change forms
+- Custom confirmation modals instead of browser default confirmation dialogs
 - Anchor navigation for review sorting on smaller screens
 - Reusable pagination styling
 
@@ -291,6 +295,7 @@ http://127.0.0.1:5000
 - Password change requires the current password.
 - Account deletion requires password confirmation and `DELETE` text confirmation.
 - Admin accounts cannot be deleted from the settings page.
+- Destructive actions use custom confirmation modals before submitting POST requests.
 
 ---
 
@@ -310,6 +315,10 @@ http://127.0.0.1:5000
 - Handling account deletion with related database cleanup
 - Managing user-uploaded files and deleting old avatar files
 - Building modal confirmation flows with JavaScript
+- Creating reusable custom confirmation modals
+- Replacing inline click handlers with JavaScript event listeners
+- Managing clickable cards with overlay links while preserving inner button and link behavior
+- Adding password visibility toggles for authentication forms
 
 ---
 
