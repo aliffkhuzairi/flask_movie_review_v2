@@ -1,19 +1,21 @@
-from flask import Blueprint, render_template, redirect, url_for, session, flash, request
+import os
+from flask import Blueprint, render_template, redirect, url_for, session, flash, request, current_app
 from db import db_cursor
-from utils import login_required, admin_required, is_valid_rating, get_page, build_pagination
+from utils import login_required, admin_required, is_valid_rating, get_page, build_pagination, save_uploaded_file, delete_uploaded_file
 
 movie_bp = Blueprint("movie", __name__)
 
 ALLOWED_SORTS = {"latest", "title", "genre"}
 ALLOWED_SORT_DIRS = {"asc", "desc"}
 ALLOWED_GENRES = {"action", "comedy", "drama", "fantasy", "romance", "thriller", "western"}
+ALLOWED_POSTER_EXTENSIONS = {"png", "jpg", "jpeg", "webp"}
 
 @movie_bp.route("/home")
 @login_required
 def home():
     with db_cursor() as cur:
         cur.execute("""
-            select id, title, director, genre, rel_date
+            select id, title, director, genre, rel_date, poster, poster_url
             from movies
             order by rel_date desc
             limit 5;
@@ -94,7 +96,7 @@ def movie_list():
         # FETCH MOVIE FROM CURENT PAGE
         if movie_sort == "genre":
             cur.execute(f"""
-               select id, title, director, genre, rel_date
+               select id, title, director, genre, rel_date, poster, poster_url
                from movies
                where title ilike %s
                or director ilike %s or genre ilike %s
@@ -104,7 +106,7 @@ def movie_list():
 
         else:
             cur.execute(f"""
-               select id, title, director, genre, rel_date
+               select id, title, director, genre, rel_date, poster, poster_url
                from movies
                where title ilike %s
                or director ilike %s or genre ilike %s
@@ -182,7 +184,7 @@ def movie_detail(movie_id):
 
     with db_cursor() as cur:
         cur.execute("""
-            select id, title, director, genre, rel_date
+            select id, title, director, genre, rel_date, poster, poster_url
             from movies
             where id = %s;
         """,(movie_id,))
@@ -294,7 +296,31 @@ def movie_detail(movie_id):
                            user_review=user_review,
                            user_id=session["user_id"])
 
-@movie_bp.route("/movies/<int:movie_id>/edit", methods=["GET", "POST"])
+def get_poster_upload_folder():
+    return os.path.join(
+        current_app.root_path,
+        "static",
+        "uploads",
+        "posters"
+    )
+
+
+def save_movie_poster(file, movie_id):
+    return save_uploaded_file(
+        file=file,
+        upload_folder=get_poster_upload_folder(),
+        filename_prefix=f"movie_{movie_id}",
+        allowed_extensions=ALLOWED_POSTER_EXTENSIONS
+    )
+
+
+def delete_movie_poster(filename):
+    delete_uploaded_file(
+        upload_folder=get_poster_upload_folder(),
+        filename=filename
+    )
+
+@movie_bp.route("/movies/<int:movie_id>/edit", methods=["POST"])
 @login_required
 @admin_required
 def movie_edit(movie_id):
@@ -302,6 +328,11 @@ def movie_edit(movie_id):
     director = request.form.get("director").strip()
     genre = request.form.get("genre").strip()
     rel_date = request.form.get("rel_date").strip()
+    poster_file = request.files.get("poster")
+    poster_url = request.form.get("poster_url", "").strip() or None
+
+    old_poster = None
+    poster_filename = None
 
     if not title or not director or not genre or not rel_date:
         flash("All movie fields are required!", "warning-edit")
@@ -314,17 +345,56 @@ def movie_edit(movie_id):
     try:
         with db_cursor(commit=True) as cur:
             cur.execute("""
-                update movies
-                set title = %s, director = %s, genre = %s, rel_date = %s
+                select poster
+                from movies
                 where id = %s;
-            """, (title, director, genre, rel_date, movie_id))
+            """,(movie_id,))
 
-            if cur.rowcount == 0:
-                flash("Movie not found!", "error-edit")
+            old_poster_row = cur.fetchone()
+
+            if old_poster_row is None:
+                flash("Movie not found!", "warning-edit")
+                return redirect(url_for("movie.movie_list"))
+
+            old_poster = old_poster_row[0]
+
+            poster_filename = old_poster
+
+            if poster_file and poster_file.filename:
+                poster_filename = save_movie_poster(poster_file, movie_id)
+
+                if not poster_filename:
+                    flash("Poster must be PNG, JPG, JPEG or WEBP", "warning-edit")
+                    return redirect(url_for("movie.movie_detail", movie_id=movie_id))
+
+            if poster_filename:
+
+                cur.execute("""
+                    update movies
+                    set title = %s, director = %s, genre = %s, rel_date = %s, poster = %s, poster_url = %s
+                    where id = %s;
+                """, (title, director, genre, rel_date, poster_filename, poster_url, movie_id))
+
             else:
-                flash("Movie updated!", "success-edit")
+                cur.execute("""
+                    update movies
+                    set title = %s, director = %s, genre = %s, rel_date = %s, poster_url = %s
+                    where id = %s;
+                """, (title, director, genre, rel_date, poster_url, movie_id))
+
+                if cur.rowcount == 0:
+                    flash("Movie not found!", "error-edit")
+                    return redirect(url_for("movie.movie_list"))
+
+        if poster_filename and old_poster:
+            delete_movie_poster(old_poster)
+
+        flash("Movie updated!", "success-edit")
 
     except Exception as err:
+        if poster_filename and old_poster:
+            delete_movie_poster(old_poster)
+
         flash(f"Failed to update movie!: {err}", "error-edit")
 
     return redirect(url_for("movie.movie_detail", movie_id=movie_id))
@@ -333,8 +403,27 @@ def movie_edit(movie_id):
 @login_required
 @admin_required
 def movie_delete(movie_id):
+    if session.get("user_role") != "admin":
+        return redirect(url_for("movie.movie_detail", movie_id=movie_id))
+
+    poster_filename = None
+
     try:
         with db_cursor(commit=True) as cur:
+            cur.execute("""
+                select poster
+                from movies
+                where id = %s;
+            """,(movie_id,))
+
+            poster_row = cur.fetchone()
+
+            if poster_row is None:
+                flash("Movie not found!", "error-edit")
+                return redirect(url_for("movie.movie_list"))
+
+            poster_filename = poster_row[0]
+
             cur.execute("""
                 delete from reviews
                 where mid = %s;
@@ -349,7 +438,10 @@ def movie_delete(movie_id):
                 flash("Movie not found!", "error-edit")
                 return redirect(url_for("movie.movie_list"))
 
-            flash("Movie deleted!", "success-edit")
+        if poster_filename:
+            delete_movie_poster(poster_filename)
+
+        flash("Movie deleted!", "success-edit")
 
     except Exception as err:
         flash(f"Failed to delete movie!: {err}", "error-edit")
@@ -357,3 +449,43 @@ def movie_delete(movie_id):
     return redirect(url_for("movie.movie_list"))
 
 
+@movie_bp.route("/movies/<int:movie_id>/poster/remove", methods=["POST"])
+@login_required
+@admin_required
+def remove_movie_poster(movie_id):
+    poster_filename = None
+
+    try:
+        with db_cursor(commit=True) as cur:
+            cur.execute("""
+                select poster
+                from movies
+                where id = %s;
+            """, (movie_id,))
+
+            poster_row = cur.fetchone()
+
+            if poster_row is None:
+                flash("Movie not found!", "error-edit")
+                return redirect(url_for("movie.movie_list"))
+
+            poster_filename = poster_row[0]
+
+            if not poster_filename:
+                flash("This movie does not have an uploaded poster.", "warning-edit")
+                return redirect(url_for("movie.movie_detail", movie_id=movie_id))
+
+            cur.execute("""
+                update movies
+                set poster = null
+                where id = %s;
+            """, (movie_id,))
+
+        delete_movie_poster(poster_filename)
+
+        flash("Uploaded poster removed.", "success-edit")
+
+    except Exception as err:
+        flash(f"Failed to remove poster!: {err}", "error-edit")
+
+    return redirect(url_for("movie.movie_detail", movie_id=movie_id))

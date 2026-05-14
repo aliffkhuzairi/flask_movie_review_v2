@@ -157,6 +157,7 @@ const setupProfileTabScrollRestore = () => {
     }
 };
 
+
 let pendingConfirmForm = null;
 
 // OPEN CONFIRMATION MODAL

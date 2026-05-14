@@ -785,6 +785,20 @@ header.sticky .nav:hover {
     box-shadow: var(--shadow2);
 }
 
+.movie-poster-wrap {
+    width: 100%;
+    height: 230px;
+    background: var(--bg-movie-card);
+    overflow: hidden;
+}
+
+.movie-poster {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
 .movie-card-top {
     min-height: 150px;
     padding: 16px;
@@ -1316,11 +1330,13 @@ header.sticky .nav:hover {
     overflow-wrap: anywhere;
 }
 
-.delete-movie {
+.delete-movie,
+.remove-poster-form {
     margin-top: 16px;
 }
 
-.delete-movie button {
+.delete-movie button,
+.remove-poster-form button {
     width: 100%;
     padding: 10px 12px;
 }

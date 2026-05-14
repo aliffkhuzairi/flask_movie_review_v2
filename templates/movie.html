@@ -174,7 +174,11 @@
                             {% endwith %}
                         </div>
 
-                        <form method="POST" class="form-grid" action="{{ url_for('movie.movie_edit', movie_id=movie[0]) }}">
+                        <form method="POST"
+                              class="form-grid"
+                              action="{{ url_for('movie.movie_edit', movie_id=movie[0]) }}"
+                              enctype="multipart/form-data">
+
                             <label for="title">Title</label>
                             <input id="title"
                                    name="title"
@@ -208,8 +212,40 @@
                                    value="{{ movie[4].strftime('%Y-%m-%d') if movie[4] else '' }}"
                                    required>
 
+                            <label for="poster">Upload Poster</label>
+
+                            <input id="poster"
+                                   name="poster"
+                                   type="file"
+                                   accept="image/png, image/jpeg, image/webp"
+                                   >
+
+                            <label for="poster_url">Poster URL</label>
+                            <input id="poster_url"
+                                   name="poster_url"
+                                   type="url"
+                                   value="{{ movie[6] if movie and movie[6] else '' }}"
+                                   placeholder="https://example.com/poster.jpg">
+
+                            <p class="small-text">
+                                Uploaded poster will be used first. Poster URL is used only if no uploaded poster exists.
+                            </p>
+
                             <button type="submit" class="button-link primary">Update Movie</button>
                         </form>
+
+                        {% if movie[5] %}
+                        <form class="remove-poster-form js-confirm-form"
+                              action="{{ url_for('movie.remove_movie_poster', movie_id=movie[0]) }}"
+                              method="POST"
+                              data-confirm-title="Remove uploaded poster?"
+                              data-confirm-message="This will delete the uploaded poster file. Poster URL will be used if available.">
+                            <button type="submit" class="button-link logout">
+                                Remove Uploaded Poster
+                            </button>
+                        </form>
+                        {% endif %}
+
                         <form class="delete-movie js-confirm-form"
                               action="{{ url_for('movie.movie_delete', movie_id=movie[0]) }}"
                               method="POST"

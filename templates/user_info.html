@@ -698,7 +698,10 @@
                         </div>
 
 
-                        <form class="form-grid" action="{{ url_for('user.add_movie') }}" method="POST">
+                        <form class="form-grid"
+                              action="{{ url_for('user.add_movie') }}"
+                              method="POST"
+                              enctype="multipart/form-data">
 
                             <label for="movie_title">Title</label>
                             <input id="movie_title" name="movie_title" type="text" required>
@@ -720,6 +723,22 @@
 
                             <label for="rel_date">Release Date</label>
                             <input id="rel_date" name="rel_date" type="date" required>
+
+                            <label for="poster">Upload Poster</label>
+                            <input id="poster"
+                                   name="poster"
+                                   type="file"
+                                   accept="image/png, image/jpeg, image/webp">
+
+                            <label for="poster_url">Poster URL</label>
+                            <input id="poster_url"
+                                   name="poster_url"
+                                   type="url"
+                                   placeholder="https://example.com/poster.jpg">
+
+                            <p class="small-text">
+                                Uploaded poster will be used first. Poster URL is used only if no uploaded poster exists.
+                            </p>
 
                             <button type="submit" class="button-link primary">Add Movie</button>
                         </form>

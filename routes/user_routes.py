@@ -1,6 +1,8 @@
 import os, base64
 from flask import render_template, request, redirect, url_for, flash, session, Blueprint, current_app
-from utils import login_required, is_valid_email, get_page, build_pagination
+
+from routes.movie_routes import save_movie_poster, delete_movie_poster
+from utils import login_required, is_valid_email, get_page, build_pagination, admin_required
 from werkzeug.security import check_password_hash, generate_password_hash
 from db import db_cursor
 from uuid import uuid4
@@ -206,6 +208,7 @@ def edit_user_profile(user_id):
 
     if email and not is_valid_email(email):
         flash("Please enter a valid email address.", "warning-profile")
+        return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
         return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
 
     with db_cursor(commit=True) as cur:
@@ -452,11 +455,16 @@ def unmute_user(target_user_id):
 
 @user_bp.route("/add-movie", methods=["POST"])
 @login_required
+@admin_required
 def add_movie():
     title =request.form.get("movie_title", "").strip()
     director = request.form.get("director", "").strip()
     genre = request.form.get("genre", "").strip()
     rel_date = request.form.get("rel_date", "").strip()
+    poster_file = request.files.get("poster")
+    poster_url = request.form.get("poster_url", "").strip() or None
+
+    poster_filename = None
 
     if not title or not director or not genre or not rel_date:
         flash("All fields are required.", "warning-admin")
@@ -469,17 +477,39 @@ def add_movie():
     try:
         with db_cursor(commit=True) as cur:
             cur.execute("""
-                insert into movies(title, director, genre, rel_date)
-                values(%s, %s, %s, %s)
-                on conflict (title, rel_date) do nothing;
-            """, (title, director, genre, rel_date))
+                insert into movies(title, director, genre, rel_date, poster_url)
+                values(%s, %s, %s, %s, %s)
+                on conflict (title, rel_date) do nothing
+                returning id;
+            """, (title, director, genre, rel_date, poster_url))
 
-            if cur.rowcount == 0:
-                flash("Movie already exists!", "warning-admin")
-            else:
-                flash("Movie added successfully!", "success-admin")
+            movie_row = cur.fetchone()
+
+            if movie_row is None:
+                flash("Movie already exists.", "warning-admin")
+                return redirect(url_for("user.user_detail", user_id=session["user_id"], tab="admin-panel"))
+
+            movie_id = movie_row[0]
+
+            if poster_file and poster_file.filename:
+                poster_filename = save_movie_poster(poster_file, movie_id)
+
+                if not poster_filename:
+                    flash("Poster must be PNG, JPG, JPEG, or WEBP", "warning-admin")
+                    return redirect(url_for("user.user_detail", user_id=session["user_id"], tab="admin-panel"))
+
+                cur.execute("""
+                    update movies
+                    set poster = %s
+                    where id = %s
+                """,(poster_filename, movie_id))
+
+        flash("Movie added successfully!", "success-admin")
 
     except Exception as err:
+        if poster_filename:
+            delete_movie_poster(poster_filename)
+
         flash(f"Failed to add movie!: {err}", "error-admin")
 
     return redirect(url_for("user.user_detail", user_id=session["user_id"], tab="admin-panel"))

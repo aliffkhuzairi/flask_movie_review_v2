@@ -1,8 +1,10 @@
-import re
+import os, re
 from flask import redirect, url_for, session
 from werkzeug.security import check_password_hash
+from werkzeug.utils import secure_filename
 from functools import wraps
 from datetime import datetime, date
+from uuid import uuid4
 
 def login_required(function):
     @wraps(function)
@@ -116,5 +118,39 @@ def build_pagination(total_items, page, per_page):
         "end_item": end_item,
     }
 
+def allowed_file(filename, allowed_extensions):
+    return (
+        "." in filename
+        and filename.rsplit(".", 1)[1].lower() in allowed_extensions
+    )
 
+
+def save_uploaded_file(file, upload_folder, filename_prefix, allowed_extensions):
+    if not file or not file.filename:
+        return None
+
+    if not allowed_file(file.filename, allowed_extensions):
+        return None
+
+    original_filename = secure_filename(file.filename)
+    ext = original_filename.rsplit(".", 1)[1].lower()
+
+    saved_filename = f"{filename_prefix}_{uuid4().hex}.{ext}"
+
+    os.makedirs(upload_folder, exist_ok=True)
+
+    file_path = os.path.join(upload_folder, saved_filename)
+    file.save(file_path)
+
+    return saved_filename
+
+
+def delete_uploaded_file(upload_folder, filename):
+    if not filename:
+        return
+
+    file_path = os.path.join(upload_folder, filename)
+
+    if os.path.exists(file_path):
+        os.remove(file_path)
 

@@ -112,10 +112,26 @@
 
                 {% for movie in movies %}
                 <a class="movie-card" href="{{ url_for('movie.movie_detail', movie_id=movie[0]) }}">
-                    <div class="movie-card-top">
-                        <span class="genre-tag">{{ movie[3] }}</span>
-                        <h3>{{ movie[1] }}</h3>
-                    </div>
+                    {% if movie[5] %}
+                        <div class="movie-poster-wrap">
+                            <img class="movie-poster"
+                                 src="{{ url_for('static', filename='uploads/posters/' ~ movie[5]) }}"
+                                 alt="{{ movie[1] }} poster">
+                        </div>
+
+                    {% elif movie[6] %}
+                        <div class="movie-poster-wrap">
+                            <img class="movie-poster"
+                                 src="{{ movie[6] }}"
+                                 alt="{{ movie[1] }} poster">
+                        </div>
+
+                    {% else %}
+                        <div class="movie-card-top">
+                            <span class="genre-tag">{{ movie[3] }}</span>
+                            <h3>{{ movie[1] }}</h3>
+                        </div>
+                    {% endif %}
 
                     <div class="movie-card-body">
                         <div class="movie-info">
