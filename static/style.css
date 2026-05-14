@@ -631,6 +631,18 @@ header.sticky .nav:hover {
     scroll-margin-top: 90px;
 }
 
+.review-container {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 48px;
+    align-items: start;
+}
+
+.home-review-col,
+.home-top-rated-col {
+    min-width: 0;
+}
+
 .section-head {
     width: 100%;
     padding: 20px 0;
@@ -869,20 +881,183 @@ header.sticky .nav:hover {
     text-transform: uppercase;
 }
 
+/* =============== TOP RATED LIST =============== */
+.top-rated-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.top-rated-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 0;
+    text-decoration: none;
+    color: inherit;
+    border-bottom: 1px solid var(--text-muted);
+    transition: background 0.15s ease;
+}
+
+.top-rated-item::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    transition: width 0.3s ease;
+}
+
+.top-rated-item:hover::after { width: 100%; }
+.top-rated-item:hover { border-bottom: 1px solid transparent; }
+
+.top-rated-item:last-child {
+    border-bottom: none;
+}
+
+.top-rated-rank {
+    flex: 0 0 24px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+.top-rated-poster {
+    flex: 0 0 48px;
+    width: 48px;
+    height: 70px;
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--bg-card);
+}
+
+.top-rated-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.top-rated-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.top-rated-info .genre-tag {
+    align-self: flex-start;
+}
+
+.top-rated-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.top-rated-avg {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--secondary);
+}
+
+.top-rated-avg i {
+    font-size: 0.85rem;
+}
+
+/* =============== TOP RATED LIST =============== */
+.most-active-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.most-active-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    text-decoration: none;
+    color: inherit;
+    border-bottom: 1px solid var(--text-muted);
+    position: relative;
+    transition: border-bottom 0.3s ease;
+}
+
+.most-active-item:last-child {
+    border-bottom: none;
+}
+
+.most-active-item::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    transition: width 0.3s ease;
+}
+
+.most-active-item:hover::after { width: 100%; }
+.most-active-item:hover { border-bottom: 1px solid transparent; }
+
+.most-active-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.most-active-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.most-active-username {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.most-active-count {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--secondary);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
 /* =============== REVIEW LIST AND REVIEW CARDS =============== */
 .review-feed {
     display: flex;
     flex-wrap: wrap;
-    gap: 32px;
+    gap: 0;
 }
 
 .review-card {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 14px;
+    width: 100%;
     position: relative;
-    overflow: hidden;
     border-bottom: 1px solid var(--text-muted);
-    padding: 14px 0;
-    margin-bottom: 16px;
-    background: none;
+    padding: 16px 0;
     cursor: pointer;
     transition: border-bottom 0.3s ease;
 }
@@ -898,40 +1073,39 @@ header.sticky .nav:hover {
     transition: width 0.3s ease;
 }
 
-.review-card:hover::after {
-    width: 100%;
-}
+.review-card:hover::after { width: 100%; }
+.review-card:hover { border-bottom: 1px solid transparent; }
 
-.review-card:hover {
-    border-bottom: 1px solid transparent;
+/* Home: 2-column cards */
+.home-review-feed .review-feed {
+    gap: 0 24px;
 }
 
 .home-review-feed .review-card {
-    flex: 1 1 calc(50% - 20px);
-    max-width: calc(50% - 20px);
-    min-height: 200px;
+    flex: 1 1 100%;
+    max-width: 100%;
 }
 
-.review-card-clickable {
-    position: relative;
+/* Movie detail: full width, slightly more padding */
+.reviews-list .review-card {
+    padding: 20px 0;
 }
+
+/* CLICKABLE CARD OVERLAY */
+.review-card-clickable { position: relative; }
 
 .review-card-cover {
     position: absolute;
     inset: 0;
     z-index: 1;
-    border-radius: inherit;
 }
 
-/* Put normal content above the cover visually,
-   but allow clicks to pass through it */
 .review-card-clickable > *:not(.review-card-cover) {
     position: relative;
     z-index: 2;
     pointer-events: none;
 }
 
-/* Actual clickable elements must receive clicks */
 .review-card-clickable a:not(.review-card-cover),
 .review-card-clickable button,
 .review-card-clickable form,
@@ -950,6 +1124,99 @@ header.sticky .nav:hover {
     padding: 20px 12px;
     margin-bottom: 0;
 }
+
+/* POSTER */
+.review-card-poster {
+    flex: 0 0 80px;
+    width: 80px;
+    height: 120px;
+    border-radius: 6px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.review-card-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.review-card-no-poster {
+    width: 100%;
+    height: 100%;
+    background: var(--bg-card);
+    border-radius: 6px;
+}
+
+/* BODY */
+.review-card-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* TITLE ROW: movie title + year + time */
+.review-card-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.review-card-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-main);
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.12s ease;
+}
+
+.review-card-title:hover { color: var(--secondary-hover); }
+
+.review-card-year-time {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+/* USER ROW: avatar + username + time */
+.review-card-user-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* STARS */
+.review-card .review-rating { padding: 0; }
+
+/* READ MORE */
+.text-toggle {
+    margin-top: 8px;
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--secondary);
+    opacity: 0.85;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    width: auto;
+}
+
+.text-toggle:hover {
+    text-decoration: underline;
+    background: none;
+}
+
 
 .review-card-top {
     display: flex;
@@ -972,6 +1239,7 @@ header.sticky .nav:hover {
     align-items: center;
     gap: 12px;
 }
+
 
 .review-title {
     font-weight: 600;
@@ -1123,23 +1391,7 @@ header.sticky .nav:hover {
     overflow: visible;
 }
 
-.text-toggle {
-    margin-top: 8px;
-    padding: 0;
-    border: none;
-    background: none;
-    color: var(--secondary);
-    opacity: 0.85;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 600;
-    width: auto;
-}
 
-.text-toggle:hover {
-    text-decoration: underline;
-    background: none;
-}
 
 /* =============== MOVIE DETAIL PAGE =============== */
 .movie-hero {
@@ -2084,6 +2336,8 @@ header.sticky .nav:hover {
 
     .review-container {
         margin-top: 50px;
+        grid-template-columns: 1fr;
+        gap: 24px;
     }
 
     .section-head {
