@@ -7,6 +7,7 @@ app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'dev_secret_key')
 
 app.jinja_env.filters["time_ago"] = time_ago
+app.jinja_env.globals['enumerate'] = enumerate
 
 register_routes(app)
 
