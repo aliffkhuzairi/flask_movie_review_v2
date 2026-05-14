@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict UPsiXAAjIoDS28YxrpcxvR7IO3WwXI0TmDIR9tyBLAlJLpqhbWJiBMBb1PXmIZ0
+\restrict lP9ZAJLIF5xwLxwi6MIzkjgksKlsEzGRqUe64jmXISPnrnz3Yu6xe25uo7dJ7xg
 
 -- Dumped from database version 18.3
 -- Dumped by pg_dump version 18.3
@@ -149,27 +149,27 @@ COPY public.mal_user (id, mal_time) FROM stdin;
 --
 
 COPY public.movies (id, title, director, genre, rel_date, poster_url, poster) FROM stdin;
-1	The Shawshank Redemption	Frank Darabont	drama	1995-01-28	\N	\N
-2	12 Angry Men	Sidney Lumet	drama	1957-04-01	\N	\N
-3	Star Wars	George Lucas	fantasy	1977-05-25	\N	\N
-6	Nuovo Cinema Paradiso	Giuseppe Tornatore	drama	1988-09-29	\N	\N
-7	Inception	Christopher Nolan	action	2010-07-16	\N	\N
-8	Interstellar	Christopher Nolan	fantasy	2014-11-07	\N	\N
-9	Titanic	James Cameron	romance	1997-12-19	\N	\N
-10	Kung Fu Panda	Mark Osborne	comedy	2008-06-06	\N	\N
-11	The Dark Knight	Christopher Nolan	action	2008-07-18	\N	\N
-12	Parasite	Bong Joon-ho	thriller	2019-05-30	\N	\N
-14	Whiplash	Damien Chazelle	drama	2014-10-10	\N	\N
-15	The Matrix	The Wachowskis	action	1999-03-31	\N	\N
-16	Spirited Away	Hayao Miyazaki	fantasy	2001-07-20	\N	\N
-17	Joker	Todd Phillips	drama	2019-10-04	\N	\N
-18	Mad Max: Fury Road	George Miller	action	2015-05-15	\N	\N
-19	The Grand Budapest Hotel	Wes Anderson	comedy	2014-03-07	\N	\N
-20	Before Sunrise	Richard Linklater	romance	1995-01-27	\N	\N
-4	Toy Story	John Lasseter	comedy	1995-12-23	\N	\N
-13	La La Land	Damien Chazelle	romance	2016-12-09	\N	\N
-5	The Truman Show	Peter Weir	comedy	1998-10-24	\N	\N
+5	The Truman Show	Peter Weir	comedy	1998-10-24	https://m.media-amazon.com/images/M/MV5BNzA3ZjZlNzYtMTdjMy00NjMzLTk5ZGYtMTkyYzNiOGM1YmM3XkEyXkFqcGc@._V1_SX300.jpg	\N
+7	Inception	Christopher Nolan	action	2010-07-16	https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_QL75_UX380_CR0,0,380,562_.jpg	\N
+8	Interstellar	Christopher Nolan	fantasy	2014-11-07	https://m.media-amazon.com/images/M/MV5BYzdjMDAxZGItMjI2My00ODA1LTlkNzItOWFjMDU5ZDJlYWY3XkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg	\N
+9	Titanic	James Cameron	romance	1997-12-19	https://m.media-amazon.com/images/M/MV5BYzYyN2FiZmUtYWYzMy00MzViLWJkZTMtOGY1ZjgzNWMwN2YxXkEyXkFqcGc@._V1_QL75_UX380_CR0,2,380,562_.jpg	\N
+10	Kung Fu Panda	Mark Osborne	comedy	2008-06-06	https://m.media-amazon.com/images/M/MV5BZDU5MDNiMGItYjVmZi00NDUxLTg2OTktNGE0NzNlNzM4NzgyXkEyXkFqcGc@._V1_SX300.jpg	\N
+11	The Dark Knight	Christopher Nolan	action	2008-07-18	https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_QL75_UX380_CR0,0,380,562_.jpg	\N
+12	Parasite	Bong Joon-ho	thriller	2019-05-30	https://m.media-amazon.com/images/M/MV5BYjk1Y2U4MjQtY2ZiNS00OWQyLWI3MmYtZWUwNmRjYWRiNWNhXkEyXkFqcGc@._V1_SX300.jpg	\N
+13	La La Land	Damien Chazelle	romance	2016-12-09	https://m.media-amazon.com/images/M/MV5BMzUzNDM2NzM2MV5BMl5BanBnXkFtZTgwNTM3NTg4OTE@._V1_QL75_UX380_CR0,0,380,562_.jpg	\N
+14	Whiplash	Damien Chazelle	drama	2014-10-10	https://m.media-amazon.com/images/M/MV5BMDFjOWFkYzktYzhhMC00NmYyLTkwY2EtYjViMDhmNzg0OGFkXkEyXkFqcGc@._V1_SX300.jpg	\N
+15	The Matrix	The Wachowskis	action	1999-03-31	https://m.media-amazon.com/images/M/MV5BN2NmN2VhMTQtMDNiOS00NDlhLTliMjgtODE2ZTY0ODQyNDRhXkEyXkFqcGc@._V1_QL75_UX380_CR0,4,380,562_.jpg	\N
+17	Joker	Todd Phillips	drama	2019-10-04	https://m.media-amazon.com/images/M/MV5BNzY3OWQ5NDktNWQ2OC00ZjdlLThkMmItMDhhNDk3NTFiZGU4XkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg	\N
+18	Mad Max: Fury Road	George Miller	action	2015-05-15	https://m.media-amazon.com/images/M/MV5BZDRkODJhOTgtOTc1OC00NTgzLTk4NjItNDgxZDY4YjlmNDY2XkEyXkFqcGc@._V1_SX300.jpg	\N
+19	The Grand Budapest Hotel	Wes Anderson	comedy	2014-03-07	https://m.media-amazon.com/images/M/MV5BMzM5NjUxOTEyMl5BMl5BanBnXkFtZTgwNjEyMDM0MDE@._V1_QL75_UX380_CR0,0,380,562_.jpg	\N
+20	Before Sunrise	Richard Linklater	romance	1995-01-27	https://m.media-amazon.com/images/M/MV5BZDZhZmI1ZTUtYWI3NC00NTMwLTk3NWMtNDc0OGNjM2I0ZjlmXkEyXkFqcGc@._V1_SX300.jpg	\N
+6	Nuovo Cinema Paradiso	Giuseppe Tornatore	drama	1988-09-29	https://m.media-amazon.com/images/M/MV5BMTljNzc4YWEtYTZlMS00ODMyLWIwMTAtNWQxY2VkMDEwYTk5XkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg	\N
+16	Spirited Away	Hayao Miyazaki	fantasy	2001-07-20	https://m.media-amazon.com/images/M/MV5BNTEyNmEwOWUtYzkyOC00ZTQ4LTllZmUtMjk0Y2YwOGUzYjRiXkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg	\N
 38	Wall to Wall	Kim Tae-joon	thriller	2025-07-18	https://m.media-amazon.com/images/M/MV5BM2Y1MjcwMWMtN2IyZi00MGIwLWFiM2YtZjkzZWE1NmJlMGFhXkEyXkFqcGc@._V1_.jpg	\N
+1	The Shawshank Redemption	Frank Darabont	drama	1995-01-28	https://m.media-amazon.com/images/M/MV5BMDAyY2FhYjctNDc5OS00MDNlLThiMGUtY2UxYWVkNGY2ZjljXkEyXkFqcGc@._V1_QL75_UX380_CR0,4,380,562_.jpg	\N
+2	12 Angry Men	Sidney Lumet	drama	1957-04-01	https://m.media-amazon.com/images/M/MV5BYjE4NzdmOTYtYjc5Yi00YzBiLWEzNDEtNTgxZGQ2MWVkN2NiXkEyXkFqcGc@._V1_QL75_UX380_CR0,11,380,562_.jpg	\N
+3	Star Wars	George Lucas	fantasy	1977-05-25	https://m.media-amazon.com/images/M/MV5BOGUwMDk0Y2MtNjBlNi00NmRiLTk2MWYtMGMyMDlhYmI4ZDBjXkEyXkFqcGc@._V1_SX300.jpg	\N
+4	Toy Story	John Lasseter	comedy	1995-12-23	https://m.media-amazon.com/images/M/MV5BZTA3OWVjOWItNjE1NS00NzZiLWE1MjgtZDZhMWI1ZTlkNzYwXkEyXkFqcGc@._V1_SX300.jpg	\N
 \.
 
 
@@ -376,5 +376,5 @@ ALTER TABLE ONLY public.user_info
 -- PostgreSQL database dump complete
 --
 
-\unrestrict UPsiXAAjIoDS28YxrpcxvR7IO3WwXI0TmDIR9tyBLAlJLpqhbWJiBMBb1PXmIZ0
+\unrestrict lP9ZAJLIF5xwLxwi6MIzkjgksKlsEzGRqUe64jmXISPnrnz3Yu6xe25uo7dJ7xg
 

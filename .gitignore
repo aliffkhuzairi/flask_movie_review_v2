@@ -8,3 +8,4 @@ static/uploads/avatars/*
 !static/uploads/avatars/.gitkeep
 static/uploads/posters/*
 !static/uploads/posters/.gitkeep
+seed_posters.py
