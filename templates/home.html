@@ -68,71 +68,137 @@
             </div>
         </section>
 
-        <!-- REVIEWS SECTION -->
         <section id="reviews" class="review-container">
-            <div class="section-head">
-                <div>
-                    <h1>Recent Reviews</h1>
-                    <p class="small-text subheader">Latest activity from users</p>
+            <!-- REVIEWS -->
+            <div class="home-review-col">
+                <div class="section-head">
+                    <div>
+                        <h1>Recent Reviews</h1>
+                        <p class="small-text subheader">Latest activity from users</p>
+                    </div>
+                </div>
+
+                {% if reviews %}
+                <div class="home-review-feed">
+                    <div class="review-feed">
+                        {% for review in reviews %}
+                        <article class="review-card review-card-clickable">
+                            <a class="review-card-cover"
+                               href="{{ url_for('movie.movie_detail', movie_id=review[0]) }}"
+                               aria-label="View {{ review[1] }} details"></a>
+
+                            {% if review[9] %}
+                                <div class="review-card-poster">
+                                    <img src="{{ url_for('static', filename='uploads/posters/' ~ review[9]) }}"
+                                         alt="{{ review[1] }} poster">
+                                </div>
+                            {% elif review[10] %}
+                                <div class="review-card-poster">
+                                    <img src="{{ review[10] }}" alt="{{ review[1] }} poster">
+                                </div>
+                            {% else %}
+                                <div class="review-card-poster review-no-poster"></div>
+                            {% endif %}
+
+                            <div class="review-card-body">
+                                <div class="review-card-title-row">
+                                    <a class="review-card-title"
+                                       href="{{ url_for('movie.movie_detail', movie_id=review[0]) }}">
+                                        {{ review[1] }}
+                                    </a>
+                                    <div class="review-card-year-time">
+                                        <span class="year-tag">{{ review[2].strftime('%Y') if review[2] else '' }}</span>
+                                        <span class="review-time">{{ review[7] | time_ago }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="review-card-user-row">
+                                    <div class="avatar-user">
+                                        {{ render_avatar(review[3], review[4], review[5], 'sm') }}
+                                        <a class="review-user"
+                                           href="{{ url_for('user.user_detail', user_id=review[3]) }}">
+                                            {{ review[3] }}
+                                        </a>
+                                    </div>
+                                    <span class="review-rating">{{ render_stars(review[8]) }}</span>
+                                </div>
+
+                                <div class="review-text-block homepage">
+                                    <p class="review-text clamp-text">{{ review[6] }}</p>
+                                    <button type="button" class="text-toggle">Read more</button>
+                                </div>
+                            </div>
+                        </article>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="empty-state">No reviews yet.</p>
+                {% endif %}
                 </div>
             </div>
 
-            {% if reviews %}
-            <div class="home-review-feed">
+            <!-- TOP RATED MOVIES -->
+            <div class="home-top-rated-col">
+                <div class="home-top-rated-col">
+                    <div class="section-head">
+                        <div>
+                            <h1>Top Rated Movies</h1>
+                            <p class="small-text subheader">Highest rated by community</p>
+                        </div>
+                    </div>
 
-                <div class="review-feed">
-                    {% for review in reviews %}
-                    <article class="review-card review-card-clickable">
-                        <a class="review-card-cover"
-                           href="{{ url_for('movie.movie_detail', movie_id=review[0]) }}"
-                           aria-label="View {{ review[1] }} details"></a>
-                        <div class="review-card-top">
-                            <div class="review-title-meta">
-                                 <span class="tooltip" data-title="{{ review[1] }}">
-                                     <a class="review-title tooltip"
-                                       href="{{ url_for('movie.movie_detail', movie_id=review[0]) }}">
-                                         {{ review[1] }}
-                                     </a>
-                                 </span>
-                                <div class="year-time">
-                                    <span class="year-tag">
-                                        {{ review[2].strftime('%Y') if review[2] else '' }}
-                                    </span>
-                                    <p class="review-time">
-                                        {{ review[7] | time_ago }}
-                                    </p>
-                                </div>
+                    <div class="top-rated-list">
+                        {% for i, movie in enumerate(top_rated, 1) %}
+                        <a class="top-rated-item"
+                           href="{{ url_for('movie.movie_detail', movie_id=movie[0]) }}">
+                            <span class="top-rated-rank">{{ i }}</span>
 
+                            <div class="top-rated-poster">
+                                {% if movie[3] %}
+                                    <img src="{{ url_for('static', filename='uploads/posters/' ~ movie[3]) }}"
+                                         alt="{{ movie[1] }} poster">
+                                {% elif movie[4] %}
+                                    <img src="{{ movie[4] }}" alt="{{ movie[1] }} poster">
+                                {% endif %}
                             </div>
-                            <span class="review-rating">
-                                {{ render_stars(review[8]) }}
-                            </span>
 
-                        </div>
-
-                        <div class="review-watch-row">
-                            <div class="review-watch-user">
-                                <div class="avatar-user">
-                                    {{ render_avatar(review[3], review[4], review[5], 'sm') }}
-                                    <a class="review-user" href="{{ url_for('user.user_detail', user_id=review[3]) }}">
-                                        {{ review[3] }}
-                                    </a>
-                                </div>
-
+                            <div class="top-rated-info">
+                                <p class="top-rated-title">{{ movie[1] }}</p>
+                                <span class="genre-tag">{{ movie[2] }}</span>
                             </div>
-                        </div>
 
-                        <div class="review-text-block homepage">
-                            <p class="review-text clamp-text">{{ review[6] }}</p>
-                            <button type="button" class="text-toggle">Read more</button>
+                            <div class="top-rated-avg">
+                                <i class="fa-solid fa-star"></i>
+                                <span>{{ movie[5] }}</span>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="section-head" style="margin-top: 32px;">
+                    <div>
+                        <h1>Most Active</h1>
+                        <p class="small-text subheader">Top reviewers in the community</p>
+                    </div>
+                </div>
+
+                <div class="most-active-list">
+                    {% for reviewer in top_reviewers %}
+                    <a class="most-active-item"
+                       href="{{ url_for('user.user_detail', user_id=reviewer[0]) }}">
+                        <span class="top-rated-rank">{{ loop.index }}</span>
+                        {{ render_avatar(reviewer[0], reviewer[1], reviewer[2], 'sm') }}
+                        <div class="most-active-info">
+                            <p class="most-active-name">{{ reviewer[1] or reviewer[0] }}</p>
+                            <span class="most-active-username">@{{ reviewer[0] }}</span>
                         </div>
-                    </article>
+                        <span class="most-active-count">{{ reviewer[3] }} review{{ '' if reviewer[3] == 1 else 's' }}</span>
+                    </a>
                     {% endfor %}
                 </div>
-            {% else %}
-                <p class="empty-state">No reviews yet.</p>
-            {% endif %}
             </div>
+
         </section>
 
         <script src="{{ url_for('static', filename='script.js') }}"></script>

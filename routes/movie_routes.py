@@ -51,9 +51,39 @@ def home():
 
         reviews = cur.fetchall()
 
+        cur.execute("""
+            select m.id, m.title, m.genre, m.poster, m.poster_url,
+            round(avg(r.ratings), 1) as avg_rating,
+            count(r.ratings) as review_count
+            from movies m
+            join reviews r on m.id = r.mid
+            group by m.id, m.title, m.genre, m.poster, m.poster_url
+            order by avg_rating desc, review_count desc
+            limit 5;
+        """)
+
+        top_rated = cur.fetchall()
+
+        cur.execute("""
+            select r.uid, ui.name, ui.avatar, count(*) as review_count
+            from reviews r
+            join user_info ui on r.uid = ui.id
+            where not exists (
+                select 1 from ties t
+                where t.id = %s and t.opid = r.uid and t.tie = 'mute'
+            )
+            group by r.uid, ui.name, ui.avatar
+            order by review_count desc
+            limit 5;
+        """, (session.get("user_id", -1),))
+
+        top_reviewers = cur.fetchall()
+
     return render_template("home.html",
                            movies=movies,
                            reviews=reviews,
+                           top_rated=top_rated,
+                           top_reviewers=top_reviewers,
                            user_id=session["user_id"],)
 
 @movie_bp.route("/movies")
