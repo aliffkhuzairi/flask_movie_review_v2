@@ -37,13 +37,13 @@
     --success-text: #a7f3d0;
 
     /* Tags */
-    --tag-genre: #DCC29B2E;
+    --tag-genre: rgb(196 73 0 / 0.82);
     --tag-bg: #233a45;
     --tag-text: #d1d5db;
 
     /* Shadow */
     --shadow: 0 6px 20px #ffffff66;
-    --shadow2: 0 10px 28px #C4490040;
+    --shadow2: 0 18px 44px #C4490040;
 }
 
 /* =============== RESET AND BASE =============== */
@@ -770,6 +770,7 @@ header.sticky .nav:hover {
     flex: 1 1 calc(20% - 16px);
     max-width: calc(20% - 16px);
     display: flex;
+    height: 320px;
     flex-direction: column;
     text-decoration: none;
     color: inherit;
@@ -777,53 +778,90 @@ header.sticky .nav:hover {
     border-radius: 8px;
     overflow: hidden;
     box-shadow: var(--shadow);
+    position: relative;
+    background: var(--bg-card);
     transition: transform 0.18s ease, box-shadow 0.18s ease, border 0.18s ease;
 }
 
 .movie-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow2);
+    transform: translateY(-5px);
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.65);
 }
 
-.movie-poster-wrap {
-    width: 100%;
-    height: 230px;
-    background: var(--bg-movie-card);
-    overflow: hidden;
-}
-
-.movie-poster {
+.movie-card-poster {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+    transition: transform 0.3s ease;
 }
 
-.movie-card-top {
-    min-height: 150px;
-    padding: 16px;
+.movie-card:hover .movie-card-poster {
+    transform: scale(1.06);
+}
+
+.movie-card-no-poster {
+    position: absolute;
+    inset: 0;
     background: var(--bg-movie-card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.movie-card-overlay {
+    position: absolute;
+    inset: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    align-items: flex-start;
+    padding: 12px;
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.45) 0%,
+        transparent 35%,
+        rgba(0, 0, 0, 0.7) 70%,
+        rgba(0, 0, 0, 0.92) 100%
+    );
 }
 
-.movie-card-top h3 {
-    color: var(--text-main);
-    text-align: left;
-    font-size: 1.35rem;
-    line-height: 1.2;
+.movie-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+.movie-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.movie-card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.3;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
+    white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.movie-card-avg {
+    flex-shrink: 0;
+    color: var(--secondary);
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 }
 
 .genre-tag {
     padding: 6px 10px;
-    border-radius: 999px;
+    border-radius: 8px;
     background: var(--tag-genre);
     color: var(--secondary);
     font-size: 0.75rem;
@@ -831,30 +869,7 @@ header.sticky .nav:hover {
     text-transform: uppercase;
 }
 
-.movie-card-body {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    flex: 1;
-}
-
-.movie-card-body .movie-info:last-child {
-    margin-top: auto;
-}
-
-.movie-info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    color: var(--text-main);
-}
-
 /* =============== REVIEW LIST AND REVIEW CARDS =============== */
-.review-container {
-    margin-top: 100px;
-}
-
 .review-feed {
     display: flex;
     flex-wrap: wrap;

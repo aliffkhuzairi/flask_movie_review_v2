@@ -15,9 +15,11 @@ ALLOWED_POSTER_EXTENSIONS = {"png", "jpg", "jpeg", "webp"}
 def home():
     with db_cursor() as cur:
         cur.execute("""
-            select id, title, director, genre, rel_date, poster, poster_url
-            from movies
-            order by rel_date desc
+            select m.id, m.title, m.genre, m.rel_date, m.poster, m.poster_url, round(avg(r.ratings), 1) as avg_rating
+            from movies m
+            left join reviews r on m.id = r.mid
+            group by m.id, m.title, m.director, m.genre, m.rel_date, m.poster, m.poster_url
+            order by m.rel_date desc
             limit 5;
         """)
 
@@ -33,7 +35,9 @@ def home():
                 ui.avatar, 
                 r.review, 
                 r.rev_time, 
-                r.ratings 
+                r.ratings,
+                m.poster,
+                m.poster_url
             from reviews r 
             join movies m on r.mid = m.id
             join user_info ui on r.uid = ui.id
@@ -96,11 +100,13 @@ def movie_list():
         # FETCH MOVIE FROM CURENT PAGE
         if movie_sort == "genre":
             cur.execute(f"""
-               select id, title, director, genre, rel_date, poster, poster_url
-               from movies
-               where title ilike %s
-               or director ilike %s or genre ilike %s
-               order by {order_column} {movie_sort_dir}, title asc
+               select m.id, m.title, m.director, m.genre, m.rel_date, m.poster, m.poster_url, round(avg(r.ratings), 1) as avg_rating
+               from movies m
+               left join reviews r on m.id = r.mid
+               where m.title ilike %s
+               or m.director ilike %s or m.genre ilike %s
+               group by m.id, m.title, m.director, m.genre, m.rel_date, m.poster, m.poster_url
+               order by {order_column} {movie_sort_dir}, m.title asc
                limit %s offset %s;
            """, (search_pattern, search_pattern, search_pattern, per_page, offset))
 
