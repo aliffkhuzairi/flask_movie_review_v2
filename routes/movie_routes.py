@@ -299,7 +299,7 @@ def movie_detail(movie_id):
 
         rating_breakdown = []
 
-        for rating in range(0, 6):
+        for rating in range(1, 6):
             count = rating_count_map.get(rating, 0)
             percentage = round((count / total_reviews) * 100) if total_reviews > 0 else 0
 

@@ -10,59 +10,68 @@
 </head>
 <body>
     {% from "macros.html" import render_stars, render_avatar %}
+    {% set poster_src = url_for('static', filename='uploads/posters/' ~ movie[5]) if movie[5] else movie[6] if movie[6] else None %}
     <!-- HEADER -->
     {% include "partials/header.html" %}
+
 
     <main class="page-container">
 
         <!-- MOVIE HERO -->
         <section class="section-card movie-hero">
-            <div class="movie-hero-main">
-                <h1 class="movie-title">{{ movie[1] }}</h1>
+            {% if poster_src %}
+                <div class="movie-hero-backdrop" style="background-image: url('{{ poster_src }}')"></div>
+            {% endif %}
+            <div class="movie-hero-overlay"></div>
 
-                <div class="movie-tags">
-                    <span class="genre-tag">{{ movie[3] }}</span>
-                    <div class="movie-tag-director">
-                        <span class="muted">Directed by </span>
-                        <span class="director">{{ movie[2] }}</span>
+            <div class="movie-hero-content">
+                {% if poster_src %}
+                    <div class="movie-detail-poster">
+                        <img src="{{ poster_src }}" alt="{{ movie[1] }} poster">
                     </div>
+                {% endif %}
 
-                    <span class="muted">{{ movie[4].strftime('%d %b %Y') if movie[4] else '' }}</span>
-                </div>
-            </div>
+                <div class="movie-hero-main">
+                    <h1 class="movie-title">{{ movie[1] }}</h1>
 
-            <div class="rating-summary-card">
-                <div class="rating-summary-head">
-                    <h3>Ratings</h3>
-                    <span>{{ total_reviews }} review{{ '' if total_reviews == 1 else 's' }}</span>
-                </div>
-
-                <div class="rating-summary-body">
-                    <div class="rating-distribution">
-
-                        <div class="rating-bars-horizontal">
-                            {% for item in rating_breakdown|reverse %}
-                                <div class="rating-column">
-                                    <div
-                                        class="rating-column-fill"
-                                        style="height: {{ item.percentage }}%;">
-                                    </div>
-                                </div>
-                            {% endfor %}
+                    <div class="movie-tags">
+                        <span class="genre-tag">{{ movie[3] }}</span>
+                        <div class="movie-tag-director">
+                            <span class="muted">Directed by </span>
+                            <span class="director">{{ movie[2] }}</span>
                         </div>
+
+                        <span class="muted">{{ movie[4].strftime('%d %b %Y') if movie[4] else '' }}</span>
+                    </div>
+                </div>
+
+                <div class="rating-summary-card">
+                    <div class="rating-summary-head">
+                        <h3>Ratings</h3>
+                        <span>{{ total_reviews }} review{{ '' if total_reviews == 1 else 's' }}</span>
                     </div>
 
-                    <div class="rating-average-display">
-                        <p class="rating-average-number">
-                            {{ avg_rating if avg_rating else '0.0' }}
-                        </p>
-
+                    <div class="rating-avg-row">
+                        <p class="rating-average-number">{{ avg_rating if avg_rating else '0.0' }}</p>
                         <div class="rating-average-stars">
                             {{ render_stars(avg_rating if avg_rating else 0) }}
                         </div>
                     </div>
+
+                    <div class="rating-bars">
+                        {% for item in rating_breakdown|reverse %}
+                        <div class="rating-bar-row">
+                            <span class="rating-bar-label">{{ item.rating }}</span>
+                            <div class="rating-bar-track">
+                                <div class="rating-bar-fill" style="width: {{ item.percentage }}%"></div>
+                            </div>
+                            <span class="rating-bar-count">{{ item.count }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
+
         </section>
 
         <!-- MOVIE INFO -->
@@ -75,10 +84,6 @@
                 <div class="section-card">
                     <h2>About this movie</h2>
                     <div class="info-list">
-                        <div class="info-item">
-                            <span class="info-label">Title</span>
-                            <span class="info-value">{{ movie[1] }}</span>
-                        </div>
                         <div class="info-item">
                             <span class="info-label">Director</span>
                             <span class="info-value">{{ movie[2] }}</span>
