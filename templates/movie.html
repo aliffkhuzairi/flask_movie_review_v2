@@ -10,7 +10,6 @@
 </head>
 <body>
     {% from "macros.html" import render_stars, render_avatar %}
-    {% set poster_src = url_for('static', filename='uploads/posters/' ~ movie[5]) if movie[5] else movie[6] if movie[6] else None %}
     <!-- HEADER -->
     {% include "partials/header.html" %}
 
@@ -18,48 +17,77 @@
     <main class="page-container">
 
         <!-- MOVIE HERO -->
-        <section class="section-card movie-hero">
-            {% if poster_src %}
-                <div class="movie-hero-backdrop" style="background-image: url('{{ poster_src }}')"></div>
-            {% endif %}
-            <div class="movie-hero-overlay"></div>
+        <section class="movie-hero">
+
+            <div class="movie-hero-title-year">
+                <h1 class="movie-title">{{ movie[1] }}</h1>
+                <span class="muted">{{ movie[4].strftime('%Y') if movie[4] else '' }}</span>
+            </div>
 
             <div class="movie-hero-content">
-                {% if poster_src %}
+                {% if movie[5] %}
                     <div class="movie-detail-poster">
-                        <img src="{{ poster_src }}" alt="{{ movie[1] }} poster">
+                        <img src="{{ url_for('static', filename='uploads/posters/' ~ movie[5]) }}"
+                             alt="{{ movie[1] }} poster">
+                    </div>
+                {% elif movie[6] %}
+                    <div class="movie-detail-poster">
+                        <img src="{{ movie[6] }}" alt="{{ movie[1] }} poster">
                     </div>
                 {% endif %}
 
-                <div class="movie-hero-main">
-                    <h1 class="movie-title">{{ movie[1] }}</h1>
-
-                    <div class="movie-tags">
-                        <span class="genre-tag">{{ movie[3] }}</span>
-                        <div class="movie-tag-director">
-                            <span class="muted">Directed by </span>
-                            <span class="director">{{ movie[2] }}</span>
-                        </div>
-
-                        <span class="muted">{{ movie[4].strftime('%d %b %Y') if movie[4] else '' }}</span>
-                    </div>
+                {% if movie[7] %}
+                <div class="movie-trailer">
+                    <iframe src="{{ movie[7] }}"
+                            title="{{ movie[1] }} trailer"
+                            allowfullscreen
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+                    </iframe>
                 </div>
+                {% endif %}
+            </div>
 
-                <div class="rating-summary-card">
-                    <div class="rating-summary-head">
-                        <h3>Ratings</h3>
-                        <span>{{ total_reviews }} review{{ '' if total_reviews == 1 else 's' }}</span>
+        </section>
+
+        <!-- MOVIE INFO -->
+        <section class="two-cols-layout movie-detail-section">
+
+            <!-- LEFT COLUMN -->
+            <div class="movie-left-column">
+                <div class="section-card movie-info">
+                        <h2>About this Movie</h2>
+                        <div class="info-list">
+                            <div class="info-item">
+                                <span class="info-label">Director</span>
+                                <span class="info-value">{{ movie[2] }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Genre</span>
+                                <span class="info-value">{{ movie[3] }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Release Date</span>
+                                <span class="info-value">{{ movie[4].strftime('%d %b %Y') if movie[4] else '' }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                <div class="section-card rating-breakdown-card">
+                    <div class="rating-breakdown-header">
+                        <h2>Ratings</h2>
+                        <span class="rating-breakdown-count">{{ total_reviews }} review{{ 's' if total_reviews != 1 else '' }}</span>
                     </div>
 
                     <div class="rating-avg-row">
-                        <p class="rating-average-number">{{ avg_rating if avg_rating else '0.0' }}</p>
-                        <div class="rating-average-stars">
-                            {{ render_stars(avg_rating if avg_rating else 0) }}
+                        <div class="rating-avg-left">
+                            <p class="rating-average-number">{{ avg_rating if avg_rating else '0.0' }}</p>
+                            <div class="rating-average-stars">{{ render_stars(avg_rating if avg_rating else 0) }}</div>
                         </div>
                     </div>
 
                     <div class="rating-bars">
                         {% for item in rating_breakdown|reverse %}
+                        {% if item.rating > 0 %}
                         <div class="rating-bar-row">
                             <span class="rating-bar-label">{{ item.rating }}</span>
                             <div class="rating-bar-track">
@@ -67,37 +95,113 @@
                             </div>
                             <span class="rating-bar-count">{{ item.count }}</span>
                         </div>
+                        {% endif %}
                         {% endfor %}
                     </div>
                 </div>
-            </div>
 
-        </section>
+                <!-- REVIEW CARDS -->
+                <div class="section-card review-form-card">
+                    <div class="detail-head" id="reviews">
+                        <h2>Reviews</h2>
+                        <div class="button-row sort">
+                            <a class="button-link {{ 'primary' if review_sort == 'latest' else 'secondary' }}"
+                               href="{{ url_for('movie.movie_detail', movie_id=movie[0], review_sort='latest') }}#reviews">
+                                Latest
+                            </a>
 
-        <!-- MOVIE INFO -->
-        <section class="two-cols-layout">
+                            <a class="button-link {{ 'primary' if review_sort == 'highest' else 'secondary' }}"
+                               href="{{ url_for('movie.movie_detail', movie_id=movie[0], review_sort='highest') }}#reviews">
+                                Highest
+                            </a>
 
-            <!-- LEFT COLUMN -->
-            <div class="movie-left-column">
-
-                <!-- MOVIE INFO -->
-                <div class="section-card">
-                    <h2>About this movie</h2>
-                    <div class="info-list">
-                        <div class="info-item">
-                            <span class="info-label">Director</span>
-                            <span class="info-value">{{ movie[2] }}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">Genre</span>
-                            <span class="info-value">{{ movie[3] }}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">Release Date</span>
-                            <span class="info-value">{{ movie[4].strftime('%d %b %Y') if movie[4] else '' }}</span>
+                            <a class="button-link {{ 'primary' if review_sort == 'lowest' else 'secondary' }}"
+                               href="{{ url_for('movie.movie_detail', movie_id=movie[0], review_sort='lowest') }}#reviews">
+                                Lowest
+                            </a>
                         </div>
                     </div>
+
+                    {% if total_reviews > 0 %}
+                    <p class="small-text result-summary">
+                        Showing {{ start_reviews }} – {{ end_reviews }} of {{ total_reviews }}
+                        review{{ '' if total_reviews == 1 else 's' }}
+                    </p>
+                    {% else %}
+                    <p class="small-text result-summary">
+                        No reviews found.
+                    </p>
+                    {% endif %}
+
+                    {% if reviews %}
+                        <div class="reviews-list">
+                            {% for review in reviews %}
+                                <article class="review-card review-card-clickable">
+                                    <a class="review-card-cover"
+                                       href="{{ url_for('user.user_detail', user_id=review[0]) }}"
+                                       aria-label="View {{ review[1] }} details"></a>
+                                    <div class="review-card-body">
+                                        <div class="review-card-user-row">
+                                            <div class="avatar-user">
+                                                {{ render_avatar(review[0], review[1], review[2], 'sm') }}
+                                                <a class="review-user"
+                                                   href="{{ url_for('user.user_detail', user_id=review[0]) }}">
+                                                    {{ review[0] }}
+                                                </a>
+                                                <span class="review-time">{{ review[4] | time_ago }}</span>
+                                            </div>
+                                            <span class="review-rating">{{ render_stars(review[5]) }}</span>
+                                        </div>
+
+                                        <div class="review-text-block">
+                                            <p class="review-text clamp-text">{{ review[3] }}</p>
+                                            <button type="button" class="text-toggle">Read more</button>
+                                        </div>
+                                    </div>
+                                </article>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="empty-state">No reviews yet.</p>
+                    {% endif %}
+
+                    {% if total_pages > 1 %}
+                    <div class="pagination">
+                        {% if page > 1 %}
+                            <a class="page-nav"
+                               href="{{ url_for('movie.movie_detail', movie_id=movie[0], page=page-1) }}">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </a>
+                        {% endif %}
+
+                        {% for p in pages %}
+                            {% if p == "..." %}
+                                <p class="ellipsis">...</p>
+                            {% else %}
+                                <a class="page-num {% if p == page %}active{% endif %}"
+                                   href="{{ url_for('movie.movie_detail', movie_id=movie[0], page=p) }}">
+                                    {{ p }}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if page < total_pages %}
+                            <a class="page-nav"
+                               href="{{ url_for('movie.movie_detail', movie_id=movie[0], page=page+1) }}" >
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </a>
+                        {% endif %}
+                        <span class="small-text">
+                            Page {{ page }} of {{ total_pages }}
+                        </span>
+                    </div>
+                    {% endif %}
                 </div>
+            </div>
+
+
+            <!-- RIGHT COLUMN -->
+            <div class="movie-right-column">
 
                 <!-- ADD/UPDATE REVIEW FORM -->
                 <div class="section-card review-form-card">
@@ -108,7 +212,7 @@
                             <h2>Add Your Review</h2>
                         {% endif %}
                     </div>
-                    
+
                     <div class="flash-container">
                         {% with messages = get_flashed_messages(with_categories=true, category_filter=['success-movie', 'error-movie', 'warning-movie']) %}
                             {% if messages %}
@@ -165,7 +269,7 @@
 
                 <!-- UPDATE/DELETE MOVIE -->
                 {% if session["user_role"] == "admin" %}
-                <div class="section-card" id="edit-movie">
+                <div class="section-card edit-form-card" id="edit-movie">
                     <div class="add-update-header">
                         <h2>Edit Movie</h2>
 
@@ -262,114 +366,7 @@
                         </form>
                     </div>
                 </div>
-
                 {% endif %}
-            </div>
-
-
-            <!-- REVIEWS COLUMN -->
-            <div class="movie-right-column">
-                <div class="section-card reviews-card">
-                    <div class="detail-head" id="reviews">
-                        <h2>Reviews</h2>
-                        <div class="button-row sort">
-                            <a class="button-link {{ 'primary' if review_sort == 'latest' else 'secondary' }}"
-                               href="{{ url_for('movie.movie_detail', movie_id=movie[0], review_sort='latest') }}#reviews">
-                                Latest
-                            </a>
-
-                            <a class="button-link {{ 'primary' if review_sort == 'highest' else 'secondary' }}"
-                               href="{{ url_for('movie.movie_detail', movie_id=movie[0], review_sort='highest') }}#reviews">
-                                Highest
-                            </a>
-
-                            <a class="button-link {{ 'primary' if review_sort == 'lowest' else 'secondary' }}"
-                               href="{{ url_for('movie.movie_detail', movie_id=movie[0], review_sort='lowest') }}#reviews">
-                                Lowest
-                            </a>
-                        </div>
-                    </div>
-
-                    {% if total_reviews > 0 %}
-                    <p class="small-text result-summary">
-                        Showing {{ start_reviews }} – {{ end_reviews }} of {{ total_reviews }}
-                        review{{ '' if total_reviews == 1 else 's' }}
-                    </p>
-                    {% else %}
-                    <p class="small-text result-summary">
-                        No reviews found.
-                    </p>
-                    {% endif %}
-
-                    {% if reviews %}
-                        <div class="reviews-list">
-                            {% for review in reviews %}
-                                <article class="review-card review-card-clickable">
-                                    <a class="review-card-cover"
-                                       href="{{ url_for('user.user_detail', user_id=review[0]) }}"
-                                       aria-label="View {{ review[1] }} details"></a>
-                                    <div class="review-card-top">
-                                        <div class="review-title-meta">
-                                            <div class="avatar-user">
-                                                {{ render_avatar(review[0], review[1], review[2], 'sm') }}
-                                                <a class="review-user" href="{{ url_for('user.user_detail', user_id=review[0]) }}">
-                                                    {{ review[0] }}
-                                                </a>
-                                            </div>
-
-                                            <p class="review-time">
-                                                {{ review[4] | time_ago }}
-                                            </p>
-                                        </div>
-                                        <span class="review-rating">
-                                            {{ render_stars(review[5]) }}
-                                        </span>
-
-                                    </div>
-
-                                    <div class="review-text-block detail-page">
-                                        <p class="review-text clamp-text">{{ review[3] }}</p>
-                                        <button type="button" class="text-toggle">Read more</button>
-                                    </div>
-                                </article>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        <p class="empty-state">No reviews yet.</p>
-                    {% endif %}
-
-                    {% if total_pages > 1 %}
-                    <div class="pagination">
-                        {% if page > 1 %}
-                            <a class="page-nav"
-                               href="{{ url_for('movie.movie_detail', movie_id=movie[0], page=page-1) }}">
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </a>
-                        {% endif %}
-
-                        {% for p in pages %}
-                            {% if p == "..." %}
-                                <p class="ellipsis">...</p>
-                            {% else %}
-                                <a class="page-num {% if p == page %}active{% endif %}"
-                                   href="{{ url_for('movie.movie_detail', movie_id=movie[0], page=p) }}">
-                                    {{ p }}
-                                </a>
-                            {% endif %}
-                        {% endfor %}
-
-                        {% if page < total_pages %}
-                            <a class="page-nav"
-                               href="{{ url_for('movie.movie_detail', movie_id=movie[0], page=page+1) }}" >
-                                <i class="fa-solid fa-chevron-right"></i>
-                            </a>
-                        {% endif %}
-                        <span class="small-text">
-                            Page {{ page }} of {{ total_pages }}
-                        </span>
-                    </div>
-                    {% endif %}
-                </div>
             </div>
         </section>
     </main>

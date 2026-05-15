@@ -142,10 +142,12 @@ def movie_list():
 
         else:
             cur.execute(f"""
-               select id, title, director, genre, rel_date, poster, poster_url
-               from movies
-               where title ilike %s
-               or director ilike %s or genre ilike %s
+               select m.id, m.title, m.director, m.genre, m.rel_date, m.poster, m.poster_url, round(avg(r.ratings), 1) as avg_rating
+               from movies m
+               left join reviews r on m.id = r.mid
+               where m.title ilike %s
+               or m.director ilike %s or m.genre ilike %s
+               group by m.id, m.title, m.director, m.genre, m.rel_date, m.poster, m.poster_url
                order by {order_column} {movie_sort_dir}
                limit %s offset %s;
            """,(search_pattern, search_pattern, search_pattern, per_page, offset))
@@ -220,7 +222,7 @@ def movie_detail(movie_id):
 
     with db_cursor() as cur:
         cur.execute("""
-            select id, title, director, genre, rel_date, poster, poster_url
+            select id, title, director, genre, rel_date, poster, poster_url, trailer_url
             from movies
             where id = %s;
         """,(movie_id,))
