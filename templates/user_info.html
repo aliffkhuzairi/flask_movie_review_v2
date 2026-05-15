@@ -17,28 +17,17 @@
 
         <!-- PROFILE HERO -->
         <section class="profile-hero">
-            <div class="profile-main">
 
-                <!-- PROFILE DIV -->
-                <p class="profile-meta">Profile</p>
+            <div class="profile-avatar-col">
+                {{ render_avatar(user_info[0], user_info[2], user_info[5], 'lg') }}
+            </div>
 
-                <div class="profile-name-row">
-                    {{ render_avatar(user_info[0], user_info[2], user_info[5], 'lg') }}
-                    <div class="profile-title-column">
-                        <h1 class="profile-title">
-                            {{ user_info[2] or user_info[0] }}
-                        </h1>
-                        <div class="profile-id">
-                            <span>@{{ user_info[0] }}</span>
-                        </div>
-                    </div>
+            <div class="profile-info-col">
+                <h1 class="profile-title">{{ user_info[2] or user_info[0] }}</h1>
+                <p class="profile-id">@{{ user_info[0] }}</p>
 
-                </div>
-
-                <!-- RELATIONSHIP DIV -->
                 {% if not is_self and not is_admin_profile and not is_current_user_admin %}
                 <div class="hero-actions">
-
                     {% if relationship == 'follow' %}
                         <form class="js-confirm-form"
                               action="{{ url_for('user.unfollow_user', target_user_id=user_info[0]) }}"
@@ -56,8 +45,7 @@
                         </form>
 
                     {% elif relationship == 'mute' %}
-                        <form action="{{ url_for('user.follow_user', target_user_id=user_info[0]) }}"
-                              method="POST">
+                        <form action="{{ url_for('user.follow_user', target_user_id=user_info[0]) }}" method="POST">
                             <button type="submit" class="button-link btn-follow">Follow</button>
                         </form>
                         <form class="js-confirm-form"
@@ -83,34 +71,26 @@
                 </div>
                 {% endif %}
             </div>
-        </section>
 
-        <!-- USER STATS -->
-        <section class="profile-stats-grid">
-            <div class="profile-stat-card">
-                <span class="profile-stat-label">Reviews</span>
-                <strong class="profile-stat-value">{{ total_reviews }}</strong>
-            </div>
-
-            <div class="profile-stat-card">
-                <span class="profile-stat-label">Average Rating Given</span>
-                <strong class="profile-stat-value">
-                    {{ avg_rating_given if avg_rating_given else '0.0' }}
-                </strong>
-            </div>
-
-            <div class="profile-stat-card">
-                <span class="profile-stat-label">Top Genre</span>
-                <strong class="profile-stat-value">
-                    {{ top_genre if top_genre else '-' }}
-                </strong>
-            </div>
-
-            <div class="profile-stat-card">
-                <span class="profile-stat-label">Latest Review</span>
-                <strong class="profile-stat-value">
-                    {{ latest_review_date.strftime('%d %b %Y') if latest_review_date else '-' }}
-                </strong>
+            <div class="profile-stats-inline">
+                <div class="profile-stat">
+                    <strong class="profile-stat-value">{{ total_reviews }}</strong>
+                    <span class="profile-stat-label">Reviews</span>
+                </div>
+                <div class="profile-stat">
+                    <strong class="profile-stat-value">{{ avg_rating_given if avg_rating_given else '0.0' }}</strong>
+                    <span class="profile-stat-label">Avg Rating</span>
+                </div>
+                <div class="profile-stat">
+                    <strong class="profile-stat-value">{{ top_genre if top_genre else '-' }}</strong>
+                    <span class="profile-stat-label">Top Genre</span>
+                </div>
+                <div class="profile-stat">
+                    <strong class="profile-stat-value">
+                        {{ latest_review_date.strftime('%d %b %Y') if latest_review_date else '-' }}
+                    </strong>
+                    <span class="profile-stat-label">Last Review</span>
+                </div>
             </div>
         </section>
 
@@ -249,42 +229,56 @@
                             <a class="review-card-cover"
                                href="{{ url_for('movie.movie_detail', movie_id=review[0]) }}"
                                aria-label="View {{ review[1] }} details"></a>
-                            <div class="review-card-top">
-                                <div class="review-title-meta">
-                                    <span class="tooltip" data-title="{{ review[1] }}">
-                                        <a class="review-title tooltip"
+
+                            {% if review[6] %}
+                                <div class="review-card-poster">
+                                    <img src="{{ url_for('static', filename='uploads/posters/' ~ review[6]) }}"
+                                         alt="{{ review[1] }} poster">
+                                </div>
+                            {% elif review[7] %}
+                                <div class="review-card-poster">
+                                    <img src="{{ review[7] }}" alt="{{ review[1] }} poster">
+                                </div>
+                            {% else %}
+                                <div class="review-card-poster review-no-poster"></div>
+                            {% endif %}
+
+                            <div class="review-card-body">
+                                <div class="review-card-title-row">
+                                    <a class="review-card-title"
                                        href="{{ url_for('movie.movie_detail', movie_id=review[0]) }}">
-                                            {{ review[1] }}
-                                        </a>
-                                    </span>
-                                    <div class="year-time">
-                                        <span class="year-tag">
-                                            {{ review[5].strftime('%Y') if review[5] else '' }}
-                                        </span>
-                                        <p class="review-time">
-                                            {{ review[4] | time_ago }}
-                                        </p>
+                                        {{ review[1] }}
+                                    </a>
+                                    <div class="review-card-year-time">
+                                        <span class="year-tag">{{ review[5].strftime('%Y') if review[5] else '' }}</span>
+                                        <span class="review-time">{{ review[4] | time_ago }}</span>
                                     </div>
                                 </div>
-                                <div>
+
+                                <div class="review-card-user-row">
                                     <span class="review-rating">{{ render_stars(review[2]) }}</span>
                                 </div>
+
+                                <div class="review-text-block homepage">
+                                    <p class="review-text clamp-text">{{ review[3] }}</p>
+                                    <button type="button" class="text-toggle">Read more</button>
+                                </div>
+
+                                {% if is_self %}
+                                <form class="profile-delete-form js-confirm-form"
+                                      action="{{ url_for('user.delete_review', movie_id=review[0]) }}"
+                                      method="POST"
+                                      data-confirm-title="Delete review?"
+                                      data-confirm-message="This action cannot be undone. Delete this review?">
+                                    <button type="submit" class="button-link logout">
+                                        <i class="fa-regular fa-trash-can"></i> Delete
+                                    </button>
+                                </form>
+                                {% endif %}
                             </div>
 
-                            <div class="review-text-block detail-page">
-                                <p class="review-text clamp-text">{{ review[3] }}</p>
-                                <button type="button" class="text-toggle">Read more</button>
-                            </div>
 
-                            {% if is_self %}
-                            <form class="delete js-confirm-form"
-                                  action="{{ url_for('user.delete_review', movie_id=review[0]) }}"
-                                  method="POST"
-                                  data-confirm-title="Delete review?"
-                                  data-confirm-message="This action cannot be undone. Delete this review?">
-                                <button type="submit" class="button-link logout">Delete Review</button>
-                            </form>
-                            {% endif %}
+
 
                         </article>
                     {% endfor %}
@@ -416,7 +410,6 @@
         <section class="two-cols-layout">
             <div class="profile-left-column">
                 <!-- EDIT PROFILE CARD -->
-
                 {% if is_self %}
                 <!-- AVATAR EDIT -->
                 <div class="section-card avatar-edit-card">

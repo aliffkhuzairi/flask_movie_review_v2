@@ -101,7 +101,8 @@ def user_detail(user_id):
 
         # FETCH PAGINATED REVIEWS
         cur.execute(f"""
-            select m.id, m.title, r.ratings, r.review, r.rev_time, m.rel_date
+            select m.id, m.title, r.ratings, r.review, r.rev_time, m.rel_date,
+                   m.poster, m.poster_url
             from reviews r
             join movies m on r.mid = m.id
             where uid = %s
