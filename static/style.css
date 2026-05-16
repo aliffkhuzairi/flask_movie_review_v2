@@ -1852,6 +1852,7 @@ header.sticky .nav:hover {
     max-width: calc(50% - 12px);
     padding: 18px 16px;
     margin-bottom: 0;
+    align-items: stretch;
 }
 
 .user-list-card h2 {
@@ -1983,6 +1984,7 @@ header.sticky .nav:hover {
 
 .profile-delete-form {
     margin-top: auto;
+    align-self: flex-end;
 }
 
 .profile-delete-btn {
@@ -2724,6 +2726,14 @@ header.sticky .nav:hover {
 
     .rating-avg-left {
         justify-content: center;
+    }
+
+    .section-card.reviews-card {
+        padding: 18px;
+    }
+
+    .profile-review-feed .review-card {
+        padding: 16px;
     }
 
 }
