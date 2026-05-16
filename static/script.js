@@ -456,6 +456,21 @@ const closeDeleteModals = () => {
     }
 };
 
+// SETUP DELETE ACCOUNT MODAL
+const setupDeleteAccountModal = () => {
+    const stepOneClose = document.getElementById('deleteStepOneClose');
+    const stepOneCancel = document.getElementById('deleteStepOneCancel');
+    const stepOneContinue = document.getElementById('deleteStepOneContinue');
+    const stepTwoClose = document.getElementById('deleteStepTwoClose');
+    const stepTwoCancel = document.getElementById('deleteStepTwoCancel');
+
+    if (stepOneClose) stepOneClose.addEventListener('click', closeDeleteModals);
+    if (stepOneCancel) stepOneCancel.addEventListener('click', closeDeleteModals);
+    if (stepOneContinue) stepOneContinue.addEventListener('click', openDeleteStepTwo);
+    if (stepTwoClose) stepTwoClose.addEventListener('click', closeDeleteModals);
+    if (stepTwoCancel) stepTwoCancel.addEventListener('click', closeDeleteModals);
+};
+
 document.addEventListener('click', function (event) {
     const stepOne = document.getElementById('deleteStepOneModal');
     const stepTwo = document.getElementById('deleteStepTwoModal');
@@ -482,4 +497,5 @@ document.addEventListener("DOMContentLoaded", () => {
     setupStarRating();
     setupAvatarCropper();
     setupConfirmModal();
+    setupDeleteAccountModal();
 })
