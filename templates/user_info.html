@@ -137,7 +137,7 @@
 
         <!-- OVERVIEW TAB -->
         {% if active_tab == 'overview' %}
-        <section class="two-cols-layout">
+        <section class="two-cols-layout profile-overview-section">
             <div class="profile-left-column">
                 <!-- ACCOUNT INFO -->
                 <div class="section-card info-card">
@@ -181,7 +181,32 @@
                 </div>
             </div>
             <div class="profile-right-column">
-
+                {% if recent_watches %}
+                <div class="section-card">
+                    <h2>Recent Activity</h2>
+                    <div class="recent-activity-list">
+                        {% for movie in recent_watches %}
+                        <a class="recent-activity-item"
+                           href="{{ url_for('movie.movie_detail', movie_id=movie[0]) }}">
+                            <div class="recent-activity-poster">
+                                {% if movie[2] %}
+                                    <img src="{{ url_for('static', filename='uploads/posters/' ~ movie[2]) }}"
+                                         alt="{{ movie[1] }}">
+                                {% elif movie[3] %}
+                                    <img src="{{ movie[3] }}" alt="{{ movie[1] }}">
+                                {% endif %}
+                            </div>
+                            <div class="recent-activity-info">
+                                <p class="recent-activity-title">{{ movie[1] }}</p>
+                                <span class="recent-activity-year">
+                                    {{ movie[4].strftime('%Y') if movie[4] else '' }}
+                                </span>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </section>
         {% endif %}

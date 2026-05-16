@@ -677,6 +677,11 @@ header.sticky .nav:hover {
     gap: 32px;
 }
 
+.profile-overview-section {
+    grid-template-columns: 1.5fr 3fr;
+    gap: 32px;
+}
+
 .movie-left-column,
 .movie-right-column,
 .profile-left-column,
@@ -1837,6 +1842,71 @@ header.sticky .nav:hover {
     color: var(--text-main);
 }
 
+.recent-activity-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.recent-activity-item {
+    flex: 1 1 calc(50% - 5px);
+    max-width: calc(50% - 5px);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+    padding: 8px 6px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease
+}
+
+.recent-activity-item:hover {
+    transform: translateY(-3px);
+    background: var(--bg-card2);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.recent-activity-poster {
+    flex: 0 0 64px;
+    width: 64px;
+    height: auto;
+    border-radius: 4px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.recent-activity-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.recent-activity-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.recent-activity-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.recent-activity-year {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
 .single-profile-section {
     max-width: 100%;
     margin: 0 auto;
@@ -2330,6 +2400,12 @@ header.sticky .nav:hover {
     }
 }
 
+@media (max-width: 900px) {
+    .profile-overview-section {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 768px) {
 
     .header-wrap {
@@ -2642,8 +2718,16 @@ header.sticky .nav:hover {
         grid-template-columns: repeat(2, 1fr);
         text-align: center;
     }
-}
 
+    .recent-activity-list {
+        grid-template-columns: 1fr;
+    }
+
+    .recent-activity-item {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+}
 
 @media (max-width: 480px) {
     .auth-card {

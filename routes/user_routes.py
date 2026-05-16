@@ -92,6 +92,16 @@ def user_detail(user_id):
 
         latest_review_date = cur.fetchone()[0]
 
+        cur.execute("""
+            select m.id, m.title, m.poster, m.poster_url, m.rel_date
+            from reviews r
+            join movies m on r.mid = m.id
+            where r.uid = %s
+            order by r.rev_time desc
+            limit 4;
+        """, (user_id,))
+        recent_watches = cur.fetchall()
+
         # USER REVIEWS PAGINATION
         page = get_page(request)
         per_page = 5
@@ -175,6 +185,7 @@ def user_detail(user_id):
                            avg_rating_given=avg_rating_given,
                            top_genre=top_genre,
                            latest_review_date=latest_review_date,
+                           recent_watches=recent_watches,
                            pages=pagination["pages"],
                            page=pagination["page"],
                            total_pages=pagination["total_pages"],
