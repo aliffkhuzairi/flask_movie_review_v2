@@ -2,8 +2,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Megrim&display=swap');
 :root {
     /* Background */
-    --bg-main: #0e1a22;
-    --bg-surface: #0b1116;
+    --bg-main: #08101a;
+    --bg-surface: #050c14;
     --bg-card: #121a21;
     --bg-card2: #EFF6FF14;
     --bg-movie-card:  linear-gradient(135deg, rgba(196, 73, 0, 0.85), rgba(4, 21, 31, 0.95)),
@@ -12,7 +12,7 @@
     --bg-input: #EFF6FF33;
 
     /* Header */
-    --bg-header: rgba(0, 0, 0, 0.15);
+    --bg-header: transparent;
 
     /* Text */
     --text-main: #e5e7eb;
@@ -20,11 +20,12 @@
     --text-dark: #04151f;
 
     /* Accent */
-    --primary: #c44900;
-    --primary-hover: #a63c00;
+    --primary: #f04e1f;
+    --primary-hover: #d03e10;
 
     --secondary: #efd6ac;
     --secondary-hover: #e4c58e;
+
 
     /* Danger */
     --danger: #dc2626;
@@ -37,7 +38,7 @@
     --success-text: #a7f3d0;
 
     /* Tags */
-    --tag-genre: rgb(196 73 0 / 0.82);
+    --tag-genre: #f04e1f;
     --tag-bg: #233a45;
     --tag-text: #d1d5db;
 
@@ -60,18 +61,10 @@ html {
 body {
     font-family: 'Lexend', Helvetica, sans-serif;
     font-size: 16px;
-    background: var(--bg-main);
+    background: #0b1116;
     color: var(--text-main);
     min-height: 100vh;
     position: relative;
-}
-
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    background: linear-gradient(180deg, #000000, #0e1a22, #152331);
 }
 
 /* =============== TYPOGRAPHY =============== */
@@ -520,7 +513,8 @@ select option {
     transition: color 0.13s ease-in-out;
 }
 
-.header-search-form button:hover {
+.header-search-form button:hover,
+.header-search-toggle:hover {
     color: var(--secondary);
 }
 
@@ -1355,7 +1349,7 @@ header.sticky .nav:hover {
 }
 
 .homepage {
-    max-width: 350px;
+    max-width: 450px;
     margin-bottom: 25px;
 }
 
@@ -1718,7 +1712,7 @@ header.sticky .nav:hover {
     grid-template-columns: 1fr 1fr;
     gap: 18px 32px;
     flex-shrink: 0;
-    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    border-left: 1px solid rgb(255 255 255 / 0.29);
     padding-left: 32px;
 }
 
