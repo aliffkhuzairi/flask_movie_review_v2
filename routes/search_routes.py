@@ -24,7 +24,7 @@ def global_search():
         with db_cursor() as cur:
             if result_type in {"all", "movies"}:
                 cur.execute("""
-                    select id, title, director, genre, rel_date
+                    select id, title, director, genre, rel_date, poster, poster_url
                     from movies
                     where title ilike %s or director ilike %s or genre ilike %s
                     order by title asc
