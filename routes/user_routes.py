@@ -104,7 +104,7 @@ def user_detail(user_id):
 
         # USER REVIEWS PAGINATION
         page = get_page(request)
-        per_page = 5
+        per_page = 6
         pagination = build_pagination(total_reviews, page, per_page)
         page = pagination["page"]
         offset = pagination["offset"]
