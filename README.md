@@ -37,48 +37,63 @@ The project focuses on backend CRUD, PostgreSQL relationships, authentication, r
 - Role-based admin access
 
 ### Movies
-- Browse all movies
+- Browse all movies with poster cards
 - Search movies by title, director, or genre
 - Sort movies by latest, title, and genre
 - Paginated movie list
 - Result summary such as `Showing 1 – 15 of 21 movies`
-- Admin can add new movies
-- Admin can update movie details
+- Movie posters seeded using the OMDB API
+- Movie trailers embedded via YouTube
+- Admin can add new movies with poster upload, poster URL, and trailer URL
+- Admin can update movie details including poster and trailer
 - Admin can delete movies
 - Duplicate movie handling
+- Live poster preview in admin add movie form
+- Average rating displayed on movie cards
 
 ### Reviews
 - Add, update, and delete reviews
 - Star-based rating input UI
 - Rating validation from 1 to 5
 - Average rating display on movie detail pages
-- Rating breakdown chart for each movie
+- Vertical bar rating breakdown chart for each movie
 - Relative time display such as `5m`, `1h`, and `2d`
 - Sort reviews by latest, highest rating, and lowest rating
 - Paginated reviews on user profile pages
 - Paginated reviews on movie detail pages
 - Review count summary such as `Showing 1 – 5 of 12 reviews`
+- Movie poster thumbnails on review cards
+
+### Home Page
+- Latest movie cards with poster backgrounds and average ratings
+- Recent Reviews feed with movie poster thumbnails
+- Top Rated Movies section ranked by community ratings
+- Most Active Reviewers section based on review count
+- Muted users excluded from all home page feeds
 
 ### Global Search
 - Header search for movies and users
 - Search result page with filter tabs for all results, movies, and people
+- Movie search results include poster thumbnails
 - People search results include user avatars
 - Search layout is responsive across desktop, tablet, and mobile
 
 ### User Profiles
 - View user profile information
-- Profile dashboard with tabs for overview, reviews, connections, and account settings
-- User review stats including total reviews, average rating given, top genre, and latest review date
+- Profile hero with avatar, display name, and stats in a single card
+- Profile stats including total reviews, average rating given, top genre, and last review date
+- Profile tabs for overview, reviews, connections, and account settings
+- Recent Activity section showing last 4 reviewed movies
 - Upload and crop profile avatar using Cropper.js
 - Remove uploaded avatar and fall back to default icon avatar
 - Edit name and email
 - Change password from account settings
 - Delete own account with double confirmation
 - Account deletion removes profile data, reviews, avatar, and social connections
-- View review history
-- Sort user reviews
-- View followed users
-- Muted users are private to the current user
+- View review history with movie posters
+- Sort user reviews by latest, highest, and lowest
+- View followed and muted users in connections tab
+
 
 ### Social Features
 - Follow users
@@ -86,26 +101,31 @@ The project focuses on backend CRUD, PostgreSQL relationships, authentication, r
 - Prevent users from following or muting themselves
 - Prevent follow/mute actions on admin profiles
 - Hide reviews from muted users on home and movie detail pages
+- Muted users list is private to the current user
 
-## Admin Features
-- Add new movies
-- Update existing movies
+### Admin Features
+- Add new movies with poster and trailer
+- Live poster preview when entering URL or uploading file
+- Update existing movies including poster and trailer
 - Delete movies and related reviews
 - Admin-only role checks
 - Admin profile protection from follow/mute actions
 
 ### UI/UX
-- Dark theme
+- Dark theme with dark navy color palette
 - Responsive layout for desktop, tablet, and mobile
 - Mobile navigation toggle
 - Header search toggle
 - Font Awesome icons
-- Card-based movie and review layout
+- Poster-style movie cards with gradient overlay
+- Movie detail page with trailer embed and rating breakdown
+- Global review card component reused across all pages
 - Clickable review cards while keeping inner links and buttons usable
 - Password visibility toggle for login, signup, and password change forms
 - Custom confirmation modals instead of browser default confirmation dialogs
-- Anchor navigation for review sorting on smaller screens
+- Anchor navigation for review sorting
 - Reusable pagination styling
+- Subtle delete actions with hover-reveal danger color
 
 ---
 
@@ -123,6 +143,10 @@ The project focuses on backend CRUD, PostgreSQL relationships, authentication, r
 - JavaScript (vanilla)
 - Font Awesome (icons)
 - Cropper.js for avatar cropping
+
+### External APIs
+- OMDB API for movie poster seeding
+- YouTube embed for movie trailers
 
 ---
 
@@ -172,7 +196,9 @@ Key relationships:
 │   ├── style.css
 │   ├── script.js
 │   └── uploads/
-│       └── avatars/
+│       ├── avatars/
+│       │   └── .gitkeep
+│       └── posters/
 │           └── .gitkeep
 ├── screenshots/
 ├── movie_db.sql
@@ -271,6 +297,16 @@ http://127.0.0.1:5000
 
 ---
 
+## Test Accounts
+ 
+| Username | Password | Role  |
+|----------|----------|-------|
+| admin    | 00000000 | admin |
+| andy     | 1234     | user  |
+| marco    | 1234     | user  |
+
+---
+
 ## Responsive Design
 
 - Desktop → multi-column layout
@@ -281,33 +317,32 @@ http://127.0.0.1:5000
 
 ---
 
-### Security Notes
-
-- Database credentials are loaded from environment variables.
-- Passwords are hashed for new users.
-- SQL queries use parameterized values.
-- Dynamic sort values are restricted through allowlists.
-- Admin-only features are protected by role checks.
-- User actions are guarded with session checks.
-- Delete actions use POST requests instead of GET links.
-- Uploaded avatar files are ignored by Git and stored locally during development.
-- Avatar uploads are processed as cropped image data before saving.
-- Password change requires the current password.
-- Account deletion requires password confirmation and `DELETE` text confirmation.
-- Admin accounts cannot be deleted from the settings page.
-- Destructive actions use custom confirmation modals before submitting POST requests.
-
+## Security Notes
+ 
+- Database credentials are loaded from environment variables
+- Passwords are hashed using Werkzeug scrypt
+- SQL queries use parameterized values
+- Dynamic sort values are restricted through allowlists
+- Admin-only features are protected by role checks
+- User actions are guarded with session checks
+- Delete actions use POST requests instead of GET links
+- Uploaded avatar files are ignored by Git and stored locally during development
+- Avatar uploads are processed as cropped image data before saving
+- Password change requires the current password
+- Account deletion requires password confirmation and `DELETE` text confirmation
+- Admin accounts cannot be deleted from the settings page
+- Destructive actions use custom confirmation modals before submitting POST requests
 ---
 
 ## What I Learned
-
+ 
 - Building Flask routes with blueprints
-- Registering route modules through routes/__init__.py
+- Registering route modules through `routes/__init__.py`
 - Handling authentication and user sessions
 - Designing PostgreSQL relationships and constraints
 - Writing SQL queries with joins, filters, sorting, pagination, and NOT EXISTS
 - Implementing role-based access for admin features
-- Building reusable Jinja macros
+- Building reusable Jinja2 macros and template components
 - Building interactive form inputs with vanilla JavaScript
 - Refactoring pagination logic into helper functions
 - Improving mobile layout with responsive CSS
@@ -319,16 +354,22 @@ http://127.0.0.1:5000
 - Replacing inline click handlers with JavaScript event listeners
 - Managing clickable cards with overlay links while preserving inner button and link behavior
 - Adding password visibility toggles for authentication forms
+- Integrating external APIs (OMDB) for data seeding
+- Embedding YouTube trailers via iframe
+- Building a global CSS component system for review cards
+- Using CSS Grid and Flexbox together for complex layouts
+- Implementing live image preview with FileReader API
 
 ---
 
 ## Future Improvements
-
-- Add movie posters using an external API
+ 
 - Add full deployment support
 - Add automated tests
 - Add CSRF protection for forms
 - Store uploaded images in cloud storage for production
+- Add movie synopsis or description field
+- Add user watchlist feature
 
 ---
 
