@@ -9,7 +9,7 @@
     <title>{{ movie[1] }}</title>
 </head>
 <body>
-    {% from "macros.html" import render_stars, render_avatar, render_poster %}
+    {% from "macros.html" import render_stars, render_avatar, render_poster, csrf %}
     <!-- HEADER -->
     {% include "partials/header.html" %}
 
@@ -217,7 +217,7 @@
                     </div>
 
                     <form method="POST" class="form-grid">
-
+                        {{ csrf() }}
                         <label for="rating">Rating</label>
                         <div class="star-rating-input" data-current-rating="{{ user_review[0] if user_review else 0 }}">
                             <input id="rating" name="rating" type="hidden"
@@ -281,6 +281,7 @@
                               action="{{ url_for('movie.movie_edit', movie_id=movie[0]) }}"
                               enctype="multipart/form-data">
 
+                            {{ csrf() }}
                             <label for="title">Title</label>
                             <input id="title"
                                    name="title"
@@ -342,6 +343,7 @@
                               method="POST"
                               data-confirm-title="Remove uploaded poster?"
                               data-confirm-message="This will delete the uploaded poster file. Poster URL will be used if available.">
+                            {{ csrf() }}
                             <button type="submit" class="button-link logout">
                                 Remove Uploaded Poster
                             </button>
@@ -353,6 +355,7 @@
                               method="POST"
                               data-confirm-title="Delete movie?"
                               data-confirm-message="This action cannot be undone. Delete this movie?">
+                            {{ csrf() }}
                             <button type="submit" class="button-link logout">
                                 Delete Movie
                             </button>

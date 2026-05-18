@@ -9,6 +9,7 @@
     <title>Sign Up</title>
 </head>
 <body>
+    {% from "macros.html" import csrf %}
      <div class="auth-shell">
          <div class="auth-card">
              <h1>Create Account</h1>
@@ -24,8 +25,7 @@
              </div>
 
              <form action="{{ url_for('auth.signup') }}" method="POST" class="form-grid">
-
-
+                 {{ csrf() }}
                  <label for="id">ID:</label>
                  <input id="id" type="text" name="user_id" required>
 

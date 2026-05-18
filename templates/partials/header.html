@@ -1,3 +1,5 @@
+{% from "macros.html" import csrf %}
+
 <header class="header">
     <div class="header-wrap">
         <div class="header-left">
@@ -16,6 +18,8 @@
             <form class="header-search-form" id="headerSearchForm"
                   action="{{ url_for('search.global_search') }}"
                   method="GET">
+
+                {{ csrf() }}
                 <input type="text" name="q"
                        placeholder="Search movies or users" value="{{ query|default('') }}"/>
                 <button type="submit" aria-label="Search">

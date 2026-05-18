@@ -9,7 +9,7 @@
     <title>All Movie</title>
 </head>
 <body>
-    {% from "macros.html" import render_poster %}
+    {% from "macros.html" import render_poster, csrf %}
     <!-- HEADER -->
     {% include "partials/header.html" %}
 
@@ -28,6 +28,7 @@
             <!-- SEARCH BAR -->
             <div class="search-section">
                 <form class="search-form" action="{{ url_for('movie.movie_list') }}" method="GET">
+                    {{ csrf() }}
                     <input
                         type="text"
                         name="search"
