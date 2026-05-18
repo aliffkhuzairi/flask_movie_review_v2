@@ -1,7 +1,9 @@
 import os
+from s3 import upload_to_s3, delete_from_s3
 from flask import Blueprint, render_template, redirect, url_for, session, flash, request, current_app
 from db import db_cursor
 from utils import login_required, admin_required, is_valid_rating, get_page, build_pagination, save_uploaded_file, delete_uploaded_file
+from uuid import uuid4
 
 movie_bp = Blueprint("movie", __name__)
 
@@ -344,19 +346,37 @@ def get_poster_upload_folder():
 
 
 def save_movie_poster(file, movie_id):
-    return save_uploaded_file(
-        file=file,
-        upload_folder=get_poster_upload_folder(),
-        filename_prefix=f"movie_{movie_id}",
-        allowed_extensions=ALLOWED_POSTER_EXTENSIONS
-    )
+    filename = file.filename.lower()
+    ext = filename.rsplit('.', 1)[-1] if '.' in filename else ''
+
+    if ext not in ALLOWED_POSTER_EXTENSIONS:
+        return None
+
+    content_type_map = {
+        'jpg': 'image/jpeg',
+        'jpeg': 'image/jpeg',
+        'png': 'image/png',
+        'webp': 'image/webp'
+    }
+
+    content_type = content_type_map.get(ext, 'image/jpeg')
+    poster_filename = f"movie_{movie_id}_{uuid4().hex}.{ext}"
+    file_data = file.read()
+
+    return upload_to_s3(file_data, poster_filename, 'posters', content_type)
 
 
-def delete_movie_poster(filename):
-    delete_uploaded_file(
-        upload_folder=get_poster_upload_folder(),
-        filename=filename
-    )
+def delete_movie_poster(poster_val):
+    if not poster_val:
+        return
+    if poster_val.startswith('https://'):
+        delete_from_s3(poster_val)
+    else:
+        # Legacy local file
+        delete_uploaded_file(
+            upload_folder=get_poster_upload_folder(),
+            filename=poster_val
+        )
 
 @movie_bp.route("/movies/<int:movie_id>/edit", methods=["POST"])
 @login_required

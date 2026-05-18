@@ -8,7 +8,7 @@
     <title>Search</title>
 </head>
 <body>
-    {% from "macros.html" import render_stars, render_avatar %}
+    {% from "macros.html" import render_stars, render_avatar, render_poster %}
     <!-- HEADER -->
     {% include "partials/header.html" %}
 
@@ -55,16 +55,9 @@
                             <a class="search-result-item movie-search-item"
                                href="{{ url_for('movie.movie_detail', movie_id=movie[0]) }}">
 
-                                {% if movie[5] %}
-                                    <div class="search-result-poster">
-                                        <img src="{{ url_for('static', filename='uploads/posters/' ~ movie[5]) }}"
-                                             alt="{{ movie[1] }}">
-                                    </div>
-                                {% elif movie[6] %}
-                                    <div class="search-result-poster">
-                                        <img src="{{ movie[6] }}" alt="{{ movie[1] }}">
-                                    </div>
-                                {% endif %}
+                                <div class="search-result-poster">
+                                    {{ render_poster(movie[5], movie[6], movie[1], '', 'movie-no-poster') }}
+                                </div>
 
                                 <div class="search-result-main">
                                     <div class="search-result-title-row">

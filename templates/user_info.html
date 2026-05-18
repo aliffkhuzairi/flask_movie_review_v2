@@ -9,7 +9,7 @@
     <title>{{ user_info[0] }}</title>
 </head>
 <body>
-    {% from "macros.html" import render_stars, render_avatar %}
+    {% from "macros.html" import render_stars, render_avatar, render_poster %}
     <!-- HEADER -->
     {% include "partials/header.html" %}
 
@@ -255,18 +255,9 @@
                                href="{{ url_for('movie.movie_detail', movie_id=review[0]) }}"
                                aria-label="View {{ review[1] }} details"></a>
 
-                            {% if review[6] %}
-                                <div class="review-card-poster">
-                                    <img src="{{ url_for('static', filename='uploads/posters/' ~ review[6]) }}"
-                                         alt="{{ review[1] }} poster">
-                                </div>
-                            {% elif review[7] %}
-                                <div class="review-card-poster">
-                                    <img src="{{ review[7] }}" alt="{{ review[1] }} poster">
-                                </div>
-                            {% else %}
-                                <div class="review-card-poster review-no-poster"></div>
-                            {% endif %}
+                            <div class="review-card-poster">
+                                {{ render_poster(review[6], review[7], review[1] ~ ' poster', '', 'review-no-poster') }}
+                            </div>
 
                             <div class="review-card-body">
                                 <div class="review-card-title-row">

@@ -26,3 +26,20 @@
         {% endif %}
     </div>
 {% endmacro %}
+
+{% macro render_poster(poster, poster_url, alt='', css_class='', fallback_class='') %}
+    {% if poster %}
+        {% if poster.startswith('http') %}
+            <img src="{{ poster }}"
+                 alt="{{ alt }}"{% if css_class %} class="{{ css_class }}"{% endif %}>
+        {% else %}
+            <img src="{{ url_for('static', filename='uploads/posters/' ~ poster) }}"
+                 alt="{{ alt }}"{% if css_class %} class="{{ css_class }}"{% endif %}>
+        {% endif %}
+    {% elif poster_url %}
+        <img src="{{ poster_url }}"
+             alt="{{ alt }}"{% if css_class %} class="{{ css_class }}"{% endif %}>
+    {% elif fallback_class %}
+        <div class="{{ fallback_class }}"></div>
+    {% endif %}
+{% endmacro %}

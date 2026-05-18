@@ -9,7 +9,7 @@
     <title>{{ movie[1] }}</title>
 </head>
 <body>
-    {% from "macros.html" import render_stars, render_avatar %}
+    {% from "macros.html" import render_stars, render_avatar, render_poster %}
     <!-- HEADER -->
     {% include "partials/header.html" %}
 
@@ -25,16 +25,9 @@
             </div>
 
             <div class="movie-hero-content">
-                {% if movie[5] %}
-                    <div class="movie-detail-poster">
-                        <img src="{{ url_for('static', filename='uploads/posters/' ~ movie[5]) }}"
-                             alt="{{ movie[1] }} poster">
-                    </div>
-                {% elif movie[6] %}
-                    <div class="movie-detail-poster">
-                        <img src="{{ movie[6] }}" alt="{{ movie[1] }} poster">
-                    </div>
-                {% endif %}
+                <div class="movie-detail-poster">
+                    {{ render_poster(movie[5], movie[6], movie[1] ~ ' poster', '', 'movie-no-poster') }}
+                </div>
 
                 {% if movie[7] %}
                 <div class="movie-trailer">
