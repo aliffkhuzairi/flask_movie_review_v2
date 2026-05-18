@@ -15,8 +15,12 @@
 {% macro render_avatar(user_id, name=None, avatar=None, size='md') %}
     <div class="profile-avatar avatar-{{ size }}">
         {% if avatar %}
-            <img src="{{ url_for('static', filename='uploads/avatars/' ~ avatar) }}"
-                 alt="{{ user_id }} avatar">
+            {% if avatar.startswith('http') %}
+                <img src="{{ avatar }}" alt="{{ user_id }} avatar">
+            {% else %}
+                <img src="{{ url_for('static', filename='uploads/avatars/' ~ avatar) }}"
+                     alt="{{ user_id }} avatar">
+            {% endif %}
         {% else %}
             <i class="fa-solid fa-user"></i>
         {% endif %}

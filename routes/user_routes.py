@@ -1,5 +1,6 @@
 import os, base64
 from flask import render_template, request, redirect, url_for, flash, session, Blueprint, current_app
+from s3 import upload_to_s3, delete_from_s3
 
 from routes.movie_routes import save_movie_poster, delete_movie_poster
 from utils import login_required, is_valid_email, get_page, build_pagination, admin_required
@@ -309,15 +310,21 @@ def update_avatar(user_id):
         flash("Please crop and save an avatar before updating.", "warning-avatar")
         return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
 
+    ext = "jpg"
+    content_type = "image/jpeg"
+
     try:
         header, encoded = cropped_avatar.split(",", 1)
 
         if "image/jpeg" in header:
             ext = "jpg"
+            content_type = "image/jpeg"
         elif "image/png" in header:
             ext = "png"
+            content_type = "image/png"
         elif "image/webp" in header:
             ext = "webp"
+            content_type = "image/webp"
         else:
             flash("Avatar must be a PNG, JPG, JPEG, or WEBP image.", "warning-avatar")
             return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
@@ -325,28 +332,20 @@ def update_avatar(user_id):
         avatar_data = base64.b64decode(encoded)
         avatar_filename = f"{user_id}_{uuid4().hex}.{ext}"
 
-        upload_folder = os.path.join(
-            current_app.root_path,
-            "static",
-            "uploads",
-            "avatars"
-        )
+        with db_cursor() as cur:
+            cur.execute("SELECT avatar FROM user_info WHERE id = %s", (user_id,))
+            old = cur.fetchone()
+            if old and old[0] and old[0].startswith('https://'):
+                delete_from_s3(old[0])
 
-        os.makedirs(upload_folder, exist_ok=True)
-
-        avatar_path = os.path.join(upload_folder, avatar_filename)
-
-        with open(avatar_path, "wb") as avatar_file:
-            avatar_file.write(avatar_data)
+        avatar_url = upload_to_s3(avatar_data, avatar_filename, 'avatars', content_type)
 
         with db_cursor(commit=True) as cur:
             cur.execute("""
-                update user_info
-                set avatar = %s
-                where id = %s;
-            """, (avatar_filename, user_id))
+                UPDATE user_info SET avatar = %s WHERE id = %s;
+            """, (avatar_url, user_id))
 
-    except Exception:
+    except Exception as e:
         flash("Failed to update avatar.", "error-avatar")
         return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
 
@@ -367,7 +366,7 @@ def remove_avatar(user_id):
                     """, (user_id,))
 
         avatar_row = cur.fetchone()
-        avatar_filename = avatar_row[0] if avatar_row else None
+        avatar_val = avatar_row[0] if avatar_row else None
 
         cur.execute("""
                     update user_info
@@ -375,17 +374,16 @@ def remove_avatar(user_id):
                     where id = %s;
                     """, (user_id,))
 
-    if avatar_filename:
-        avatar_path = os.path.join(
-            current_app.root_path,
-            "static",
-            "uploads",
-            "avatars",
-            avatar_filename
-        )
-
-        if os.path.exists(avatar_path):
-            os.remove(avatar_path)
+    if avatar_val:
+        if avatar_val.startswith('https://'):
+            delete_from_s3(avatar_val)
+        else:
+            # Legacy local file
+            avatar_path = os.path.join(
+                current_app.root_path, "static", "uploads", "avatars", avatar_val
+            )
+            if os.path.exists(avatar_path):
+                os.remove(avatar_path)
 
     flash("Profile photo removed.", "success-avatar")
     return redirect(url_for("user.user_detail", user_id=user_id, tab="settings"))
