@@ -284,11 +284,6 @@ select {
     background-repeat: no-repeat;
 }
 
-.admin-field select,
-.admin-field input {
-    height: 40px;
-    box-sizing: border-box;
-}
 select option {
     background: var(--bg-surface);
     color: var(--text-main);
@@ -2105,7 +2100,7 @@ header.sticky .nav:hover {
 
 .admin-poster-inputs {
     flex: 1;
-    min-width: 0;
+    min-width: 340px;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -2762,11 +2757,13 @@ header.sticky .nav:hover {
         min-height: 71px;
     }
 
-    .profile-name-row {
+    .profile-name-row,
+    .admin-poster-row {
         flex-direction: column;
     }
 
-    .search-result-grid {
+    .search-result-grid,
+    .admin-fields-row {
         grid-template-columns: 1fr;
     }
 
