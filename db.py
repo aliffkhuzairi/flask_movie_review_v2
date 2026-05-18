@@ -8,6 +8,7 @@ def get_db_connection():
         password=os.getenv('DATABASE_PASSWORD'),
         host=os.getenv('DATABASE_HOST'),
         port=os.getenv('DATABASE_PORT'),
+        sslmode='require'
     )
 
 @contextmanager
