@@ -388,6 +388,7 @@ def movie_edit(movie_id):
     rel_date = request.form.get("rel_date").strip()
     poster_file = request.files.get("poster")
     poster_url = request.form.get("poster_url", "").strip() or None
+    trailer_url = request.form.get("trailer_url", "").strip() or None
 
     old_poster = None
     poster_filename = None
@@ -429,16 +430,16 @@ def movie_edit(movie_id):
 
                 cur.execute("""
                     update movies
-                    set title = %s, director = %s, genre = %s, rel_date = %s, poster = %s, poster_url = %s
+                    set title = %s, director = %s, genre = %s, rel_date = %s, poster = %s, poster_url = %s, trailer_url = %s
                     where id = %s;
-                """, (title, director, genre, rel_date, poster_filename, poster_url, movie_id))
+                """, (title, director, genre, rel_date, poster_filename, poster_url, trailer_url, movie_id))
 
             else:
                 cur.execute("""
                     update movies
-                    set title = %s, director = %s, genre = %s, rel_date = %s, poster_url = %s
+                    set title = %s, director = %s, genre = %s, rel_date = %s, poster_url = %s, trailer_url = %s
                     where id = %s;
-                """, (title, director, genre, rel_date, poster_url, movie_id))
+                """, (title, director, genre, rel_date, poster_url, trailer_url, movie_id))
 
                 if cur.rowcount == 0:
                     flash("Movie not found!", "error-edit")

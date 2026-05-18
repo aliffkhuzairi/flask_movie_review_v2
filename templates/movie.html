@@ -334,6 +334,13 @@
                                 Uploaded poster will be used first. Poster URL is used only if no uploaded poster exists.
                             </p>
 
+                            <label for="trailer_url">Trailer URL</label>
+                            <input id="trailer_url"
+                                   name="trailer_url"
+                                   type="url"
+                                   value="{{ movie[7] if movie and movie[7] else '' }}"
+                                   placeholder="https://www.youtube.com/embed/VIDEO_ID">
+
                             <button type="submit" class="button-link primary">Update Movie</button>
                         </form>
 
