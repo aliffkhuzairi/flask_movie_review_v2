@@ -362,9 +362,14 @@
                             <li class="relation-item">
                                 <div class="relation-user">
                                     {{ render_avatar(followed[0], followed[1], followed[2], 'sm') }}
-                                    <a class="id-user" href="{{ url_for('user.user_detail', user_id=followed[0]) }}">
-                                        {{ followed[0] }}
-                                    </a>
+                                    <div>
+                                        <a class="id-user" href="{{ url_for('user.user_detail', user_id=followed[0]) }}">
+                                            {{ followed[0] }}
+                                        </a>
+                                        {% if followed[1] %}
+                                            <p class="small-text">{{ followed[1] }}</p>
+                                        {% endif %}
+                                    </div>
                                 </div>
                                 {% if is_self %}
                                     <form class="js-confirm-form"
@@ -401,9 +406,15 @@
                                     <div class="relation-user">
 
                                         {{ render_avatar(muted[0], muted[1], muted[2], 'sm') }}
-                                        <a href="{{ url_for('user.user_detail', user_id=muted[0]) }}" class="id-user">
-                                            {{ muted[0] }}
-                                        </a>
+                                        <div>
+                                            <a href="{{ url_for('user.user_detail', user_id=muted[0]) }}" class="id-user">
+                                                {{ muted[0] }}
+                                            </a>
+                                            {% if muted[1] %}
+                                                <p class="small-text">{{ muted[1] }}</p>
+                                            {% endif %}
+                                        </div>
+
 
                                     </div>
 
@@ -693,12 +704,12 @@
         {% endif %}
 
         {% if active_tab == 'admin-panel' and is_self and is_current_user_admin %}
-        <section class="two-cols-layout">
+        <section class="single-profile-section">
             <div class="profile-left-column">
                 <!-- ADMIN PANEL -->
                 {% if is_self and is_current_user_admin %}
                     <div class="section-card admin-card">
-                        <h2>Admin Panel</h2>
+                        <h2>Add New Movie</h2>
                         <p class="small-text admin-panel">Add a new movie to the platform.</p>
 
                         <div class="flash-container">
@@ -717,42 +728,82 @@
                               method="POST"
                               enctype="multipart/form-data">
 
-                            <label for="movie_title">Title</label>
-                            <input id="movie_title" name="movie_title" type="text" required>
+                            <!-- POSTER PREVIEW + UPLOAD/URL -->
+                            <div class="admin-poster-row">
+                                <div class="admin-poster-preview">
+                                    <img id="posterPreview" src="" alt="Poster preview">
+                                    <div class="admin-poster-placeholder" id="posterPlaceholder">
+                                        <i class="fa-regular fa-image"></i>
+                                        <span>No poster</span>
+                                    </div>
+                                </div>
+                                <div class="admin-poster-input">
+                                    <div class="admin-field">
+                                        <label for="poster">Upload Poster</label>
+                                        <input id="poster"
+                                               name="poster"
+                                               type="file"
+                                               accept="image/png, image/jpeg, image/webp">
+                                    </div>
 
-                            <label for="director">Director</label>
-                            <input id="director" name="director" type="text" required>
 
-                            <label for="genre">Genre</label>
-                            <select id="genre" name="genre" required>
-                                <option value="">-- Select Genre --</option>
-                                <option value="action">action</option>
-                                <option value="comedy">comedy</option>
-                                <option value="drama">drama</option>
-                                <option value="fantasy">fantasy</option>
-                                <option value="romance">romance</option>
-                                <option value="thriller">thriller</option>
-                                <option value="western">western</option>
-                            </select>
+                                    <div class="admin-or-divider"><span>or</span></div>
 
-                            <label for="rel_date">Release Date</label>
-                            <input id="rel_date" name="rel_date" type="date" required>
+                                    <div class="admin-field">
+                                        <label for="poster_url">Poster URL</label>
+                                        <input id="poster_url"
+                                               name="poster_url"
+                                               type="url"
+                                               placeholder="https://example.com/poster.jpg">
+                                    </div>
 
-                            <label for="poster">Upload Poster</label>
-                            <input id="poster"
-                                   name="poster"
-                                   type="file"
-                                   accept="image/png, image/jpeg, image/webp">
+                                    <p class="small-text">
+                                        Uploaded poster will be used first. Poster URL is used only if no uploaded poster exists.
+                                    </p>
+                                </div>
+                            </div>
 
-                            <label for="poster_url">Poster URL</label>
-                            <input id="poster_url"
-                                   name="poster_url"
-                                   type="url"
-                                   placeholder="https://example.com/poster.jpg">
+                            <!-- TITLE + DIRECTOR -->
+                            <div class="admin-fields-row">
+                                <div class="admin-field">
+                                    <label for="movie_title">Title</label>
+                                    <input id="movie_title" name="movie_title" type="text" required>
+                                </div>
 
-                            <p class="small-text">
-                                Uploaded poster will be used first. Poster URL is used only if no uploaded poster exists.
-                            </p>
+                                <div class="admin-field">
+                                    <label for="director">Director</label>
+                                    <input id="director" name="director" type="text" required>
+                                </div>
+                            </div>
+
+                            <!-- GENRE + REL_DATE -->
+                            <div class="admin-fields-row">
+                                <div class="admin-field">
+                                    <label for="genre">Genre</label>
+                                    <select id="genre" name="genre" required>
+                                        <option value="">-- Select Genre --</option>
+                                        <option value="action">action</option>
+                                        <option value="comedy">comedy</option>
+                                        <option value="drama">drama</option>
+                                        <option value="fantasy">fantasy</option>
+                                        <option value="romance">romance</option>
+                                        <option value="thriller">thriller</option>
+                                        <option value="western">western</option>
+                                    </select>
+                                </div>
+
+                                <div class="admin-field">
+                                    <label for="rel_date">Release Date</label>
+                                    <input id="rel_date" name="rel_date" type="date" required>
+                                </div>
+                            </div>
+
+                            <!-- TRAILER URL -->
+                            <div class="admin-field">
+                                <label for="trailer_url">Trailer URL</label>
+                                <input id="trailer_url" name="trailer_url" type="url"
+                                       placeholder="https://www.youtube.com/embed/VIDEO_ID">
+                            </div>
 
                             <button type="submit" class="button-link primary">Add Movie</button>
                         </form>

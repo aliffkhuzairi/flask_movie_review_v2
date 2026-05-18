@@ -486,6 +486,49 @@ document.addEventListener('keydown', function (event) {
     }
 });
 
+// ADMIN POSTER PREVIEW
+const setupAdminPosterPreview = () => {
+    const fileInput = document.getElementById('poster');
+    const urlInput = document.getElementById('poster_url');
+    const preview = document.getElementById('posterPreview');
+    const placeholder = document.getElementById('posterPlaceholder');
+
+    if (!fileInput || !urlInput || !preview || !placeholder) return;
+
+    const showPreview = (src) => {
+        if (src) {
+            preview.src = src;
+            preview.classList.add('visible');
+            placeholder.classList.add('hidden');
+        } else {
+            preview.src = '';
+            preview.classList.remove('visible');
+            placeholder.classList.remove('hidden');
+        }
+    };
+
+    fileInput.addEventListener('change', () => {
+        const file = fileInput.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => showPreview(e.target.result);
+            reader.readAsDataURL(file);
+        } else {
+            showPreview(urlInput.value || '');
+        }
+    });
+
+    let urlTimer;
+    urlInput.addEventListener('input', () => {
+        clearTimeout(urlTimer);
+        urlTimer = setTimeout(() => {
+            if (!fileInput.files[0]) {
+                showPreview(urlInput.value);
+            }
+        }, 600);
+    });
+};
+
 // INIT
 document.addEventListener("DOMContentLoaded", () => {
     setupPasswordToggles();
@@ -497,5 +540,6 @@ document.addEventListener("DOMContentLoaded", () => {
     setupStarRating();
     setupAvatarCropper();
     setupConfirmModal();
+    setupAdminPosterPreview();
     setupDeleteAccountModal();
 })

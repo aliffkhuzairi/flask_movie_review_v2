@@ -475,6 +475,7 @@ def add_movie():
     rel_date = request.form.get("rel_date", "").strip()
     poster_file = request.files.get("poster")
     poster_url = request.form.get("poster_url", "").strip() or None
+    trailer_url = request.form.get("trailer_url", "").strip() or None
 
     poster_filename = None
 
@@ -489,11 +490,11 @@ def add_movie():
     try:
         with db_cursor(commit=True) as cur:
             cur.execute("""
-                insert into movies(title, director, genre, rel_date, poster_url)
-                values(%s, %s, %s, %s, %s)
+                insert into movies(title, director, genre, rel_date, poster_url, trailer_url)
+                values(%s, %s, %s, %s, %s, %s)
                 on conflict (title, rel_date) do nothing
                 returning id;
-            """, (title, director, genre, rel_date, poster_url))
+            """, (title, director, genre, rel_date, poster_url, trailer_url))
 
             movie_row = cur.fetchone()
 
