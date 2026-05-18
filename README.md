@@ -1,9 +1,10 @@
 # MovieReview — Flask Movie Review Web App
 
 MovieReview is a full-stack Flask web app where users can browse movies, post reviews, manage their profile, and interact with other users through follow and mute features.
-
+ 
 The project focuses on backend CRUD, PostgreSQL relationships, authentication, responsive UI, and user-focused features.
-
+ 
+**Live demo:** https://flask-movie-review-v2.onrender.com
 ---
 
 ### Home Page
@@ -136,6 +137,7 @@ The project focuses on backend CRUD, PostgreSQL relationships, authentication, r
 - PostgreSQL
 - psycopg2
 - Werkzeug password hashing
+- Gunicorn (production server)
 
 ### Frontend
 - HTML5
@@ -143,6 +145,11 @@ The project focuses on backend CRUD, PostgreSQL relationships, authentication, r
 - JavaScript (vanilla)
 - Font Awesome (icons)
 - Cropper.js for avatar cropping
+
+### Cloud & Deployment
+- Render (app hosting)
+- Neon (managed PostgreSQL)
+- AWS S3 (avatar and movie poster storage)
 
 ### External APIs
 - OMDB API for movie poster seeding
@@ -244,7 +251,7 @@ source .venv/bin/activate
 ### 3. Install dependencies
 
 ```bash
-pip install flask psycopg2-binary
+pip install -r requirements.txt
 ```
 
 ---
@@ -267,19 +274,23 @@ psql -U postgres -d movie_review -f movie_db.sql
 
 ### 5. Configure environment variable
 
-Set your database password:
-
-**Windows**
-
-```bash
-set DB_PASSWORD=yourpassword
+Create a `.env` file in the project root:
+ 
+```env
+DATABASE_NAME=movie_review
+DATABASE_USER=postgres
+DATABASE_PASSWORD=yourpassword
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+FLASK_SECRET_KEY=your_secret_key
+ 
+AWS_ACCESS_KEY_ID=your_aws_key
+AWS_SECRET_ACCESS_KEY=your_aws_secret
+AWS_S3_BUCKET=your_bucket_name
+AWS_REGION=your_region
 ```
 
-**Mac/Linux**
-
-```bash
-export DB_PASSWORD=yourpassword
-```
+AWS S3 credentials are required for avatar and movie poster uploads. Without them, file uploads will fail.
 
 ---
 
@@ -332,6 +343,8 @@ http://127.0.0.1:5000
 - Account deletion requires password confirmation and `DELETE` text confirmation
 - Admin accounts cannot be deleted from the settings page
 - Destructive actions use custom confirmation modals before submitting POST requests
+- SSL is enforced for cloud database connections
+
 ---
 
 ## What I Learned
@@ -348,7 +361,11 @@ http://127.0.0.1:5000
 - Improving mobile layout with responsive CSS
 - Managing UI growth through CSS restructuring
 - Handling account deletion with related database cleanup
-- Managing user-uploaded files and deleting old avatar files
+- Storing and serving user-uploaded files via AWS S3
+- Deploying a Flask app to Render with Gunicorn
+- Connecting a production app to a cloud PostgreSQL database (Neon)
+- Managing environment-specific configuration (local vs production)
+- Debugging encoding issues between local PostgreSQL and cloud imports
 - Building modal confirmation flows with JavaScript
 - Creating reusable custom confirmation modals
 - Replacing inline click handlers with JavaScript event listeners
@@ -363,11 +380,9 @@ http://127.0.0.1:5000
 ---
 
 ## Future Improvements
- 
-- Add full deployment support
+
 - Add automated tests
 - Add CSRF protection for forms
-- Store uploaded images in cloud storage for production
 - Add movie synopsis or description field
 - Add user watchlist feature
 
