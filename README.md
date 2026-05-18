@@ -11,20 +11,28 @@ The project focuses on backend CRUD, PostgreSQL relationships, authentication, r
 ![Home Page](screenshots/homepage.png)
 ![Home Page](screenshots/homepage2.png)
 
-### All Movies Page
+### Movie List Page
 ![All Movies Page](screenshots/movie_list_page.png)
 
 ### Movie Details Page
 ![Movie Details Page](screenshots/movie_detail.png)
+![Movie Details Page](screenshots/movie_detail2.png)
 
 ### User Profile Page
 ![User Profile Page](screenshots/user_profile_page.png)
 ![User Profile Page](screenshots/user_profile_page2.png)
-![User Profile Page](screenshots/visit_user.png)
+![User Profile Page](screenshots/user_profile_page3.png)
+![User Profile Page](screenshots/user_profile_page4.png)
+
+### Other User Page
+![Other User Page](screenshots/visit_user.png)
 
 ### Admin Panel
 ![Admin Panel](screenshots/admin_panel.png)
 ![Admin Panel](screenshots/admin_panel2.png)
+
+### Search Result Page
+![Search Result Page](screenshots/search_page.png)
 
 ---
 
