@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict ulUM0T5ofeaIcZ1A8YRGu2F5CERTxJwe0RcAxPIFX5lqk64dmO1nI3FcfIbBrGn
+\restrict vNSFOwRZEoDIubOTkQ527Ir0UD12cgwIQAAvg8U0M4x2TgoUeaMlhNcyBuyHpCx
 
 -- Dumped from database version 18.3
 -- Dumped by pg_dump version 18.3
@@ -168,7 +168,7 @@ COPY public.movies (id, title, director, genre, rel_date, poster_url, poster, tr
 15	The Matrix	The Wachowskis	action	1999-03-31	https://m.media-amazon.com/images/M/MV5BN2NmN2VhMTQtMDNiOS00NDlhLTliMjgtODE2ZTY0ODQyNDRhXkEyXkFqcGc@._V1_QL75_UX380_CR0,4,380,562_.jpg	\N	https://www.youtube.com/embed/vKQi3bBA1y8
 19	The Grand Budapest Hotel	Wes Anderson	comedy	2014-03-07	https://m.media-amazon.com/images/M/MV5BMzM5NjUxOTEyMl5BMl5BanBnXkFtZTgwNjEyMDM0MDE@._V1_QL75_UX380_CR0,0,380,562_.jpg	\N	https://www.youtube.com/embed/1Fg5iWmQjwk
 20	Before Sunrise	Richard Linklater	romance	1995-01-27	https://m.media-amazon.com/images/M/MV5BZDZhZmI1ZTUtYWI3NC00NTMwLTk3NWMtNDc0OGNjM2I0ZjlmXkEyXkFqcGc@._V1_SX300.jpg	\N	https://www.youtube.com/embed/6MUcuqbGTxc
-38	Wall to Wall	Kim Tae-joon	thriller	2025-07-18	https://m.media-amazon.com/images/M/MV5BM2Y1MjcwMWMtN2IyZi00MGIwLWFiM2YtZjkzZWE1NmJlMGFhXkEyXkFqcGc@._V1_SX300.jpg	\N	https://www.youtube.com/embed/R4lLVWhg-_ic
+38	Wall to Wall	Kim Tae-joon	thriller	2025-07-18	https://m.media-amazon.com/images/M/MV5BM2Y1MjcwMWMtN2IyZi00MGIwLWFiM2YtZjkzZWE1NmJlMGFhXkEyXkFqcGc@._V1_SX300.jpg	\N	https://www.youtube.com/embed/4lLVWhg-_ic
 16	Spirited Away	Hayao Miyazaki	fantasy	2001-07-20	https://m.media-amazon.com/images/M/MV5BNTEyNmEwOWUtYzkyOC00ZTQ4LTllZmUtMjk0Y2YwOGUzYjRiXkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg	\N	https://www.youtube.com/embed/ByXuk9QqQkk
 17	Joker	Todd Phillips	drama	2019-10-04	https://m.media-amazon.com/images/M/MV5BNzY3OWQ5NDktNWQ2OC00ZjdlLThkMmItMDhhNDk3NTFiZGU4XkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg	\N	https://www.youtube.com/embed/zAGVQLHvwOY
 \.
@@ -199,12 +199,12 @@ COPY public.reviews (mid, uid, ratings, review, rev_time) FROM stdin;
 10	andy	4	Simple but effective. The emotional parts worked well.	2009-02-02 11:35:52.963943
 1	lisa	4	I liked the concept and the way the story developed.	2024-10-16 10:03:47.562115
 2	lisa	5	Great movie. The ending stayed with me after watching.	1965-12-25 12:39:28.114643
-18	khuzairi	4	Mad Max: Fury Road is basically a two-hour, heavy-metal car chase that never lets up. ItΓÇÖs loud, gorgeous, and uses insane real-life stunts that make modern CGI movies look boring by comparison. Furiosa is a total badass, the world is wonderfully weird, and the whole thing is just pure, high-octane energy from start to finish.	2026-04-30 16:44:35.233584
+18	khuzairi	4	Mad Max: Fury Road is basically a two-hour, heavy-metal car chase that never lets up. It’s loud, gorgeous, and uses insane real-life stunts that make modern CGI movies look boring by comparison. Furiosa is a total badass, the world is wonderfully weird, and the whole thing is just pure, high-octane energy from start to finish.	2026-04-30 16:44:35.233584
 3	lisa	3	EWW THE MONSTERSS	2026-05-01 01:55:08.159189
-3	cai	3	ΓáÇΓáÇΓáÇΓáÇΓú┤Γú╢Γú╢Γú╢Γú╢Γú╢Γú╢Γú╢Γú╢Γú╢ΓíåΓú┤Γú╢Γú╢Γú╢ΓíÇΓáÇΓó░Γú╢Γú╢Γú╢Γú╢ΓúªΓíäΓáÇΓáÇ\r\nΓáÇΓáÇΓáÇΓáÇΓó┐Γú┐Γú┐ΓíìΓáëΓó╣Γú┐Γú┐ΓáëΓáëΓóíΓú┐Γú┐Γá╣Γú┐ΓúºΓáÇΓó╕Γú┐Γú┐ΓúñΓú╝Γú┐ΓáçΓáÇΓáÇ\r\nΓú╢Γú╢Γú╢Γú╢Γú╢Γú┐Γú┐Γí┐ΓáÇΓó╕Γú┐Γú┐ΓáÇΓáÇΓú╛Γú┐Γú┐Γú┐Γú┐Γú┐ΓíåΓó╕Γú┐ΓíƒΓó┐Γú┐Γú╖Γú╢Γú╢Γú╢\r\nΓú¡Γú¡ΓíìΓó⌐Γú¡Γú¡ΓíëΓúñΓúñΓíîΓó⌐Γú¡ΓúñΓúñΓíëΓáëΓóáΓúñΓú¼Γú¡ΓúÑΓúîΓíëΓáüΓóÇΓú⌐Γú¡Γú¡Γú¡Γú¡\r\nΓá╕Γú┐Γú┐Γú┐Γú┐Γú┐Γú╖Γú┐Γí┐ΓáÇΓú╛Γú┐Γó┐Γú┐ΓúçΓáÇΓó╕Γú┐Γú┐Γú¢Γú╗Γú┐Γú╖ΓáÇΓó┐Γú┐Γú┐Γí¢Γá¢Γá¢\r\nΓáÇΓó╗Γú┐Γú┐Γí┐Γú┐Γú┐Γú┐ΓáâΓú╕Γú┐Γú┐Γú╝Γú┐Γú┐ΓíäΓó╕Γú┐Γú┐Γú┐Γú┐Γú┐ΓúÑΓúñΓú¼Γú┐Γú┐Γú┐ΓáÇΓáÇ\r\nΓáÇΓáêΓá┐Γá┐ΓáüΓá╣Γá┐ΓáƒΓáÇΓá┐Γá┐ΓáëΓáëΓá╣Γá┐ΓáºΓá╕Γá┐Γá┐ΓáêΓá¢Γá┐Γá┐Γá┐Γá┐Γá┐Γá┐ΓáïΓáÇΓáÇ	2026-05-01 01:56:58.369036
+3	cai	3	⠀⠀⠀⠀⣴⣶⣶⣶⣶⣶⣶⣶⣶⣶⡆⣴⣶⣶⣶⡀⠀⢰⣶⣶⣶⣶⣦⡄⠀⠀\r\n⠀⠀⠀⠀⢿⣿⣿⡍⠉⢹⣿⣿⠉⠉⢡⣿⣿⠹⣿⣧⠀⢸⣿⣿⣤⣼⣿⠇⠀⠀\r\n⣶⣶⣶⣶⣶⣿⣿⡿⠀⢸⣿⣿⠀⠀⣾⣿⣿⣿⣿⣿⡆⢸⣿⡟⢿⣿⣷⣶⣶⣶\r\n⣭⣭⡍⢩⣭⣭⡉⣤⣤⡌⢩⣭⣤⣤⡉⠉⢠⣤⣬⣭⣥⣌⡉⠁⢀⣩⣭⣭⣭⣭\r\n⠸⣿⣿⣿⣿⣿⣷⣿⡿⠀⣾⣿⢿⣿⣇⠀⢸⣿⣿⣛⣻⣿⣷⠀⢿⣿⣿⡛⠛⠛\r\n⠀⢻⣿⣿⡿⣿⣿⣿⠃⣸⣿⣿⣼⣿⣿⡄⢸⣿⣿⣿⣿⣿⣥⣤⣬⣿⣿⣿⠀⠀\r\n⠀⠈⠿⠿⠁⠹⠿⠟⠀⠿⠿⠉⠉⠹⠿⠧⠸⠿⠿⠈⠛⠿⠿⠿⠿⠿⠿⠋⠀⠀	2026-05-01 01:56:58.369036
 12	cai	3	I think its moderate	2026-04-26 14:46:54.223913
-13	aliff	4	I finally got around to watching La La Land and I honestly don't know why I waited so long. I usually don't like musicals, but this felt more like a movie with music rather than a traditional Broadway-style film.\r\n\r\nEven if you aren't a huge fan of musicals, I'd say give it a chance. ItΓÇÖs a sad, beautiful story about chasing dreams, and itΓÇÖs one of those movies that makes you appreciate the art of filmmaking.	2026-04-26 18:38:24.461082
-16	aliff	5	This is more than just a cartoon; itΓÇÖs a total experience. Even if you've seen it before, itΓÇÖs worth a rewatch to pick up on the little details. ItΓÇÖs perfect to watch when you want to feel cozy and nostalgic. Absolutely a masterpiece!.	2026-04-26 18:40:01.543848
+13	aliff	4	I finally got around to watching La La Land and I honestly don't know why I waited so long. I usually don't like musicals, but this felt more like a movie with music rather than a traditional Broadway-style film.\r\n\r\nEven if you aren't a huge fan of musicals, I'd say give it a chance. It’s a sad, beautiful story about chasing dreams, and it’s one of those movies that makes you appreciate the art of filmmaking.	2026-04-26 18:38:24.461082
+16	aliff	5	This is more than just a cartoon; it’s a total experience. Even if you've seen it before, it’s worth a rewatch to pick up on the little details. It’s perfect to watch when you want to feel cozy and nostalgic. Absolutely a masterpiece!.	2026-04-26 18:40:01.543848
 7	admin	5	A masterpiece of storytelling and visual effects. Nolan at his absolute best. The dream-within-a-dream concept is executed flawlessly.	2010-09-12 14:23:45.123456
 7	andy	5	The rotating corridor fight scene alone is worth five stars. Mind-blowing cinema that rewards repeat viewings.	2010-08-02 20:11:30.654321
 8	aliff	4	Interstellar is a film that challenges its audience to think while deeply engaging their emotions. It is a contemplative adventure about finding connection across space and time, offering a sense of wonder that few modern films can match. It is an unforgettable experience, a breathtaking journey that remains relevant and highly rewatchable a decade later.	2026-04-27 01:08:11.342448
@@ -215,7 +215,7 @@ COPY public.reviews (mid, uid, ratings, review, rev_time) FROM stdin;
 7	cai	5	One of the most original films ever made. Absolutely gripping from the first frame to the last.	2011-02-28 21:05:10.901234
 7	admin2	3	Visually stunning but the plot gets too convoluted at times. Still an impressive achievement.	2013-11-05 10:00:00.111111
 11	admin	5	Heath Ledger's Joker is one of the greatest villain performances in cinema history. A film that transcends its genre.	2008-08-01 19:30:00.222222
-11	andy	5	Not just a superhero film ├óΓé¼ΓÇ¥ a genuinely great crime thriller. Ledger is unforgettable. Nolan's best work.	2008-09-14 22:45:33.333333
+11	andy	5	Not just a superhero film â€” a genuinely great crime thriller. Ledger is unforgettable. Nolan's best work.	2008-09-14 22:45:33.333333
 11	aliff	5	Rewatched this for the tenth time and it still holds up perfectly. The interrogation scene is pure cinema.	2020-04-10 14:20:00.444444
 11	lisa	4	Brilliant film. Ledger deserved every award he received. Dark, intense, and completely gripping.	2009-01-22 11:15:00.555555
 11	cai	5	The interrogation scene between Batman and Joker is one of the best scenes ever filmed.	2010-05-05 17:00:00.666666
@@ -347,12 +347,13 @@ admin	admin	admin@korea.ac.kr	2026-04-24	\N
 andy	Andy Mercury	andym@mail.com	2026-04-24	\N
 lisa	Lisa Blackpink	lisabp@mail.com	2026-04-24	\N
 khuzairi	Khuzairi	khuzairi@mail.com	2026-04-26	\N
-aliff	Aliff Khuzairi	aliffkhuzairi07@gmail.com	2026-04-24	aliff_e92aeaaed4774446a7c65b7e255bd558.jpg
 delete	\N	\N	2026-05-10	\N
 marco	Marco Rossi	marco.rossi@gmail.com	2026-01-10	\N
 sarah	Sarah Chen	sarah.chen@email.com	2026-01-22	\N
 jake	Jake Morrison	jake.m@email.com	2026-02-05	\N
 priya	Priya Patel	priya.p@email.com	2026-02-18	\N
+anon	\N	\N	2026-05-18	\N
+aliff	Aliff Khuzairi	aliffkhuzairi07@gmail.com	2026-04-24	https://flask-movie-review.s3.ap-southeast-5.amazonaws.com/avatars/aliff_1479711e8c654f1899c3b705a25edda9.jpg
 \.
 
 
@@ -369,6 +370,7 @@ lisa	scrypt:32768:8:1$quIc1jvX6NEz6L6G$da53ff042c8a806a404a60d7bcd84b8644b39c6a3
 andy	scrypt:32768:8:1$TQLl6cQ0NtnLitle$31c99caa470da05f86118c0f4ded12d0e914f28f50e68d0dff02f18b2d13bf5aa970402dbed5a3e7bf85c2e9c3a1ba08feb77717bf6a1539d3a13901cbda1bbf	user
 admin2	scrypt:32768:8:1$gmYHIyLN8Bcxxm4v$abaab8c0f52c0e4a2dfa079975f4e9275bfc38ba330cb3a113fad99f25a32e099b565ca2fcd9dd94ab8da424157787b214d76edc5e8ffac27c76d5ae821bdf52	admin
 delete	scrypt:32768:8:1$DQErZEsNjzyWlydg$d720386b6f46fa1edcd2b8d1d9bdf88833922b7b21a20b615cfad1722da1a8977c89e8ce0e55d515b1dbb08cb67f8ed6aa0149c00e41f9587b2b8433f5fb6d51	user
+anon	scrypt:32768:8:1$k0o7ehkm4RK1SyKv$40a974142b1d22e11bb87c1a013e4a0c1c99d271b2a5f27603b07ee2dd14be64cd2d2486f60d2d26baddcaa52ed4875f49ad9e3a6ee8a803449078ae717454b7	user
 marco	scrypt:32768:8:1$ZllCU9RwfddcE0Pu$3d6228eed9e3b3f28ff43a44b5c16b25b800786f45f33d1aed268f69ada21c9bc34ad0e628afdc722be2512a39753630b6abec91154fb436c1e43e099294dba1	user
 sarah	scrypt:32768:8:1$ZllCU9RwfddcE0Pu$3d6228eed9e3b3f28ff43a44b5c16b25b800786f45f33d1aed268f69ada21c9bc34ad0e628afdc722be2512a39753630b6abec91154fb436c1e43e099294dba1	user
 jake	scrypt:32768:8:1$ZllCU9RwfddcE0Pu$3d6228eed9e3b3f28ff43a44b5c16b25b800786f45f33d1aed268f69ada21c9bc34ad0e628afdc722be2512a39753630b6abec91154fb436c1e43e099294dba1	user
@@ -491,5 +493,5 @@ ALTER TABLE ONLY public.user_info
 -- PostgreSQL database dump complete
 --
 
-\unrestrict ulUM0T5ofeaIcZ1A8YRGu2F5CERTxJwe0RcAxPIFX5lqk64dmO1nI3FcfIbBrGn
+\unrestrict vNSFOwRZEoDIubOTkQ527Ir0UD12cgwIQAAvg8U0M4x2TgoUeaMlhNcyBuyHpCx
 
