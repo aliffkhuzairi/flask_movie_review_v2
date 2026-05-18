@@ -352,6 +352,7 @@ http://127.0.0.1:5000
 - Admin accounts cannot be deleted from the settings page
 - Destructive actions use custom confirmation modals before submitting POST requests
 - SSL is enforced for cloud database connections
+- All POST forms are protected with CSRF tokens using Flask-WTF
 
 ---
 
@@ -390,7 +391,6 @@ http://127.0.0.1:5000
 ## Future Improvements
 
 - Add automated tests
-- Add CSRF protection for forms
 - Add movie synopsis or description field
 - Add user watchlist feature
 
